@@ -1,0 +1,13 @@
+<h1>Write a Testimonial</h1>
+<form method="POST">
+  {% csrf_token %}
+  <label>Professor:</label>
+  <select name="professor">
+    {% for prof in professors %}
+      <option value="{{ prof.id }}">{{ prof.name }}</option>
+    {% endfor %}
+  </select><br><br>
+  <label>Testimonial:</label><br>
+  <textarea name="content" rows="6" cols="50"></textarea><br><br>
+  <button type="submit">Submit</button>
+</form>

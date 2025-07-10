@@ -1,0 +1,6 @@
+<h2>All Testimonials</h2>
+<ul>
+  {% for t in testimonials %}
+    <li><strong>{{ t.professor.name }}</strong> - "{{ t.content }}" — by {{ t.student.username }}</li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,8 @@
+<h2>Select a Professor to Write a Testimonial</h2>
+<ul>
+  {% for prof in professors %}
+    <li>
+      <a href="{% url 'submit_testimonial' prof.id %}">{{ prof.name }} ({{ prof.department }})</a>
+    </li>
+  {% endfor %}
+</ul>
