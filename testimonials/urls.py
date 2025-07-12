@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import submit_testimonial, home, professor_list,view_testimonials,thank_you
+from .views import submit_testimonial, home, professor_list, view_testimonials, thank_you, logout_view
 
 
 urlpatterns = [
@@ -9,5 +9,5 @@ urlpatterns = [
     path('professors/', professor_list, name='professor_list'),
     path('submit/<int:professor_id>/', submit_testimonial, name='submit_testimonial'),
     path('thank-you/', thank_you, name='thank_you'),
-
+    path('logout/', logout_view, name='logout'),
 ]
