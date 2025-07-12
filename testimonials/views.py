@@ -3,7 +3,7 @@ from .models import Testimonial
 from professors.models import Professor
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 # @login_required
 # def submit_testimonial(request):
@@ -15,6 +15,7 @@ from django.contrib.auth import login
 #         return redirect('/testimonials/submit')
 #     professors = Professor.objects.all()
 #     return render(request, 'submit_testimonial.html', {'professors': professors})
+@login_required
 def submit_testimonial(request, professor_id):
     professor = Professor.objects.get(id=professor_id)
     if request.method == 'POST':
@@ -29,21 +30,17 @@ def view_testimonials(request):
     return render(request, 'testimonials/view_testimonials.html', {'testimonials': testimonials})
 
 def home(request):
-    if request.method == 'POST':
-        username = request.POST.get('username').strip()
-        if not username:
-            return render(request, 'home.html', {'error': 'Username is required'})
-        user, created = User.objects.get_or_create(username=username)
-        login(request, user)
-        return redirect('professor_list')
     return render(request, 'home.html')
 # view prof list 
 from professors.models import Professor
 
+@login_required
 def professor_list(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
     professors = Professor.objects.all()
     return render(request, 'professor_list.html', {'professors': professors})
 def thank_you(request):
     return render(request, 'thank_you.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')

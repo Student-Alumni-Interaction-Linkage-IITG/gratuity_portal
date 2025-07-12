@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-!_h9m$14@*64b)ko3!l!ww4yt36-(1jj0%w6@nn^5x8+7!mosj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -64,6 +64,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -80,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gratuity',
         'USER': 'postgres',
-        'PASSWORD': 'post',
+        'PASSWORD': 'pavan',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -105,24 +107,80 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = '/'
+
+
+AUTHENTICATION_BACKENDS = (
+    'testimonials.azure_backend.AzureADOAuth2WithPKCE',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+
+
+SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_KEY = 'aa4f2840-08d7-458e-992d-6ff67ff0d699'
+SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_SECRET = 'APF8Q~J.bD3cXIgyFjH.CAu79wDoQsuNCEYjwcin' 
+SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_TENANT_ID = '850aa78d-94e1-4bc6-9cf3-8c11b530701c'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+
+SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_USE_PKCE = True
+
+# Force redirect URI to use localhost instead of 127.0.0.1
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+
+
+
+LOGIN_URL = '/login/azuread-oauth2/'
+LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/'
 
-# Google
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '19939825107-nfgc591dt4q6sdds7f1mgeknpua8fatf.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+# Social Auth Configuration
+SOCIAL_AUTH_CREATE_USERS = True
+SOCIAL_AUTH_ASSOCIATE_BY_EMAIL = True
+SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_SCOPE = ['openid', 'email', 'profile', 'User.Read']
 
-# Microsoft Outlook / Azure AD
-SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = 'your-azure-client-id'
-SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = 'your-azure-client-secret'
-SOCIAL_AUTH_AZUREAD_OAUTH2_TENANT_ID = 'your-tenant-id'
+# Enable PKCE globally
+SOCIAL_AUTH_PKCE_EXTENSION_ENABLED = True
 
-# AUTHENTICATION_BACKENDS = (
-#     'social_core.backends.google.GoogleOAuth2',
-#     'social_core.backends.azuread.AzureADOAuth2',
-#     'django.contrib.auth.backends.ModelBackend',
-# )
+# Force the use of localhost in redirect URIs
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+import socket
+if socket.gethostname() == 'localhost' or True:  # Always use localhost for development
+    SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_REDIRECT_URI = 'http://localhost:8000/accounts/complete/azuread-oauth2-pkce/'
+
+# Error handling
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True  # Enable for debugging
+
+
+# Default social auth pipeline
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+# Minimal logging - only username
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'testimonials.azure_backend': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
 
 
 # Internationalization
@@ -146,3 +204,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+def debug_user_info(strategy, details, response, *args, **kwargs):
+    import logging
+    logger = logging.getLogger('social')
+    logger.debug(f'User Details: {details}')
+    # logger.debug(f'Response: {response}')
+    return

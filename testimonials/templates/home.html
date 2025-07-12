@@ -1,10 +1,42 @@
 <h1>Welcome to the Gratuity Portal</h1>
-<form method="POST">
-  {% csrf_token %}
-  {% if error %}
-    <p style="color:red">{{ error }}</p>
+
+<div style="max-width: 450px; margin: 0 auto; padding: 20px; text-align: center;">
+
+  {% if user.is_authenticated %}
+  <!-- User is already authenticated -->
+  <div style="padding: 30px; border: 2px solid #28a745; border-radius: 10px; background-color: #f0fff0;">
+    <h2 style="color: #28a745; margin-bottom: 20px;">✅ Successfully Authenticated</h2>
+    <p style="font-size: 1.1em; margin-bottom: 25px; color: #333;">
+      Welcome, {{ user.first_name|default:user.username }}! You are logged in with Microsoft.
+    </p>
+
+    <a href="/professors/"
+      style="display: inline-block; background-color: #28a745; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-right: 10px;">
+      📚 View Professors
+    </a>
+
+    <a href="/logout/"
+      style="display: inline-block; background-color: #dc3545; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      🚪 Logout
+    </a>
+  </div>
+  {% else %}
+  <!-- Microsoft Authentication - Only login method -->
+  <div style="padding: 30px; border: 2px solid #0078d4; border-radius: 10px; background-color: #f0f8ff;">
+    <h2 style="color: #0078d4; margin-bottom: 20px;">🔐 Microsoft Authentication Required</h2>
+    <p style="font-size: 1.1em; margin-bottom: 25px; color: #333;">
+      Please log in with your Microsoft account to access the Gratuity Portal.
+    </p>
+
+    <a href="{% url 'social:begin' 'azuread-oauth2-pkce' %}"
+      style="display: inline-block; background-color: #0078d4; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      🚀 Login with Microsoft
+    </a>
+
+    <p style="font-size: 0.9em; color: #666; margin-top: 20px; margin-bottom: 0;">
+      After authentication, you will be redirected to the professors page.
+    </p>
+  </div>
   {% endif %}
-  <label>Enter your name to continue:</label><br>
-  <input type="text" name="username" required><br><br>
-  <button type="submit">Continue</button>
-</form>
+
+</div>
