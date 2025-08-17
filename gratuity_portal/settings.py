@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gratuity',
         'USER': 'postgres',
-        'PASSWORD': 'pavan',
+        'PASSWORD': 'post',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 AUTHENTICATION_BACKENDS = (
-    'testimonials.azure_backend.AzureADOAuth2WithPKCE',
+    # 'testimonials.azure_backend.AzureADOAuth2WithPKCE',
     'django.contrib.auth.backends.ModelBackend',
 )
 
