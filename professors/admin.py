@@ -10,5 +10,12 @@
 #     search_fields = ('content',)
 from django.contrib import admin
 from .models import Professor
+from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
+from .models import Professor
 
-admin.site.register(Professor)
+@admin.register(Professor)
+class ProfessorAdmin(ImportExportModelAdmin):
+    pass
+
+# admin.site.register(Professor)
