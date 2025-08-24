@@ -1,2 +1,17 @@
-<a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>
-<a href="{% url 'social:begin' 'azuread-oauth2' %}">Login with Outlook</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      {% block css %}{% endblock %}
+</head>
+<body>
+
+    
+        {% block content %}
+        <!-- Child templates will replace this -->
+        {% endblock %}
+</body>
+</html>

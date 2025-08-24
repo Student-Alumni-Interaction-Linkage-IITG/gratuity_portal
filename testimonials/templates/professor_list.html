@@ -1,117 +1,104 @@
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-    height: 100%;
-  }
-  .page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* whole viewport */
-  }
-  
-</style>
+{%extends "base.html"%}
+{%load static%}
+{% block css%}
+<link rel="stylesheet" href="{% static 'css/prof_list.css' %}">
+{%endblock%}
+{%block content%}
 <div class="page">
-  <div class="header" style="width: 100vw; height: 10%; display: flex; justify-content: space-between; background-color: #0c405e;padding: 10px 60px;box-sizing: border-box; ">
-  <div class="header-logo" style="display: flex; justify-content: center;">
-      <img src="https://iitg.ac.in/sail/static/media/sail%20white%20logo%201.1a5b5ee342209483926a85aa53969a1f.svg" alt="SAIL">
-  </div>
-  <div class="user-info" style="display: flex; align-items: center; gap: 20px;">
-    <div class="user-logo">
-      <svg width="52" height="52" viewBox="0 0 32 32" fill="none">
-      <circle cx="16" cy="16" r="16" fill="#bdbdbd"/>
-      <circle cx="16" cy="13" r="6" fill="#fff"/>
-      <ellipse cx="16" cy="24" rx="8" ry="5" fill="#fff"/>
-      </svg>
-    </div>
-    <div class="username" style="color: #ffffff;font-family: DM Sans;font-size: 25px;font-weight: 500;">{{ request.user.username }}</div> 
-  </div>
-  </div>
-<div class="prof-list" style="flex: 1; display: flex;overflow: hidden;  margin: 0;">
-  <div class="nav-bar" style="display: flex; width: 20%; height: 100%; flex-direction: column; background-color:#c3d6ea; font-size: 25px; color: #003366; overflow: auto;box-shadow: 5px 0 15px rgba(0,0,0,0.1);">
-    <ul class="dept-list" style="display: flex; flex-direction: column; height: 100%; list-style-type: none; justify-content: space-evenly;">
-      <li>
-        <a href="?" style="text-decoration: none; color: #003366; background: none; transition: color 0.2s, background 0.2s;" 
-           onmousedown="event.preventDefault();" 
+  {%include "nav_bar.html" %}
+  <div class="prof-list" id="prof-list-container">
+    <div class="nav-bar">
+      <ul class="dept-list">
+        <li>
+          <a href="?"
+             onmousedown="event.preventDefault();" 
              onmouseover="this.style.color='#FFF9E6'; this.style.background='#003366'; this.style.borderRadius='5px';" 
-           onmouseout="this.style.color='#003366'; this.style.background='';">
-          All
-        </a>
-      </li>
-      {% for prof in professors|dictsort:"department" %}
-        {% ifchanged prof.department %}
-          <li>
-            <a href="?department={{ prof.department }}" style="text-decoration: none;color: #003366; background: none; transition: color 0.2s, background 0.2s;" 
-             onmousedown="event.preventDefault();"
-           onmouseover="this.style.color='#FFF9E6'; this.style.background='#003366'; this.style.borderRadius='5px';" 
-           onmouseout="this.style.color='#003366'; this.style.background='';">{{ prof.department }}</a>
-          </li>
-        {% endifchanged %}
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="container" style="display: flex;flex-direction: column;width: 80%;height: 100%;overflow: hidden;">
-    <div class="search-box" style="display: flex;padding: 10px 20px; justify-content: center;">
-        <input type="search" id="prof-search" placeholder="Enter name of professor" style="padding-left: 30px; height: 50px; width: 90%;border-top-left-radius: 20px;border-bottom-left-radius: 20px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;font-size: 24px; color: #1A4D8C;border: 0.5px solid #1A4D8C;" oninput="filterProfessors()">
-        <span style="position: relative; left: -55px; top: 3px; "></span>
-        <script>
-        function filterProfessors() {
-          const searchValue = document.getElementById('prof-search').value.toLowerCase();
-          const cards = document.querySelectorAll('.card-area ul');
-          cards.forEach(card => {
-            const name = card.querySelector('.prof-details ul li:first-child').textContent.toLowerCase();
-            if (name.includes(searchValue)) {
-              card.style.display = '';
-            } else {
-              card.style.display = 'none';
-            }
-          });
-        }
-        </script>
-        <span style=" position: relative;left: -50px; top: 2px;">
-          <svg width="40" height="40" viewBox="0 0 20 20" fill="none">
-            <circle cx="9" cy="9" r="7" stroke="#607D8B" stroke-width="2"/>
-            <line x1="15" y1="15" x2="19" y2="19" stroke="#607D8B" stroke-width="2"/>
-          </svg>
-        </span>
-    </div>
-    <div class="card-area" style="width: 100%;display: flex; gap: 0; padding: 0px 0 40px 0;flex-wrap: wrap;overflow-x: hidden; overflow-y: scroll;box-sizing: border-box;">
-      {% for prof in professors %}
-        {% if not request.GET.department or prof.department == request.GET.department %}
-          <ul style="list-style-type: none;">
+             onmouseout="this.style.color='#003366'; this.style.background='';">
+            All
+          </a>
+        </li>
+        {% for prof in professors|dictsort:"department" %}
+          {% ifchanged prof.department %}
             <li>
-              <a href="{% url 'submit_testimonial' prof.id %}" style="text-decoration: none;">
-                <div class="prof-card" style="display: flex;flex-direction: column;background-color: #e0ebf4; padding: 15px 10px;border-radius: 5px; width: 270px; align-items: center; transition: transform 0.2s;">
-                  <div class="prof-img" style="width: 210px; height: 250px; background-image: url('{{prof.image_url}}'); background-size: contain; background-position: center;background-repeat: no-repeat; border-radius: 50%; border: 1px solid #1A4D8C;">
-                    <!-- <img src={{prof.image_url}} alt="prof-img"> -->
-                  </div>
-                  <div class="prof-details " style="background-color: #1A4D8C; width: 88%; margin-top: 10px;justify-content: center;">
-                    <ul style="list-style-type: none; color: white;font-size: 18px;text-align: justify;">
-                      <li>{{prof.name}}</li>
-                      <li>{{prof.department}}</li>
-                      <li>{{prof.email}}</li>
-                    </ul>
-                  </div>
-                </div>
-                <style>
-                .prof-card:hover {
-                  transform: scale(1.05);
-                }
-                </style>
-              </a>
+              <a href="?department={{ prof.department }}" 
+                 onmousedown="event.preventDefault();"
+                 onmouseover="this.style.color='#FFF9E6'; this.style.background='#003366'; this.style.borderRadius='5px';" 
+                 onmouseout="this.style.color='#003366'; this.style.background='';">{{ prof.department }}</a>
             </li>
-          </ul>
-        {% endif %}
-      {% endfor %}
+          {% endifchanged %}
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="container">
+      <div class="container-top">
+        <div class="search-box">
+          <input type="search" id="prof-search" placeholder="Enter name of professor" oninput="filterProfessors()">
+          <!-- <span></span> -->
+          <script>
+          function filterProfessors() {
+            const searchValue = document.getElementById('prof-search').value.toLowerCase();
+            const cards = document.querySelectorAll('.card-area ul');
+            cards.forEach(card => {
+              const name = card.querySelector('.prof-details ul li:first-child').textContent.toLowerCase();
+              if (name.includes(searchValue)) {
+                card.style.display = '';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          }
+          </script>
+          <span>
+            <svg width="40" height="40" viewBox="0 0 20 20" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="#607D8B" stroke-width="2"/>
+              <line x1="15" y1="15" x2="19" y2="19" stroke="#607D8B" stroke-width="2"/>
+            </svg>
+          </span>
+        </div>
+        <!-- Mobile Version -->
+        <div class="hamburger-menu" id="hamburger-menu-toggle" >
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+        </div>
+      </div>
+      <script>
+        document.getElementById('hamburger-menu-toggle').addEventListener('click', function() {
+          const profListContainer = document.getElementById('prof-list-container');
+          profListContainer.classList.toggle('nav-open');
+        });
+      </script>
+      <div class="card-area">
+        {% for prof in professors %}
+          {% if not request.GET.department or prof.department == request.GET.department %}
+            <ul>
+              <li>
+                <a href="{% url 'submit_testimonial' prof.id %}">
+                  <div class="prof-card">
+                    <div class="prof-img" style="background-image: url('{{prof.image_url}}');">
+                      </div>
+                    <div class="prof-details">
+                      <ul>
+                        <li>{{prof.name}}</li>
+                        <li>{{prof.department}}</li>
+                        <li>{{prof.email}}</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <style>
+                  .prof-card:hover {
+                    transform: scale(1.05);
+                  }
+                  </style>
+                </a>
+              </li>
+            </ul>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
   </div>
+  {% include "footer.html" %}
 </div>
-<footer style="width: 100%; height: 3%;background-color: #0c405e;display: flex;opacity: 0.9; display: flex;justify-content: center;">
-  <div style="color: white; font-size: 18px;">
-    Student Alumni Interaction Linkage
-  </div>
-</footer>
 
-
-</div>
+{%endblock%}
