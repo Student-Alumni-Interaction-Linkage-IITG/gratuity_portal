@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'professors',
     'testimonials',
     'social_django',
+    'import_export',
 ]
 
 MIDDLEWARE = [

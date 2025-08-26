@@ -1,0 +1,19 @@
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/nav-bar.css' %}">
+{%endblock%}
+<div class="header">
+    <div class="header-logo">
+      <img src="https://iitg.ac.in/sail/static/media/sail%20white%20logo%201.1a5b5ee342209483926a85aa53969a1f.svg" alt="SAIL">
+    </div>
+    <div class="user-info">
+      <div class="user-logo">
+        <svg width="52" height="52" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="16" fill="#bdbdbd"/>
+          <circle cx="16" cy="13" r="6" fill="#fff"/>
+          <ellipse cx="16" cy="24" rx="8" ry="5" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="username">{{ request.user.username }}</div> 
+    </div>
+  </div>

@@ -1,13 +1,43 @@
-<h1>Write a Testimonial</h1>
-<form method="POST">
-  {% csrf_token %}
-  <label>Professor:</label>
-  <select name="professor">
-    {% for prof in professors %}
-      <option value="{{ prof.id }}">{{ prof.name }}</option>
-    {% endfor %}
-  </select><br><br>
-  <label>Testimonial:</label><br>
-  <textarea name="content" rows="6" cols="50"></textarea><br><br>
-  <button type="submit">Submit</button>
-</form>
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/submit_testimonial.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page">
+  {% include "nav_bar.html" %}
+  <div class="main">
+    <div class="nav-bar">
+      <div class="prof-card">
+        <div class="prof-img" style="background-image: url('{{professor.image_url}}');">
+        </div>
+        <div class="prof-data">
+          <ul>
+            <li> {{professor.name}} </li>
+            <li> {{professor.department}} </li>
+            <li> {{professor.email}} </li>
+          </ul>
+        </div> 
+      </div>
+    </div>
+    <div class="container">
+      <div class="form">
+        <h1>Write a Testimonial</h1>
+        <form method="POST">
+        {% csrf_token %}
+        <label>Professor</label>
+        <select name="professor">
+        {% for prof in professors %}
+        <option value="{{ prof.id }}">{{ prof.name }}</option>
+        {% endfor %}
+        </select><br><br>
+        <label>Testimonial</label><br>
+        <textarea name="content" rows="6" cols="50"></textarea><br><br>
+        <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% include "footer.html" %}
+</div>
+{% endblock %}
