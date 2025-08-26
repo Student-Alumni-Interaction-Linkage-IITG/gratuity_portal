@@ -1,0 +1,128 @@
+html,body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+    height: 100%;
+}
+.page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* whole viewport */
+}
+.main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    margin: 0;
+}
+.nav-bar {
+    display: flex;
+    width: 30%;
+    height: 100%;
+    flex-direction: column;
+    background-color:#c3d6ea;
+    font-size: 25px;
+    color: #003366;
+    overflow: auto;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    justify-content: center;
+}
+.prof-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.prof-img {
+    width: 210px;
+    height: 250px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 40px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.1);
+    margin-left:3%;
+}
+.prof-data ul {
+    list-style-type: none;
+    text-align: center;
+    font-size: 28px;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+}
+.form {
+    background: linear-gradient(145deg, #ffffff, #f0f4f8);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: auto;
+}
+.form h1 {
+    color: #0d3b66;
+    margin-bottom: 30px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 50px;
+}
+.form label {
+    color: #333;
+    font-weight: 500;
+    font-size: 22px;
+}
+.form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #c3d6ea;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: 14px;
+    color: #333;
+}
+.form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #c3d6ea;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: 18px;
+    color: #333;
+    min-height:100px;
+    resize: vertical;
+}
+.form button {
+    display: block;
+    background-color: #1a365d;
+    color: white;
+    font-size: 16px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+}
+.form button:hover {
+    background-color: #145da0; /* lighter blue on hover */
+}
+@media(max-width:769px){
+    .main{
+        overflow: visible;
+        flex-direction: column;
+        background-color: #c3d6ea;
+    }
+    .nav-bar{
+        width: 100%;
+        padding: 40px 0;
+    }
+    .container{
+        margin-left: 15%;
+        box-shadow: none;
+        padding: 30px 0;
+    }
+    
+}

@@ -1,8 +1,104 @@
-<h2>Select a Professor to Write a Testimonial</h2>
-<ul>
-  {% for prof in professors %}
-    <li>
-      <a href="{% url 'submit_testimonial' prof.id %}">{{ prof.name }} ({{ prof.department }})</a>
-    </li>
-  {% endfor %}
-</ul>
+{%extends "base.html"%}
+{%load static%}
+{% block css%}
+<link rel="stylesheet" href="{% static 'css/prof_list.css' %}">
+{%endblock%}
+{%block content%}
+<div class="page">
+  {%include "nav_bar.html" %}
+  <div class="prof-list" id="prof-list-container">
+    <div class="nav-bar">
+      <ul class="dept-list">
+        <li>
+          <a href="?"
+             onmousedown="event.preventDefault();" 
+             onmouseover="this.style.color='#FFF9E6'; this.style.background='#003366'; this.style.borderRadius='5px';" 
+             onmouseout="this.style.color='#003366'; this.style.background='';">
+            All
+          </a>
+        </li>
+        {% for prof in professors|dictsort:"department" %}
+          {% ifchanged prof.department %}
+            <li>
+              <a href="?department={{ prof.department }}" 
+                 onmousedown="event.preventDefault();"
+                 onmouseover="this.style.color='#FFF9E6'; this.style.background='#003366'; this.style.borderRadius='5px';" 
+                 onmouseout="this.style.color='#003366'; this.style.background='';">{{ prof.department }}</a>
+            </li>
+          {% endifchanged %}
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="container">
+      <div class="container-top">
+        <div class="search-box">
+          <input type="search" id="prof-search" placeholder="Enter name of professor" oninput="filterProfessors()">
+          <!-- <span></span> -->
+          <script>
+          function filterProfessors() {
+            const searchValue = document.getElementById('prof-search').value.toLowerCase();
+            const cards = document.querySelectorAll('.card-area ul');
+            cards.forEach(card => {
+              const name = card.querySelector('.prof-details ul li:first-child').textContent.toLowerCase();
+              if (name.includes(searchValue)) {
+                card.style.display = '';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          }
+          </script>
+          <span>
+            <svg width="40" height="40" viewBox="0 0 20 20" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="#607D8B" stroke-width="2"/>
+              <line x1="15" y1="15" x2="19" y2="19" stroke="#607D8B" stroke-width="2"/>
+            </svg>
+          </span>
+        </div>
+        <!-- Mobile Version -->
+        <div class="hamburger-menu" id="hamburger-menu-toggle" >
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+        </div>
+      </div>
+      <script>
+        document.getElementById('hamburger-menu-toggle').addEventListener('click', function() {
+          const profListContainer = document.getElementById('prof-list-container');
+          profListContainer.classList.toggle('nav-open');
+        });
+      </script>
+      <div class="card-area">
+        {% for prof in professors %}
+          {% if not request.GET.department or prof.department == request.GET.department %}
+            <ul>
+              <li>
+                <a href="{% url 'submit_testimonial' prof.id %}">
+                  <div class="prof-card">
+                    <div class="prof-img" style="background-image: url('{{prof.image_url}}');">
+                      </div>
+                    <div class="prof-details">
+                      <ul>
+                        <li>{{prof.name}}</li>
+                        <li>{{prof.department}}</li>
+                        <li>{{prof.email}}</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <style>
+                  .prof-card:hover {
+                    transform: scale(1.05);
+                  }
+                  </style>
+                </a>
+              </li>
+            </ul>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% include "footer.html" %}
+</div>
+
+{%endblock%}

@@ -1,0 +1,29 @@
+.header {
+  width: 100vw;
+  height: 10%;
+  display: flex;
+  justify-content: space-between;
+  background-color: #0c405e;
+  padding: 10px 60px;
+  box-sizing: border-box;
+}
+.header-logo {
+  display: flex;
+  justify-content: center;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.username {
+  color: #ffffff;
+  font-family: DM Sans;
+  font-size: 25px;
+  font-weight: 500;
+}
+@media(max-width:426px){
+  .header{
+    padding: 10px 10px;
+  }
+}
