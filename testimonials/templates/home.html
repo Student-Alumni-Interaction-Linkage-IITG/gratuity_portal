@@ -1,4 +1,4 @@
-<h1>Welcome to the Gratuity Portal</h1>
+{% comment %} <h1>Welcome to the Gratuity Portal</h1>
 
 <div style="max-width: 450px; margin: 0 auto; padding: 20px; text-align: center;">
 
@@ -39,4 +39,50 @@
   </div>
   {% endif %}
 
-</div>
+</div> {% endcomment %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link href="{% static 'img/sail_logo.png' %}" rel="shortcut icon" type="image/png">
+    <title>Login | SAIL Year Book Portal</title>
+
+  
+</head>
+
+<body>
+    <div class="landingpage">
+        <img src="{% static 'img/sail_logo.svg' %}" alt="SAIL Logo" class="saillogo-img" />
+        <div class="landing-intro">
+            <h1 class="landing-heading">GRATITUDE PORTAL</h1>
+            <hr class="landing-border" />
+            <h4>#ON THE OCCASION OF TEACHER'S DAY</h4>
+
+            {% if user.is_authenticated %}
+            <!-- Already logged in -->
+            <div class="success-box">
+                <h2> Successfully Authenticated</h2>
+                <p>Welcome, {{ user.first_name|default:user.username }}! You are logged in with Microsoft.</p>
+                <div class="success-actions">
+                    <a href="/professors/" class="btn">click here to proceed</a>
+
+                    {% comment %} <a href="/logout/" class="btn-red"> Logout</a> {% endcomment %}
+                </div>
+            </div>
+            {% else %}
+            <!-- Login button -->
+            <a class="btn"
+                href="{% url 'social:begin' 'azuread-oauth2-pkce' %}?next={{ next|default:'/' }}">
+                 Login with Microsoft
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

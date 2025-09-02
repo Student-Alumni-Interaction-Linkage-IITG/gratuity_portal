@@ -1,10 +1,10 @@
-{% load static %}
+{% comment %} {% load static %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/nav-bar.css' %}">
 {%endblock%}
 <div class="header">
     <div class="header-logo">
-      <img src="https://iitg.ac.in/sail/static/media/sail%20white%20logo%201.1a5b5ee342209483926a85aa53969a1f.svg" alt="SAIL">
+      <img src="\static\img\sail_logo.png" alt="SAIL">
     </div>
     <div class="user-info">
       <div class="user-logo">
@@ -16,4 +16,85 @@
       </div>
       <div class="username">{{ request.user.username }}</div> 
     </div>
+  </div> {% endcomment %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/nav-bar.css' %}">
+{% endblock %}
+
+<div class="header">
+  <div class="header-logo">
+    <img src="{% static 'img/sail_logo.png' %}" alt="SAIL">
   </div>
+  <div class="user-info">
+    <div class="dropdown">
+      <div class="user-logo" onclick="toggleDropdown()">
+        <svg width="52" height="52" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="16" fill="#bdbdbd"/>
+          <circle cx="16" cy="13" r="6" fill="#fff"/>
+          <ellipse cx="16" cy="24" rx="8" ry="5" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="dropdown-menu" id="dropdownMenu">
+        <div class="username">{{ request.user.username }}</div>
+        <a href="{% url 'logout' %}">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-menu {
+    display: none; /* hide by default */
+    position: absolute;
+    right: 0;
+    top: 60px;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 100;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .dropdown-menu a {
+    color: #333;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: #f1f1f1;
+  }
+
+  .dropdown-menu .username {
+    font-weight: bold;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
+    color: black;
+  }
+</style>
+
+<script>
+  function toggleDropdown() {
+    let menu = document.getElementById("dropdownMenu");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", function(event) {
+    let dropdown = document.querySelector(".dropdown");
+    if (!dropdown.contains(event.target)) {
+      document.getElementById("dropdownMenu").style.display = "none";
+    }
+  });
+</script>

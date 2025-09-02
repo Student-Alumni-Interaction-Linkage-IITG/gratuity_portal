@@ -1,2 +1,95 @@
-<h3>Thank you for your testimonial!</h3>
-<a href="{% url 'professor_list' %}">Submit another</a>
+{% comment %} <h3>Thank you for your testimonial!</h3>
+<a href="{% url 'professor_list' %}">Submit another</a> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, rgb(233, 124, 124), #9403fc);
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    a {
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-green {
+      background-color: #4caf50;
+      color: white;
+    }
+    .btn-green:hover {
+      background-color: #45a049;
+    }
+
+    .btn-red {
+      background-color: #f44336;
+      color: white;
+    }
+    .btn-red:hover {
+      background-color: #d32f2f;
+    }
+    .btn {
+    display: inline-block;
+    {% comment %} padding: 14px 28px; {% endcomment %}
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    {% comment %} margin: 8px; {% endcomment %}
+    color: white;
+    transition: background 0.3s, transform 0.2s;
+    background-color: #e2d544d6;
+    color: #2389d6;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1> Thank You!</h1>
+    <p>Your testimonial has been submitted successfully.</p>
+    <div class="actions">
+      <a href="/professors/" class="btn"> Back to Professor List</a>
+      <a href="/logout/" class="btn-red"> Logout</a>
+    </div>
+  </div>
+</body>
+</html>
