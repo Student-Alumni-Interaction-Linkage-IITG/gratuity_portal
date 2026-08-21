@@ -1,0 +1,221 @@
+/* ==========================================================================
+   GLOBAL DESIGN SYSTEM
+   Theme: Glassmorphism / Academic Modern
+   Inspired by SAIL Logo: Bold Primary Blue, Red/Green/Yellow accents.
+   ========================================================================== */
+
+:root {
+    /* Color Palette - Academic & Professional */
+    --clr-primary: #0F2C59; /* Deep Navy */
+    --clr-primary-light: #1A4B96;
+    --clr-accent-red: #D32F2F;
+    --clr-accent-green: #2E7D32;
+    --clr-accent-yellow: #F9A826;
+    
+    /* Backgrounds & Text */
+    --clr-bg: #F5F7FA;
+    --clr-text-main: #1C2331;
+    --clr-text-muted: #5C6B80;
+    
+    /* Elegant Cards */
+    --glass-bg: #FFFFFF;
+    --glass-border: #E2E8F0;
+    --glass-shadow: 0 4px 16px rgba(15, 44, 89, 0.05);
+    
+    /* Form */
+    --form-bg: #FFFFFF;
+    --form-border: #E2E8F0;
+    
+    /* Typography */
+    --font-main: 'Inter', sans-serif;
+    
+    /* Border Radius - more structural, less rounded */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-pill: 30px;
+}
+
+[data-theme="dark"] {
+    --clr-bg: #121212;
+    --clr-text-main: #E0E0E0;
+    --clr-text-muted: #A0A0A0;
+    
+    /* Primary brand tweaked for contrast */
+    --clr-primary: #5A8CFF;
+    --clr-primary-light: #83A9FF;
+    
+    /* Dark Glassmorphism */
+    --glass-bg: rgba(30, 30, 30, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    
+    /* Form */
+    --form-bg: rgba(0, 0, 0, 0.5);
+    --form-border: rgba(255, 255, 255, 0.2);
+}
+
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--clr-bg);
+    color: var(--clr-text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+/* ==========================================================================
+   BACKGROUND ELEMENTS (Clean & Subtle)
+   ========================================================================== */
+.bg-shape {
+    position: fixed;
+    z-index: -1;
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+.bg-shape-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--clr-primary) 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
+}
+
+.bg-shape-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--clr-primary-light) 0%, transparent 70%);
+    bottom: -150px;
+    right: -150px;
+}
+
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+.app-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 100px auto 40px;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+/* ==========================================================================
+   UI COMPONENTS
+   ========================================================================== */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glass-shadow);
+    padding: 30px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    font-family: var(--font-main);
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--clr-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(31, 60, 136, 0.3);
+}
+
+.btn-primary:hover {
+    background: var(--clr-primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(31, 60, 136, 0.4);
+}
+
+.btn-danger {
+    background: var(--clr-accent-red);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c92a36;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: var(--clr-accent-green);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #21867a;
+    transform: translateY(-2px);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--clr-text-main);
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--form-border);
+    border-radius: var(--radius-sm);
+    background: var(--form-bg);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    color: var(--clr-text-main);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--clr-primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(31, 60, 136, 0.1);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}

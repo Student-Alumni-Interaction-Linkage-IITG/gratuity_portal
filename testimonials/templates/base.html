@@ -4,14 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-      {% block css %}{% endblock %}
+    <title>SAIL Gratuity Portal</title>
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Global Design System -->
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    
+    <script>
+      // Apply theme before page renders to avoid FOUC
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    </script>
+
+    {% block css %}{% endblock %}
 </head>
 <body>
-
+    <!-- Abstract Background Elements -->
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
     
+    <!-- Main Content Area -->
+    <div class="app-wrapper">
         {% block content %}
         <!-- Child templates will replace this -->
         {% endblock %}
+    </div>
+
+    <!-- Global Footer -->
+    <footer style="text-align: center; padding: 30px 20px; color: var(--clr-text-muted); font-size: 0.85rem; border-top: 1px solid rgba(0,0,0,0.05); margin-top: auto;">
+        &copy; 2026 SAIL, IIT Guwahati. All rights reserved.
+    </footer>
+
 </body>
 </html>

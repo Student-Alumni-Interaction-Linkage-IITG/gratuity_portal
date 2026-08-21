@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "nav_bar.html" %}
+<div class="page-container" style="display: flex; align-items: center; justify-content: center; min-height: 70vh;">
+    <div class="glass-card" style="max-width: 500px; width: 100%; text-align: center; padding: 50px 30px; position: relative;">
+        
+        {% if profile and profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid var(--clr-primary); margin: 0 auto 20px;">
+        {% else %}
+            <div style="width: 150px; height: 150px; border-radius: 50%; background: #eee; color: #aaa; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold; border: 4px solid var(--clr-primary); margin: 0 auto 20px;">
+                {{ student.username|make_list|first|upper }}
+            </div>
+        {% endif %}
+        
+        <h2 style="font-size: 2rem; color: var(--clr-primary); margin-bottom: 5px;">{{ student.username }}</h2>
+        <div style="color: var(--clr-text-muted); margin-bottom: 30px;">{{ student.email }}</div>
+
+        <div style="text-align: left; background: rgba(255,255,255,0.4); border-radius: var(--radius-sm); padding: 20px;">
+            <div style="padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex;">
+                <strong style="color: var(--clr-primary); width: 130px;">Designation:</strong> 
+                <span style="color: var(--clr-text-main);">{% if profile and profile.designation %}{{ profile.designation }}{% else %}<span style="color:#aaa; font-style:italic;">Not provided</span>{% endif %}</span>
+            </div>
+            <div style="padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex;">
+                <strong style="color: var(--clr-primary); width: 130px;">Batch:</strong> 
+                <span style="color: var(--clr-text-main);">{% if profile and profile.batch %}{{ profile.batch }}{% else %}<span style="color:#aaa; font-style:italic;">Not provided</span>{% endif %}</span>
+            </div>
+            <div style="padding: 10px 0; display: flex;">
+                <strong style="color: var(--clr-primary); width: 130px;">Branch:</strong> 
+                <span style="color: var(--clr-text-main);">{% if profile and profile.branch %}{{ profile.branch }}{% else %}<span style="color:#aaa; font-style:italic;">Not provided</span>{% endif %}</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <a href="javascript:history.back()" class="btn" style="background: rgba(31, 60, 136, 0.1); color: var(--clr-primary);">Go Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

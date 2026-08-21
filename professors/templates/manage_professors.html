@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "nav_bar.html" %}
+
+<div class="page-container" style="max-width: 1000px; padding-top: 40px;">
+    <h1 style="color: var(--clr-primary); font-size: 2.2rem; margin-bottom: 20px;">Manage Professors</h1>
+    
+    {% if messages %}
+    <div style="margin-bottom: 20px;">
+        {% for message in messages %}
+        <div style="padding: 15px; border-radius: 6px; margin-bottom: 10px; {% if message.tags == 'error' %}background-color: #fee2e2; color: #991b1b; border: 1px solid #f87171;{% else %}background-color: #dcfce7; color: #166534; border: 1px solid #4ade80;{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="glass-card" style="padding: 30px; margin-bottom: 40px;">
+        <h2 style="color: var(--clr-primary); font-size: 1.5rem; margin-bottom: 15px;">Import Teachers Data (CSV)</h2>
+        <p style="color: var(--clr-text-muted); margin-bottom: 20px;">Upload a CSV file containing teacher information. Required columns: <strong>name, department, email, image_url, url</strong>. The email will be used as a unique identifier to prevent duplicates.</p>
+        
+        <form method="POST" enctype="multipart/form-data" style="display: flex; gap: 15px; align-items: center;">
+            {% csrf_token %}
+            <input type="file" name="csv_file" accept=".csv" required style="padding: 10px; border: 1px solid var(--glass-border); border-radius: 6px; background: rgba(255,255,255,0.5);">
+            <button type="submit" class="btn btn-primary" style="padding: 10px 24px;">Import Data</button>
+        </form>
+    </div>
+
+    <h2 style="color: var(--clr-primary); font-size: 1.5rem; margin-bottom: 15px;">Current Professors Directory</h2>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 8px; overflow: hidden;">
+            <thead style="background: rgba(31, 60, 136, 0.1);">
+                <tr>
+                    <th style="padding: 15px; color: var(--clr-text-main); font-weight: 600;">Name</th>
+                    <th style="padding: 15px; color: var(--clr-text-main); font-weight: 600;">Department</th>
+                    <th style="padding: 15px; color: var(--clr-text-main); font-weight: 600;">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prof in professors %}
+                <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+                    <td style="padding: 15px; color: var(--clr-text-main);">{{ prof.name }}</td>
+                    <td style="padding: 15px; color: var(--clr-text-muted);">{{ prof.department }}</td>
+                    <td style="padding: 15px; color: var(--clr-text-muted);">{{ prof.email }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="padding: 15px; text-align: center; color: var(--clr-text-muted);">No professors found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

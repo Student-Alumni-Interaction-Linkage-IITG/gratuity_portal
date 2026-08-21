@@ -80,12 +80,8 @@ WSGI_APPLICATION = 'gratuity_portal.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gratuity',
-        'USER': 'postgres',
-        'PASSWORD': 'post',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -112,15 +108,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'testimonials.azure_backend.AzureADOAuth2WithPKCE',
+    'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.azuread.AzureADOAuth2',
 )
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your-google-client-id'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your-google-client-secret'
 
-
-
-SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_KEY = 'aa4f2840-08d7-458e-992d-6ff67ff0d699'
-SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_SECRET = 'APF8Q~J.bD3cXIgyFjH.CAu79wDoQsuNCEYjwcin' 
+SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = '1f13daea-3da1-447a-8b1b-eb0dfbe0e137'
+SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = 'D9k8Q~9-813-w_lTIDV8F50HXXa-3yF9c2yHlcOQ'
 SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_TENANT_ID = '850aa78d-94e1-4bc6-9cf3-8c11b530701c'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
@@ -213,3 +210,8 @@ def debug_user_info(strategy, details, response, *args, **kwargs):
     logger.debug(f'User Details: {details}')
     # logger.debug(f'Response: {response}')
     return
+
+# Media files setup for image uploads
+import os
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

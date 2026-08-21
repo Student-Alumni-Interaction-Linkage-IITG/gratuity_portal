@@ -1,104 +1,382 @@
-{%extends "base.html"%}
-{%load static%}
-{% block css%}
-<link rel="stylesheet" href="{% static 'css/prof_list.css' %}">
-{%endblock%}
-{%block content%}
-<div class="page">
-  {%include "nav_bar.html" %}
-  <div class="prof-list" id="prof-list-container">
-    <div class="nav-bar">
-      <ul class="dept-list">
-        <li>
-          <a href="?"
-             onmousedown="event.preventDefault();" 
-             onmouseover="this.style.color='#FFF9E6'; this.style.background='#003366'; this.style.borderRadius='5px';" 
-             onmouseout="this.style.color='#003366'; this.style.background='';">
-            All
-          </a>
-        </li>
-        {% for prof in professors|dictsort:"department" %}
-          {% ifchanged prof.department %}
-            <li>
-              <a href="?department={{ prof.department }}" 
-                 onmousedown="event.preventDefault();"
-                 onmouseover="this.style.color='#FFF9E6'; this.style.background='#003366'; this.style.borderRadius='5px';" 
-                 onmouseout="this.style.color='#003366'; this.style.background='';">{{ prof.department }}</a>
-            </li>
-          {% endifchanged %}
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="container">
-      <div class="container-top">
-        <div class="search-box">
-          <input type="search" id="prof-search" placeholder="Enter name of professor" oninput="filterProfessors()">
-          <!-- <span></span> -->
-          <script>
-          function filterProfessors() {
-            const searchValue = document.getElementById('prof-search').value.toLowerCase();
-            const cards = document.querySelectorAll('.card-area ul');
-            cards.forEach(card => {
-              const name = card.querySelector('.prof-details ul li:first-child').textContent.toLowerCase();
-              if (name.includes(searchValue)) {
-                card.style.display = '';
-              } else {
-                card.style.display = 'none';
-              }
-            });
-          }
-          </script>
-          <span>
-            <svg width="40" height="40" viewBox="0 0 20 20" fill="none">
-              <circle cx="9" cy="9" r="7" stroke="#607D8B" stroke-width="2"/>
-              <line x1="15" y1="15" x2="19" y2="19" stroke="#607D8B" stroke-width="2"/>
-            </svg>
-          </span>
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "nav_bar.html" %}
+
+<div class="page-container" style="max-width: 1400px; display: flex; gap: 40px; align-items: flex-start;">
+    
+    <!-- Left Sidebar: Search & Filters -->
+    <aside style="width: 280px; flex-shrink: 0; position: sticky; top: 100px; background: var(--glass-bg); padding: 24px; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);">
+        
+        <h3 style="color: var(--clr-primary); font-size: 1.2rem; margin-bottom: 20px;">Search</h3>
+        
+        <!-- Search Box -->
+        <div style="position: relative; margin-bottom: 30px;">
+            <svg style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #999;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="search" id="prof-search" class="form-control" placeholder="Search name..." oninput="filterProfessors()" style="padding-left: 45px; border-radius: 8px; border: 1px solid #E0E0E0; background: #fff; width: 100%;">
         </div>
-        <!-- Mobile Version -->
-        <div class="hamburger-menu" id="hamburger-menu-toggle" >
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
+        
+        <h3 style="color: var(--clr-primary); font-size: 1.2rem; margin-bottom: 15px;">Departments</h3>
+        
+        <!-- Department Vertical List -->
+        <div style="display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 280px); overflow-y: auto; padding-right: 10px;" class="custom-scrollbar">
+            <a href="?" class="sidebar-filter-item {% if not request.GET.department %}active{% endif %}">All Departments</a>
+            {% for prof in professors|dictsort:"department" %}
+                {% ifchanged prof.department %}
+                    <a href="?department={{ prof.department }}" class="sidebar-filter-item {% if request.GET.department == prof.department %}active{% endif %}">
+                        {{ prof.department }}
+                    </a>
+                {% endifchanged %}
+            {% endfor %}
         </div>
-      </div>
-      <script>
-        document.getElementById('hamburger-menu-toggle').addEventListener('click', function() {
-          const profListContainer = document.getElementById('prof-list-container');
-          profListContainer.classList.toggle('nav-open');
-        });
-      </script>
-      <div class="card-area">
-        {% for prof in professors %}
-          {% if not request.GET.department or prof.department == request.GET.department %}
-            <ul>
-              <li>
-                <a href="{% url 'submit_testimonial' prof.id %}">
-                  <div class="prof-card">
-                    <div class="prof-img" style="background-image: url('{{prof.image_url}}');">
-                      </div>
-                    <div class="prof-details">
-                      <ul>
-                        <li>{{prof.name}}</li>
-                        <li>{{prof.department}}</li>
-                        <li>{{prof.email}}</li>
-                      </ul>
+    </aside>
+
+    <!-- Right Content: Professors -->
+    <div style="flex-grow: 1; min-width: 0;">
+        
+        <!-- Header Section -->
+        <div style="margin-bottom: 30px;">
+            <h1 style="color: var(--clr-primary); font-size: 2.2rem; margin-bottom: 8px;">Browse Professors</h1>
+            <p style="color: var(--clr-text-muted); font-size: 1.05rem;">Find your professor and write a testimonial to show your gratitude.</p>
+        </div>
+
+        <!-- Professor Grid -->
+        <div class="prof-grid-horizontal">
+            {% for prof in page_obj %}
+                <a href="{% url 'submit_testimonial' prof.id %}" class="prof-card-horiz">
+                    
+                    <div class="prof-card-top">
+                        <div class="prof-avatar">
+                            {% if prof.profile_picture %}
+                                <img src="{{ prof.profile_picture.url }}" alt="{{ prof.name }}">
+                            {% elif prof.image_url %}
+                                <img src="{{ prof.image_url }}" alt="{{ prof.name }}">
+                            {% else %}
+                                <div class="no-img">{{ prof.name|make_list|first|upper }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="prof-details">
+                            <h3 class="prof-name">{{ prof.name }}</h3>
+                            <div class="prof-dept">{{ prof.department }}</div>
+                            <div class="prof-email">{{ prof.email }}</div>
+                        </div>
                     </div>
-                  </div>
-                  <style>
-                  .prof-card:hover {
-                    transform: scale(1.05);
-                  }
-                  </style>
+                    
+                    <div class="prof-card-divider"></div>
+                    
+                    <div class="prof-card-bottom">
+                        <div class="prof-stat">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            <div class="stat-text">
+                                <strong>{{ prof.testimonial_set.count }}</strong><br>
+                                <span>Testimonials</span>
+                            </div>
+                        </div>
+                    </div>
                 </a>
-              </li>
-            </ul>
-          {% endif %}
-        {% endfor %}
-      </div>
+            {% empty %}
+                <div style="text-align: center; color: var(--clr-text-muted); padding: 40px; grid-column: 1 / -1;">
+                    No professors found.
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Controls -->
+        {% if page_obj.has_other_pages %}
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if current_department %}&department={{ current_department }}{% endif %}" class="page-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></a>
+                {% else %}
+                    <span class="page-btn disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></span>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-btn active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?page={{ num }}{% if current_department %}&department={{ current_department }}{% endif %}" class="page-btn">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if current_department %}&department={{ current_department }}{% endif %}" class="page-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></a>
+                {% else %}
+                    <span class="page-btn disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                {% endif %}
+            </div>
+            <div style="color: var(--clr-text-muted); font-size: 0.9rem;">Show 12 per page</div>
+        </div>
+        {% endif %}
     </div>
-  </div>
-  {% include "footer.html" %}
 </div>
 
-{%endblock%}
+<style>
+    /* Sidebar Filter Items */
+    .sidebar-filter-item {
+        display: block;
+        padding: 10px 16px;
+        border-radius: 8px;
+        color: var(--clr-text-main);
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        background: transparent;
+    }
+
+    .sidebar-filter-item:hover {
+        background: rgba(15, 44, 89, 0.05);
+        color: var(--clr-primary);
+    }
+
+    .sidebar-filter-item.active {
+        background: var(--clr-primary);
+        color: #fff;
+    }
+
+    [data-theme="dark"] .sidebar-filter-item {
+        color: var(--clr-text-main);
+    }
+    [data-theme="dark"] .sidebar-filter-item:hover {
+        background: rgba(255,255,255,0.05);
+    }
+    [data-theme="dark"] .sidebar-filter-item.active {
+        background: var(--clr-primary);
+        color: #121212;
+    }
+    
+    /* Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.02);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+
+    [data-theme="dark"] input#prof-search {
+        background: var(--form-bg) !important;
+        border-color: var(--form-border) !important;
+        color: var(--clr-text-main);
+    }
+
+    /* Grid */
+    .prof-grid-horizontal {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 24px;
+    }
+    
+    /* Horizontal Card */
+    .prof-card-horiz {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        border: 1px solid #F0F0F0;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+        overflow: hidden;
+    }
+    
+    [data-theme="dark"] .prof-card-horiz {
+        background: var(--glass-bg);
+        border-color: var(--glass-border);
+    }
+
+    .prof-card-horiz:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(31, 60, 136, 0.12);
+    }
+
+    .prof-card-top {
+        display: flex;
+        padding: 24px;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .prof-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: #eee;
+    }
+
+    .prof-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .prof-avatar .no-img {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: #aaa;
+        font-weight: bold;
+    }
+
+    .prof-details {
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    .prof-name {
+        color: var(--clr-primary);
+        font-size: 1.25rem;
+        margin-bottom: 4px;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .prof-dept {
+        color: var(--clr-accent-green);
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .prof-email {
+        color: var(--clr-text-muted);
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .prof-card-divider {
+        height: 1px;
+        background: #F0F0F0;
+        margin: 0 24px;
+    }
+
+    [data-theme="dark"] .prof-card-divider {
+        background: rgba(255,255,255,0.1);
+    }
+
+    .prof-card-bottom {
+        display: flex;
+        padding: 16px 24px;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .prof-stat {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .stat-divider {
+        width: 1px;
+        height: 30px;
+        background: #F0F0F0;
+    }
+
+    [data-theme="dark"] .stat-divider {
+        background: rgba(255,255,255,0.1);
+    }
+
+    .stat-text {
+        line-height: 1.2;
+    }
+
+    .stat-text strong {
+        font-size: 1.1rem;
+        color: var(--clr-text-main);
+    }
+
+    .stat-text span {
+        font-size: 0.75rem;
+        color: var(--clr-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .page-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid #E0E0E0;
+        background: #fff;
+        color: var(--clr-text-main);
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .page-btn:hover:not(.disabled):not(.active) {
+        background: #F8F9FA;
+        border-color: #B0B0B0;
+    }
+
+    .page-btn.active {
+        background: var(--clr-primary);
+        color: #fff;
+        border-color: var(--clr-primary);
+    }
+
+    .page-btn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f5f5f5;
+    }
+
+    [data-theme="dark"] .page-btn {
+        background: var(--form-bg);
+        border-color: var(--form-border);
+        color: var(--clr-text-main);
+    }
+
+    [data-theme="dark"] .page-btn.active {
+        background: var(--clr-primary);
+        color: #121212;
+    }
+
+    [data-theme="dark"] .page-btn.disabled {
+        background: rgba(0,0,0,0.2);
+    }
+
+</style>
+
+<script>
+function filterProfessors() {
+    const searchValue = document.getElementById('prof-search').value.toLowerCase();
+    const cards = document.querySelectorAll('.prof-card-horiz');
+    cards.forEach(card => {
+        const name = card.querySelector('.prof-name').textContent.toLowerCase();
+        const dept = card.querySelector('.prof-dept').textContent.toLowerCase();
+        if (name.includes(searchValue) || dept.includes(searchValue)) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

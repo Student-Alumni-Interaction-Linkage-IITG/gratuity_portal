@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "nav_bar.html" %}
+<div class="page-container">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: var(--clr-primary); font-size: 2.5rem; margin-bottom: 15px;">All Testimonials</h1>
+        <p style="color: var(--clr-text-muted); font-size: 1.1rem;">Read the wonderful words of gratitude shared by students.</p>
+    </div>
+
+    <div style="column-count: 1; column-gap: 30px; max-width: 900px; margin: 0 auto;">
+        {% for t in testimonials %}
+            <div class="glass-card" style="break-inside: avoid; margin-bottom: 30px; position: relative;">
+                
+                <!-- Professor Info (Top) -->
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; border: 2px solid var(--clr-primary);">
+                        {% if t.professor.profile_picture %}
+                            <img src="{{ t.professor.profile_picture.url }}" style="width:100%; height:100%; object-fit:cover;">
+                        {% elif t.professor.image_url %}
+                            <img src="{{ t.professor.image_url }}" style="width:100%; height:100%; object-fit:cover;">
+                        {% else %}
+                            <div style="width:100%; height:100%; background:var(--clr-primary); color:white; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                                {{ t.professor.name|make_list|first|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div style="font-size: 0.9rem; color: var(--clr-text-muted);">For Professor</div>
+                        <h4 style="color: var(--clr-primary); margin: 0;">{{ t.professor.name }}</h4>
+                    </div>
+                </div>
+
+                <!-- Testimonial Content -->
+                <div style="position: relative;">
+                    <p class="testimonial-content" style="font-size: 1.1rem; line-height: 1.7; font-style: italic; color: var(--clr-text-main); margin-bottom: 25px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; max-height: calc(1.7rem * 4);">
+                        "{{ t.content }}"
+                    </p>
+                    {% if t.content|length > 200 %}
+                    <button class="btn-read-more" onclick="openTestimonialModal('{{ t.id }}')" style="background:none; border:none; color:var(--clr-primary); font-weight:600; cursor:pointer; padding:0; margin-bottom:15px; font-size:0.95rem;">Read more</button>
+                    <!-- Hidden full content for modal -->
+                    <div id="full-content-{{ t.id }}" style="display: none;">{{ t.content }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Student Info (Bottom Right) -->
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 15px; text-align: right;">
+                    <div>
+                        {% if t.student %}
+                        <a href="{% url 'view_student_profile' t.student.id %}" style="text-decoration: none;">
+                            <h4 style="color: var(--clr-text-main); margin: 0; transition: color 0.2s;">- {{ t.author_name }}</h4>
+                        </a>
+                        {% else %}
+                        <h4 style="color: var(--clr-text-main); margin: 0; transition: color 0.2s;">- {{ t.author_name }}</h4>
+                        {% endif %}
+                        <div style="font-size: 0.8rem; color: var(--clr-text-muted); margin-top: 3px;">
+                            {{ t.author_designation|default:"" }}
+                            {% if t.author_batch %} ({{ t.author_batch }}){% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if t.student %}
+                    <a href="{% url 'view_student_profile' t.student.id %}">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid #ddd; flex-shrink: 0;">
+                            {% if t.student.student_profile.profile_picture %}
+                                <img src="{{ t.student.student_profile.profile_picture.url }}" style="width:100%; height:100%; object-fit:cover;">
+                            {% else %}
+                                <div style="width:100%; height:100%; background:#eee; color:#888; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size: 0.9rem;">
+                                    {{ t.author_name|make_list|first|upper }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% else %}
+                    <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid #ddd; flex-shrink: 0; background:#eee; color:#888; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size: 0.9rem;">
+                        {{ t.author_name|make_list|first|upper }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div style="position: absolute; top: 20px; right: 20px; font-size: 0.8rem; color: #bbb;">
+                    {{ t.submitted_at|date:"M j, Y" }}
+                </div>
+            </div>
+        {% empty %}
+            <div class="glass-card" style="text-align: center; padding: 60px; color: var(--clr-text-muted); font-style: italic;">
+                No testimonials have been written yet. Be the first!
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    @media (min-width: 768px) {
+        div[style*="column-count: 1"] {
+            column-count: 2 !important;
+        }
+    }
+    
+    /* Modal styles */
+    .testimonial-modal {
+        display: none;
+        position: fixed;
+        z-index: 1050;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
+    }
+    
+    .testimonial-modal-content {
+        background-color: var(--glass-bg);
+        margin: 10% auto;
+        padding: 30px;
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        width: 80%;
+        max-width: 700px;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .testimonial-close {
+        color: var(--clr-text-muted);
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .testimonial-close:hover,
+    .testimonial-close:focus {
+        color: var(--clr-text-main);
+        text-decoration: none;
+    }
+</style>
+
+<!-- Modal -->
+<div id="testimonialModal" class="testimonial-modal">
+  <div class="testimonial-modal-content">
+    <span class="testimonial-close" onclick="closeTestimonialModal()">&times;</span>
+    <h3 style="color: var(--clr-primary); margin-top: 0; margin-bottom: 20px;">Full Testimonial</h3>
+    <p id="modalTestimonialContent" style="font-size: 1.1rem; line-height: 1.7; font-style: italic; color: var(--clr-text-main); white-space: pre-wrap;"></p>
+  </div>
+</div>
+
+<script>
+    function openTestimonialModal(id) {
+        const fullContent = document.getElementById('full-content-' + id).innerText;
+        document.getElementById('modalTestimonialContent').innerText = '"' + fullContent + '"';
+        document.getElementById('testimonialModal').style.display = 'block';
+    }
+
+    function closeTestimonialModal() {
+        document.getElementById('testimonialModal').style.display = 'none';
+    }
+
+    // Close when clicking outside of modal content
+    window.onclick = function(event) {
+        const modal = document.getElementById('testimonialModal');
+        if (event.target == modal) {
+            closeTestimonialModal();
+        }
+    }
+</script>
+{% endblock %}

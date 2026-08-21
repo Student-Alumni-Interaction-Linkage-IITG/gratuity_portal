@@ -1,88 +1,60 @@
-{% comment %} <h1>Welcome to the Gratuity Portal</h1>
-
-<div style="max-width: 450px; margin: 0 auto; padding: 20px; text-align: center;">
-
-  {% if user.is_authenticated %}
-  <!-- User is already authenticated -->
-  <div style="padding: 30px; border: 2px solid #28a745; border-radius: 10px; background-color: #f0fff0;">
-    <h2 style="color: #28a745; margin-bottom: 20px;">✅ Successfully Authenticated</h2>
-    <p style="font-size: 1.1em; margin-bottom: 25px; color: #333;">
-      Welcome, {{ user.first_name|default:user.username }}! You are logged in with Microsoft.
-    </p>
-
-    <a href="/professors/"
-      style="display: inline-block; background-color: #28a745; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-right: 10px;">
-      📚 View Professors
-    </a>
-
-    <a href="/logout/"
-      style="display: inline-block; background-color: #dc3545; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      🚪 Logout
-    </a>
-  </div>
-  {% else %}
-  <!-- Microsoft Authentication - Only login method -->
-  <div style="padding: 30px; border: 2px solid #0078d4; border-radius: 10px; background-color: #f0f8ff;">
-    <h2 style="color: #0078d4; margin-bottom: 20px;">🔐 Microsoft Authentication Required</h2>
-    <p style="font-size: 1.1em; margin-bottom: 25px; color: #333;">
-      Please log in with your Microsoft account to access the Gratuity Portal.
-    </p>
-
-    <a href="{% url 'social:begin' 'azuread-oauth2-pkce' %}"
-      style="display: inline-block; background-color: #0078d4; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      🚀 Login with Microsoft
-    </a>
-
-    <p style="font-size: 0.9em; color: #666; margin-top: 20px; margin-bottom: 0;">
-      After authentication, you will be redirected to the professors page.
-    </p>
-  </div>
-  {% endif %}
-
-</div> {% endcomment %}
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
-    <link href="{% static 'img/sail_logo.png' %}" rel="shortcut icon" type="image/png">
-    <title>Login | SAIL Year Book Portal</title>
+{% block content %}
+{% include "nav_bar.html" %}
 
-  
-</head>
-
-<body>
-    <div class="landingpage">
-        <img src="{% static 'img/sail_logo.svg' %}" alt="SAIL Logo" class="saillogo-img" />
-        <div class="landing-intro">
-            <h1 class="landing-heading">GRATITUDE PORTAL</h1>
-            <hr class="landing-border" />
-            <h4>#ON THE OCCASION OF TEACHER'S DAY</h4>
-
-            {% if user.is_authenticated %}
-            <!-- Already logged in -->
-            <div class="success-box">
-                <h2> Successfully Authenticated</h2>
-                <p>Welcome, {{ user.first_name|default:user.username }}! You are logged in with Microsoft.</p>
-                <div class="success-actions">
-                    <a href="/professors/" class="btn">click here to proceed</a>
-
-                    {% comment %} <a href="/logout/" class="btn-red"> Logout</a> {% endcomment %}
-                </div>
-            </div>
-            {% else %}
-            <!-- Login button -->
-            <a class="btn"
-                href="{% url 'social:begin' 'azuread-oauth2-pkce' %}?next={{ next|default:'/' }}">
-                 Login with Microsoft
+<div class="page-container" style="max-width: 1200px; padding-top: 60px;">
+    
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 60px;">
+        <img src="{% static 'img/sail_logo.png' %}" alt="SAIL Logo" style="height: 100px; margin-bottom: 25px;">
+        <h1 style="font-size: 3.5rem; color: var(--clr-primary); margin-bottom: 20px; font-weight: 700; letter-spacing: -1px; max-width: 800px; line-height: 1.2;">
+            Honor the Educators Who Shape the Future
+        </h1>
+        <p style="font-size: 1.25rem; color: var(--clr-text-muted); margin-bottom: 40px; line-height: 1.7; max-width: 700px;">
+            The SAIL Gratuity Portal is a dedicated platform for IIT Guwahati students to express their gratitude, share experiences, and leave lasting testimonials for our esteemed faculty.
+        </p>
+        
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'professor_list' %}" class="btn btn-primary" style="font-size: 1.1rem; padding: 14px 32px;">
+                Browse Professors
             </a>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'social:begin' 'azuread-oauth2' %}" class="btn" style="font-size: 1.1rem; padding: 14px 20px; background: transparent; color: var(--clr-primary); border: 2px solid var(--clr-primary);">
+                     Login with Microsoft
+                </a>
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn" style="font-size: 1.1rem; padding: 14px 20px; background: transparent; color: #DB4437; border: 2px solid #DB4437;">
+                     Login with Google
+                </a>
             {% endif %}
         </div>
     </div>
-</body>
-
-</html>
+    
+    <!-- Quick Stats or Features -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 60px;">
+        <div class="glass-card" style="text-align: center; padding: 40px 20px;">
+            <div style="width: 60px; height: 60px; background: rgba(15, 44, 89, 0.1); color: var(--clr-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <h3 style="color: var(--clr-text-main); font-size: 1.3rem; margin-bottom: 10px;">Academic Excellence</h3>
+            <p style="color: var(--clr-text-muted); font-size: 1rem; line-height: 1.6;">Celebrating the dedication and hard work of our professors and researchers.</p>
+        </div>
+        
+        <div class="glass-card" style="text-align: center; padding: 40px 20px;">
+            <div style="width: 60px; height: 60px; background: rgba(15, 44, 89, 0.1); color: var(--clr-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <h3 style="color: var(--clr-text-main); font-size: 1.3rem; margin-bottom: 10px;">Lasting Testimonials</h3>
+            <p style="color: var(--clr-text-muted); font-size: 1rem; line-height: 1.6;">A permanent repository of student gratitude, accessible to faculty members.</p>
+        </div>
+        
+        <div class="glass-card" style="text-align: center; padding: 40px 20px;">
+            <div style="width: 60px; height: 60px; background: rgba(15, 44, 89, 0.1); color: var(--clr-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <h3 style="color: var(--clr-text-main); font-size: 1.3rem; margin-bottom: 10px;">Community Bond</h3>
+            <p style="color: var(--clr-text-muted); font-size: 1rem; line-height: 1.6;">Strengthening the connection between students, alumni, and the institution.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
