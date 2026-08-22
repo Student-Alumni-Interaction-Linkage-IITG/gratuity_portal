@@ -69,21 +69,71 @@ from professors.models import Professor
 
 from django.core.paginator import Paginator
 
+from django.db.models import Q
+
 def professor_list(request):
-    department = request.GET.get('department')
+    department = request.GET.get('department', '').strip()
+    search_query = request.GET.get('q', '').strip()
+    
+    professors_list = Professor.objects.all()
     if department:
-        professors_list = Professor.objects.filter(department=department).order_by('name')
-    else:
-        professors_list = Professor.objects.all().order_by('name')
+        professors_list = professors_list.filter(department=department)
+    if search_query:
+        professors_list = professors_list.filter(
+            Q(name__icontains=search_query) | Q(department__icontains=search_query)
+        )
+    professors_list = professors_list.order_by('name')
         
-    paginator = Paginator(professors_list, 12) # Show 12 professors per page
+    paginator = Paginator(professors_list, 30) # Show 30 professors per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    # We still need all departments for the filter pills
-    all_professors = Professor.objects.all()
+    # All distinct departments for the filter dropdown
+    departments = Professor.objects.values_list('department', flat=True).distinct().order_by('department')
     
-    return render(request, 'professor_list.html', {'page_obj': page_obj, 'professors': all_professors, 'current_department': department})
+    return render(request, 'professor_list.html', {
+        'page_obj': page_obj,
+        'departments': departments,
+        'current_department': department,
+        'search_query': search_query,
+    })
+
+from django.http import JsonResponse
+from django.urls import reverse
+
+def professor_search_suggestions(request):
+    query = request.GET.get('q', '').strip()
+    department = request.GET.get('department', '').strip()
+    
+    if not query:
+        return JsonResponse({'results': []})
+        
+    qs = Professor.objects.all()
+    if department:
+        qs = qs.filter(department=department)
+        
+    qs = qs.filter(
+        Q(name__icontains=query) | Q(department__icontains=query)
+    ).order_by('name')[:8]
+    
+    results = []
+    for prof in qs:
+        image_url = ''
+        if prof.profile_picture:
+            image_url = prof.profile_picture.url
+        elif prof.image_url:
+            image_url = prof.image_url
+            
+        results.append({
+            'id': prof.id,
+            'name': prof.name,
+            'department': prof.department,
+            'image_url': image_url,
+            'initial': prof.name[0].upper() if prof.name else '?',
+            'submit_url': reverse('submit_testimonial', args=[prof.id]),
+        })
+        
+    return JsonResponse({'results': results})
 def thank_you(request):
     return render(request, 'thank_you.html')
 
