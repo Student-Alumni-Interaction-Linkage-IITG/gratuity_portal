@@ -4,318 +4,817 @@
 {% block content %}
 {% include "nav_bar.html" %}
 
-<div class="page-container" style="max-width: 1400px; display: flex; gap: 40px; align-items: flex-start;">
-    
-    <!-- Left Sidebar: Search & Filters -->
-    <aside style="width: 280px; flex-shrink: 0; position: sticky; top: 100px; background: var(--glass-bg); padding: 24px; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);">
-        
-        <h3 style="color: var(--clr-primary); font-size: 1.2rem; margin-bottom: 20px;">Search</h3>
-        
-        <!-- Search Box -->
-        <div style="position: relative; margin-bottom: 30px;">
-            <svg style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #999;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="search" id="prof-search" class="form-control" placeholder="Search name..." oninput="filterProfessors()" style="padding-left: 45px; border-radius: 8px; border: 1px solid #E0E0E0; background: #fff; width: 100%;">
-        </div>
-        
-        <h3 style="color: var(--clr-primary); font-size: 1.2rem; margin-bottom: 15px;">Departments</h3>
-        
-        <!-- Department Vertical List -->
-        <div style="display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 280px); overflow-y: auto; padding-right: 10px;" class="custom-scrollbar">
-            <a href="?" class="sidebar-filter-item {% if not request.GET.department %}active{% endif %}">All Departments</a>
-            {% for prof in professors|dictsort:"department" %}
-                {% ifchanged prof.department %}
-                    <a href="?department={{ prof.department }}" class="sidebar-filter-item {% if request.GET.department == prof.department %}active{% endif %}">
-                        {{ prof.department }}
-                    </a>
-                {% endifchanged %}
-            {% endfor %}
-        </div>
-    </aside>
+<!-- Spacer for fixed navbar (70px) -->
+<div style="height: 70px;"></div>
+<div class="prof-page-header">
+    <h1>Browse Professors</h1>
+    <p>Find your professor and write a testimonial to show your gratitude.</p>
+</div>
+<!-- Sticky Top Bar: Department Dropdown + Search -->
+<div class="prof-top-bar" id="prof-top-bar">
+    <div class="prof-top-bar-inner">
 
-    <!-- Right Content: Professors -->
-    <div style="flex-grow: 1; min-width: 0;">
-        
-        <!-- Header Section -->
-        <div style="margin-bottom: 30px;">
-            <h1 style="color: var(--clr-primary); font-size: 2.2rem; margin-bottom: 8px;">Browse Professors</h1>
-            <p style="color: var(--clr-text-muted); font-size: 1.05rem;">Find your professor and write a testimonial to show your gratitude.</p>
-        </div>
-
-        <!-- Professor Grid -->
-        <div class="prof-grid-horizontal">
-            {% for prof in page_obj %}
-                <a href="{% url 'submit_testimonial' prof.id %}" class="prof-card-horiz">
-                    
-                    <div class="prof-card-top">
-                        <div class="prof-avatar">
-                            {% if prof.profile_picture %}
-                                <img src="{{ prof.profile_picture.url }}" alt="{{ prof.name }}">
-                            {% elif prof.image_url %}
-                                <img src="{{ prof.image_url }}" alt="{{ prof.name }}">
-                            {% else %}
-                                <div class="no-img">{{ prof.name|make_list|first|upper }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="prof-details">
-                            <h3 class="prof-name">{{ prof.name }}</h3>
-                            <div class="prof-dept">{{ prof.department }}</div>
-                            <div class="prof-email">{{ prof.email }}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="prof-card-divider"></div>
-                    
-                    <div class="prof-card-bottom">
-                        <div class="prof-stat">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                            <div class="stat-text">
-                                <strong>{{ prof.testimonial_set.count }}</strong><br>
-                                <span>Testimonials</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            {% empty %}
-                <div style="text-align: center; color: var(--clr-text-muted); padding: 40px; grid-column: 1 / -1;">
-                    No professors found.
-                </div>
-            {% endfor %}
-        </div>
-
-        <!-- Pagination Controls -->
-        {% if page_obj.has_other_pages %}
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
-            <div class="pagination">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}{% if current_department %}&department={{ current_department }}{% endif %}" class="page-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></a>
-                {% else %}
-                    <span class="page-btn disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></span>
+        <!-- Department Dropdown (left) -->
+        <div class="dept-dropdown-wrapper">
+            <svg class="dept-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+            <select id="dept-filter" onchange="filterByDepartment(this.value)">
+                <option value="">All Departments</option>
+                {% for dept in departments %}
+                {% if dept %}
+                <option value="{{ dept }}" {% if current_department == dept %}selected{% endif %}>{{ dept }}</option>
                 {% endif %}
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <span class="page-btn active">{{ num }}</span>
-                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                        <a href="?page={{ num }}{% if current_department %}&department={{ current_department }}{% endif %}" class="page-btn">{{ num }}</a>
-                    {% endif %}
                 {% endfor %}
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% if current_department %}&department={{ current_department }}{% endif %}" class="page-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></a>
-                {% else %}
-                    <span class="page-btn disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
-                {% endif %}
-            </div>
-            <div style="color: var(--clr-text-muted); font-size: 0.9rem;">Show 12 per page</div>
+            </select>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+            </svg>
         </div>
-        {% endif %}
+
+        <!-- Search Form (center) -->
+        <form method="GET" action="{% url 'professor_list' %}" class="prof-search-wrapper" id="prof-search-form"
+            autocomplete="off">
+            {% if current_department %}
+            <input type="hidden" name="department" value="{{ current_department }}" id="prof-dept-hidden">
+            {% endif %}
+            <div class="prof-search-input-box" id="prof-search-box-container">
+                <svg class="prof-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="search" name="q" id="prof-search-input"
+                    placeholder="Search professors by name or department..." value="{{ search_query|default:'' }}"
+                    autocomplete="off" aria-autocomplete="list" aria-controls="prof-suggestions-dropdown">
+                {% if search_query %}
+                <button type="button" class="prof-search-clear" onclick="clearSearch()" title="Clear search"
+                    aria-label="Clear search">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+                {% endif %}
+
+                <!-- Live Suggestions Dropdown -->
+                <div class="prof-suggestions-dropdown" id="prof-suggestions-dropdown">
+                    <div class="prof-suggestions-list" id="prof-suggestions-list"></div>
+                    <div class="prof-suggestions-footer" id="prof-suggestions-footer"></div>
+                </div>
+            </div>
+            <button type="submit" class="prof-search-btn">Search</button>
+        </form>
+
+        <!-- Result count (right) -->
+        <div class="prof-result-count" id="prof-result-count">
+            {{ page_obj.paginator.count }} professor{{ page_obj.paginator.count|pluralize }}
+        </div>
     </div>
 </div>
 
+<!-- Page Content -->
+<div class="prof-page-container">
+
+    <!-- Professor Grid (full width) -->
+    <div class="prof-card-grid" id="prof-card-grid">
+        {% for prof in page_obj %}
+        <a href="{% url 'submit_testimonial' prof.id %}" class="prof-card-item" data-name="{{ prof.name|lower }}"
+            data-dept="{{ prof.department|lower }}">
+            <div class="prof-card-avatar-wrap">
+                {% if prof.profile_picture %}
+                <img src="{{ prof.profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
+                {% elif prof.image_url %}
+                <img src="{{ prof.image_url }}" alt="{{ prof.name }}" loading="lazy">
+                {% else %}
+                <div class="prof-avatar-fallback">{{ prof.name|make_list|first|upper }}</div>
+                {% endif %}
+            </div>
+            <div class="prof-card-info-wrap">
+                <h3 class="prof-card-title">{{ prof.name }}</h3>
+                <span class="prof-card-department">{{ prof.department }}</span>
+            </div>
+            <div class="prof-card-actions">
+                <div class="prof-testimonial-count">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                    <span>{{ prof.testimonial_set.count }}</span>
+                </div>
+                <span class="prof-write-cta">Write &rarr;</span>
+            </div>
+        </a>
+        {% empty %}
+        <div class="prof-empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <p>No professors found{% if search_query %} matching "<strong>{{ search_query }}</strong>"{% endif %}{% if current_department %} in <strong>{{ current_department }}</strong>{% endif %}.</p>
+            {% if search_query or current_department %}
+            <a href="{% url 'professor_list' %}" class="prof-reset-btn">Clear Filters</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="prof-pagination-bar">
+        <div class="prof-pagination-btns">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_department %}&department={{ current_department|urlencode }}{% endif %}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="prof-page-btn" aria-label="Previous Page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+            </a>
+            {% else %}
+            <span class="prof-page-btn prof-page-disabled" aria-disabled="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+            </span>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="prof-page-btn prof-page-active">{{ num }}</span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}{% if current_department %}&department={{ current_department|urlencode }}{% endif %}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="prof-page-btn">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if current_department %}&department={{ current_department|urlencode }}{% endif %}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="prof-page-btn" aria-label="Next Page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6" />
+                </svg>
+            </a>
+            {% else %}
+            <span class="prof-page-btn prof-page-disabled" aria-disabled="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6" />
+                </svg>
+            </span>
+            {% endif %}
+        </div>
+        <div class="prof-pagination-info">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} &middot; {{ page_obj.paginator.count }} professor{{ page_obj.paginator.count|pluralize }}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
 <style>
-    /* Sidebar Filter Items */
-    .sidebar-filter-item {
-        display: block;
-        padding: 10px 16px;
-        border-radius: 8px;
-        color: var(--clr-text-main);
-        font-weight: 500;
-        font-size: 0.95rem;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        background: transparent;
+    /* ═══════════════════════════════════════════
+       STICKY TOP BAR — sits below the 70px fixed navbar
+    ═══════════════════════════════════════════ */
+    .prof-top-bar {
+        position: sticky;
+        top: 70px;
+        z-index: 500;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        padding: 14px 0;
     }
 
-    .sidebar-filter-item:hover {
-        background: rgba(15, 44, 89, 0.05);
+    [data-theme="dark"] .prof-top-bar {
+        background: rgba(18, 18, 18, 0.92);
+        border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .prof-top-bar-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 32px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    /* ═══════════════════════════════════════════
+       DEPARTMENT DROPDOWN
+    ═══════════════════════════════════════════ */
+    .dept-dropdown-wrapper {
+        position: relative;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    .dept-dropdown-wrapper .dept-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
         color: var(--clr-primary);
+        pointer-events: none;
+        z-index: 1;
     }
 
-    .sidebar-filter-item.active {
-        background: var(--clr-primary);
+    .dept-dropdown-wrapper .chevron-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .dept-dropdown-wrapper select {
+        display: block;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background: #fff;
+        border: 1px solid #E0E0E0;
+        border-radius: 10px;
+        padding: 10px 42px 10px 42px;
+        font-size: 0.92rem;
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        color: var(--clr-text-main);
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        min-width: 200px;
+        height: auto;
+        line-height: 1.4;
+    }
+
+    .dept-dropdown-wrapper select:focus {
+        outline: none;
+        border-color: var(--clr-primary);
+        box-shadow: 0 0 0 3px rgba(15, 44, 89, 0.08);
+    }
+
+    [data-theme="dark"] .dept-dropdown-wrapper select {
+        background: #1e1e1e;
+        border-color: rgba(255, 255, 255, 0.15);
+        color: var(--clr-text-main);
+    }
+
+    /* ═══════════════════════════════════════════
+       SEARCH INPUT
+    ═══════════════════════════════════════════ */
+    .prof-search-wrapper {
+        flex: 1;
+        max-width: 560px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .prof-search-input-box {
+        position: relative;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .prof-search-input-box .prof-search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .prof-search-input-box input#prof-search-input {
+        width: 100%;
+        padding: 10px 42px 10px 46px;
+        border: 1px solid #E0E0E0;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        color: var(--clr-text-main);
+        transition: border-color 0.2s, box-shadow 0.2s;
+        height: auto;
+        line-height: 1.4;
+        box-sizing: border-box;
+    }
+
+    .prof-search-input-box input#prof-search-input:focus {
+        outline: none;
+        border-color: var(--clr-primary);
+        box-shadow: 0 0 0 3px rgba(15, 44, 89, 0.08);
+    }
+
+    .prof-search-input-box input#prof-search-input::placeholder {
+        color: #aaa;
+    }
+
+    [data-theme="dark"] .prof-search-input-box input#prof-search-input {
+        background: #1e1e1e;
+        border-color: rgba(255, 255, 255, 0.15);
+        color: var(--clr-text-main);
+    }
+
+    .prof-search-clear {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.06);
+        border: none;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        padding: 0;
+        z-index: 2;
+    }
+
+    .prof-search-clear:hover {
+        background: rgba(0, 0, 0, 0.14);
+        color: #111;
+    }
+
+    [data-theme="dark"] .prof-search-clear {
+        background: rgba(255, 255, 255, 0.12);
+        color: #bbb;
+    }
+
+    [data-theme="dark"] .prof-search-clear:hover {
+        background: rgba(255, 255, 255, 0.22);
         color: #fff;
     }
 
-    [data-theme="dark"] .sidebar-filter-item {
-        color: var(--clr-text-main);
-    }
-    [data-theme="dark"] .sidebar-filter-item:hover {
-        background: rgba(255,255,255,0.05);
-    }
-    [data-theme="dark"] .sidebar-filter-item.active {
+    .prof-search-btn {
         background: var(--clr-primary);
-        color: #121212;
-    }
-    
-    /* Scrollbar */
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: rgba(0,0,0,0.02);
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: rgba(0,0,0,0.1);
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
         border-radius: 10px;
-    }
-
-    [data-theme="dark"] input#prof-search {
-        background: var(--form-bg) !important;
-        border-color: var(--form-border) !important;
-        color: var(--clr-text-main);
-    }
-
-    /* Grid */
-    .prof-grid-horizontal {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-        gap: 24px;
-    }
-    
-    /* Horizontal Card */
-    .prof-card-horiz {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-        border: 1px solid #F0F0F0;
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        text-decoration: none;
-        color: inherit;
-        overflow: hidden;
-    }
-    
-    [data-theme="dark"] .prof-card-horiz {
-        background: var(--glass-bg);
-        border-color: var(--glass-border);
-    }
-
-    .prof-card-horiz:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(31, 60, 136, 0.12);
-    }
-
-    .prof-card-top {
-        display: flex;
-        padding: 24px;
-        gap: 20px;
-        align-items: flex-start;
-    }
-
-    .prof-avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        overflow: hidden;
-        flex-shrink: 0;
-        background: #eee;
-    }
-
-    .prof-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .prof-avatar .no-img {
-        width: 100%;
-        height: 100%;
+        cursor: pointer;
+        font-size: 0.92rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 2.5rem;
-        color: #aaa;
-        font-weight: bold;
+        transition: background 0.2s, transform 0.15s;
+        flex-shrink: 0;
     }
 
-    .prof-details {
-        flex-grow: 1;
-        overflow: hidden;
+    .prof-search-btn:hover {
+        background: var(--clr-primary-light);
     }
 
-    .prof-name {
-        color: var(--clr-primary);
-        font-size: 1.25rem;
-        margin-bottom: 4px;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .prof-dept {
-        color: var(--clr-accent-green);
-        font-size: 0.9rem;
+    .prof-reset-btn {
+        display: inline-block;
+        margin-top: 16px;
+        padding: 9px 20px;
+        background: var(--clr-primary);
+        color: #fff !important;
+        border-radius: 8px;
+        text-decoration: none !important;
         font-weight: 600;
-        margin-bottom: 4px;
+        font-size: 0.9rem;
+        transition: background 0.2s, transform 0.15s;
     }
 
-    .prof-email {
-        color: var(--clr-text-muted);
-        font-size: 0.85rem;
-        white-space: nowrap;
+    .prof-reset-btn:hover {
+        background: var(--clr-primary-light);
+        transform: translateY(-1px);
+    }
+
+    /* ═══════════════════════════════════════════
+       LIVE SEARCH SUGGESTIONS
+    ═══════════════════════════════════════════ */
+    .prof-suggestions-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        box-shadow: 0 16px 36px rgba(15, 44, 89, 0.14), 0 4px 12px rgba(0, 0, 0, 0.06);
+        z-index: 1000;
         overflow: hidden;
-        text-overflow: ellipsis;
+        animation: profFadeIn 0.15s ease-out;
+        max-height: 380px;
+        overflow-y: auto;
     }
 
-    .prof-card-divider {
-        height: 1px;
-        background: #F0F0F0;
-        margin: 0 24px;
+    [data-theme="dark"] .prof-suggestions-dropdown {
+        background: #1e1e1e;
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    [data-theme="dark"] .prof-card-divider {
-        background: rgba(255,255,255,0.1);
+    @keyframes profFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    .prof-card-bottom {
-        display: flex;
-        padding: 16px 24px;
-        align-items: center;
-        justify-content: space-around;
+    .prof-suggestions-list {
+        padding: 6px 0;
+        margin: 0;
+        list-style: none;
     }
 
-    .prof-stat {
+    .prof-suggestion-item {
         display: flex;
         align-items: center;
         gap: 12px;
-        flex: 1;
+        padding: 9px 16px;
+        text-decoration: none !important;
+        color: var(--clr-text-main) !important;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    .prof-suggestion-item:hover,
+    .prof-suggestion-item.prof-suggestion-active {
+        background: rgba(15, 44, 89, 0.06);
+    }
+
+    [data-theme="dark"] .prof-suggestion-item:hover,
+    [data-theme="dark"] .prof-suggestion-item.prof-suggestion-active {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .prof-sugg-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        background: #e2e8f0;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .prof-sugg-avatar-fallback {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--clr-primary), #3b82f6);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
 
-    .stat-divider {
-        width: 1px;
-        height: 30px;
-        background: #F0F0F0;
+    .prof-sugg-info {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
     }
 
-    [data-theme="dark"] .stat-divider {
-        background: rgba(255,255,255,0.1);
+    .prof-sugg-name {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--clr-primary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .stat-text {
-        line-height: 1.2;
+    [data-theme="dark"] .prof-sugg-name {
+        color: #60a5fa;
     }
 
-    .stat-text strong {
-        font-size: 1.1rem;
+    .prof-sugg-name .highlight {
         color: var(--clr-text-main);
+        background: rgba(59, 130, 246, 0.16);
+        padding: 0 2px;
+        border-radius: 3px;
+        font-weight: 700;
     }
 
-    .stat-text span {
-        font-size: 0.75rem;
+    [data-theme="dark"] .prof-sugg-name .highlight {
+        background: rgba(59, 130, 246, 0.35);
+        color: #fff;
+    }
+
+    .prof-sugg-dept {
+        font-size: 0.76rem;
         color: var(--clr-text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .prof-sugg-action {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--clr-primary);
+        opacity: 0.85;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    [data-theme="dark"] .prof-sugg-action {
+        color: #93c5fd;
+    }
+
+    .prof-suggestions-footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        padding: 8px 16px;
+        background: rgba(0, 0, 0, 0.02);
+    }
+
+    [data-theme="dark"] .prof-suggestions-footer {
+        border-top-color: rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .prof-sugg-footer-btn {
+        width: 100%;
+        background: none;
+        border: none;
+        padding: 4px 0;
+        font-size: 0.83rem;
+        font-weight: 600;
+        color: var(--clr-primary);
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: inherit;
+    }
+
+    [data-theme="dark"] .prof-sugg-footer-btn {
+        color: #93c5fd;
+    }
+
+    .prof-sugg-empty {
+        padding: 16px;
+        text-align: center;
+        font-size: 0.88rem;
+        color: var(--clr-text-muted);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESULT COUNT BADGE
+    ═══════════════════════════════════════════ */
+    .prof-result-count {
+        flex-shrink: 0;
+        font-size: 0.85rem;
+        color: var(--clr-text-muted);
+        font-weight: 500;
+        white-space: nowrap;
+        background: rgba(15, 44, 89, 0.06);
+        padding: 8px 16px;
+        border-radius: 8px;
+    }
+
+    [data-theme="dark"] .prof-result-count {
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* ═══════════════════════════════════════════
+       PAGE CONTAINER & CENTERED HEADER
+    ═══════════════════════════════════════════ */
+    .prof-page-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 32px 32px 60px;
+    }
+
+    .prof-page-header {
+        text-align: center;
+        max-width: 1400px;
+        margin: 28px auto 20px auto;
+        padding: 0 32px;
+    }
+
+    .prof-page-header h1 {
+        color: var(--clr-primary);
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .prof-page-header p {
+        color: var(--clr-text-muted);
+        font-size: 1.05rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════
+       PROFESSOR GRID — 4 Columns
+    ═══════════════════════════════════════════ */
+    .prof-card-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 24px !important;
+        width: 100% !important;
+    }
+
+    /* ═══════════════════════════════════════════
+       PROFESSOR CARD — unique class names to avoid conflicts
+    ═══════════════════════════════════════════ */
+    .prof-card-item {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center;
+        text-decoration: none !important;
+        color: inherit;
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #F0F0F0;
+        padding: 28px 20px 18px;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        position: relative;
+        overflow: hidden;
+        width: auto !important;
+    }
+
+    .prof-card-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--clr-primary), var(--clr-accent-green, #34d399));
+        opacity: 0;
+        transition: opacity 0.22s ease;
+    }
+
+    .prof-card-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 32px rgba(15, 44, 89, 0.12);
+        border-color: rgba(15, 44, 89, 0.15);
+    }
+
+    .prof-card-item:hover::before {
+        opacity: 1;
+    }
+
+    [data-theme="dark"] .prof-card-item {
+        background: rgba(30, 30, 30, 0.7);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .prof-card-item:hover {
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Avatar */
+    .prof-card-avatar-wrap {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        margin-bottom: 14px;
+        background: #f0f0f0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .prof-card-avatar-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .prof-avatar-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fff;
+        background: linear-gradient(135deg, var(--clr-primary), #3b82f6);
+    }
+
+    /* Info */
+    .prof-card-info-wrap {
+        margin-bottom: 14px;
+        width: 100%;
+    }
+
+    .prof-card-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--clr-primary);
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .prof-card-department {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--clr-accent-green, #16a34a);
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
-    /* Pagination */
-    .pagination {
+    /* Footer actions */
+    .prof-card-actions {
+        width: 100%;
         display: flex;
-        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid #f0f0f0;
+        padding-top: 12px;
+        margin-top: auto;
+    }
+
+    [data-theme="dark"] .prof-card-actions {
+        border-top-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .prof-testimonial-count {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.82rem;
+        color: var(--clr-text-muted);
+        font-weight: 500;
+    }
+
+    .prof-write-cta {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--clr-primary);
+        opacity: 0;
+        transform: translateX(-6px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .prof-card-item:hover .prof-write-cta {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Empty state */
+    .prof-empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--clr-text-muted);
+    }
+
+    .prof-empty-state svg {
+        margin-bottom: 16px;
+        opacity: 0.4;
+    }
+
+    .prof-empty-state p {
+        font-size: 1.1rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       PAGINATION
+    ═══════════════════════════════════════════ */
+    .prof-pagination-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+    }
+
+    .prof-pagination-btns {
+        display: flex;
+        gap: 6px;
         align-items: center;
     }
 
-    .page-btn {
+    .prof-page-btn {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -326,57 +825,325 @@
         background: #fff;
         color: var(--clr-text-main);
         font-weight: 500;
+        font-size: 0.9rem;
         text-decoration: none;
         transition: all 0.2s ease;
     }
 
-    .page-btn:hover:not(.disabled):not(.active) {
+    .prof-page-btn:hover:not(.prof-page-disabled):not(.prof-page-active) {
         background: #F8F9FA;
         border-color: #B0B0B0;
     }
 
-    .page-btn.active {
-        background: var(--clr-primary);
-        color: #fff;
-        border-color: var(--clr-primary);
+    .prof-page-active {
+        background: var(--clr-primary) !important;
+        color: #fff !important;
+        border-color: var(--clr-primary) !important;
     }
 
-    .page-btn.disabled {
-        opacity: 0.5;
+    .prof-page-disabled {
+        opacity: 0.4;
         cursor: not-allowed;
         background: #f5f5f5;
     }
 
-    [data-theme="dark"] .page-btn {
-        background: var(--form-bg);
-        border-color: var(--form-border);
+    .prof-pagination-info {
+        font-size: 0.85rem;
+        color: var(--clr-text-muted);
+    }
+
+    [data-theme="dark"] .prof-page-btn {
+        background: #1e1e1e;
+        border-color: rgba(255, 255, 255, 0.15);
         color: var(--clr-text-main);
     }
 
-    [data-theme="dark"] .page-btn.active {
-        background: var(--clr-primary);
-        color: #121212;
+    [data-theme="dark"] .prof-page-active {
+        background: var(--clr-primary) !important;
+        color: #121212 !important;
     }
 
-    [data-theme="dark"] .page-btn.disabled {
-        background: rgba(0,0,0,0.2);
+    [data-theme="dark"] .prof-page-disabled {
+        background: rgba(0, 0, 0, 0.2);
     }
 
+    /* ═══════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ═══════════════════════════════════════════ */
+    @media (max-width: 1200px) {
+        .prof-card-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 20px !important;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .prof-card-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 16px !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .prof-top-bar-inner {
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 0 16px;
+        }
+
+        .dept-dropdown-wrapper {
+            order: 2;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .dept-dropdown-wrapper select {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .prof-search-wrapper {
+            order: 1;
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+
+        .prof-result-count {
+            order: 3;
+        }
+
+        .prof-page-container {
+            padding: 20px 16px 40px;
+        }
+
+        .prof-card-item {
+            padding: 20px 14px 14px;
+        }
+
+        .prof-card-avatar-wrap {
+            width: 64px;
+            height: 64px;
+        }
+
+        .prof-page-header h1 {
+            font-size: 1.6rem;
+        }
+
+        .prof-pagination-bar {
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+
+    @media (max-width: 540px) {
+        .prof-card-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
 </style>
 
 <script>
-function filterProfessors() {
-    const searchValue = document.getElementById('prof-search').value.toLowerCase();
-    const cards = document.querySelectorAll('.prof-card-horiz');
-    cards.forEach(card => {
-        const name = card.querySelector('.prof-name').textContent.toLowerCase();
-        const dept = card.querySelector('.prof-dept').textContent.toLowerCase();
-        if (name.includes(searchValue) || dept.includes(searchValue)) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
+    var suggestionsApiUrl = "{% url 'professor_search_suggestions' %}";
+    var currentDepartment = "{{ current_department|escapejs }}";
+
+    function filterByDepartment(dept) {
+        var searchInput = document.getElementById('prof-search-input');
+        var q = searchInput ? searchInput.value.trim() : '';
+        var params = new URLSearchParams();
+        if (dept) params.set('department', dept);
+        if (q) params.set('q', q);
+
+        var queryString = params.toString();
+        window.location.href = window.location.pathname + (queryString ? '?' + queryString : '');
+    }
+
+    function clearSearch() {
+        var params = new URLSearchParams();
+        if (currentDepartment) params.set('department', currentDepartment);
+        var queryString = params.toString();
+        window.location.href = window.location.pathname + (queryString ? '?' + queryString : '');
+    }
+
+    (function () {
+        var searchInput = document.getElementById('prof-search-input');
+        var searchForm = document.getElementById('prof-search-form');
+        var dropdown = document.getElementById('prof-suggestions-dropdown');
+        var listContainer = document.getElementById('prof-suggestions-list');
+        var footerContainer = document.getElementById('prof-suggestions-footer');
+        var deptHidden = document.getElementById('prof-dept-hidden');
+
+        if (!searchInput || !dropdown || !listContainer) return;
+
+        var debounceTimer = null;
+        var activeIndex = -1;
+        var currentResults = [];
+        var abortController = null;
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
-    });
-}
+
+        function highlightMatch(text, query) {
+            if (!query) return escapeHtml(text);
+            var escapedText = escapeHtml(text);
+            var escapedQuery = escapeHtml(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            var regex = new RegExp('(' + escapedQuery + ')', 'gi');
+            return escapedText.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function hideSuggestions() {
+            dropdown.style.display = 'none';
+            searchInput.setAttribute('aria-expanded', 'false');
+            activeIndex = -1;
+        }
+
+        function showSuggestions() {
+            dropdown.style.display = 'block';
+            searchInput.setAttribute('aria-expanded', 'true');
+        }
+
+        function updateActiveItem() {
+            var items = listContainer.querySelectorAll('.prof-suggestion-item');
+            for (var i = 0; i < items.length; i++) {
+                if (i === activeIndex) {
+                    items[i].classList.add('prof-suggestion-active');
+                    items[i].scrollIntoView({ block: 'nearest' });
+                } else {
+                    items[i].classList.remove('prof-suggestion-active');
+                }
+            }
+        }
+
+        function renderSuggestions(query, results) {
+            currentResults = results;
+            activeIndex = -1;
+
+            if (!results || results.length === 0) {
+                listContainer.innerHTML = '<div class="prof-sugg-empty">No professors found matching "' + escapeHtml(query) + '"</div>';
+                footerContainer.innerHTML = '';
+                showSuggestions();
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < results.length; i++) {
+                var item = results[i];
+                var avatarHtml = item.image_url
+                    ? '<img src="' + escapeHtml(item.image_url) + '" alt="' + escapeHtml(item.name) + '" class="prof-sugg-avatar">'
+                    : '<div class="prof-sugg-avatar-fallback">' + escapeHtml(item.initial) + '</div>';
+
+                html += '<a href="' + item.submit_url + '" class="prof-suggestion-item" data-index="' + i + '">' +
+                    avatarHtml +
+                    '<div class="prof-sugg-info">' +
+                    '<span class="prof-sugg-name">' + highlightMatch(item.name, query) + '</span>' +
+                    '<span class="prof-sugg-dept">' + highlightMatch(item.department, query) + '</span>' +
+                    '</div>' +
+                    '<div class="prof-sugg-action">' +
+                    'Write &rarr;' +
+                    '</div>' +
+                    '</a>';
+            }
+            listContainer.innerHTML = html;
+
+            footerContainer.innerHTML =
+                '<button type="button" class="prof-sugg-footer-btn" id="prof-sugg-see-all">' +
+                '<span>Search all results for "<strong>' + escapeHtml(query) + '</strong>"</span>' +
+                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
+                '</button>';
+
+            var seeAllBtn = document.getElementById('prof-sugg-see-all');
+            if (seeAllBtn) {
+                seeAllBtn.addEventListener('click', function () {
+                    searchForm.submit();
+                });
+            }
+
+            showSuggestions();
+        }
+
+        function fetchSuggestions(query) {
+            if (abortController) {
+                abortController.abort();
+            }
+            abortController = new AbortController();
+
+            var dept = deptHidden ? deptHidden.value : (currentDepartment || '');
+            var url = suggestionsApiUrl + '?q=' + encodeURIComponent(query);
+            if (dept) url += '&department=' + encodeURIComponent(dept);
+
+            fetch(url, { signal: abortController.signal })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    renderSuggestions(query, data.results || []);
+                })
+                .catch(function (err) {
+                    if (err.name !== 'AbortError') {
+                        hideSuggestions();
+                    }
+                });
+        }
+
+        searchInput.addEventListener('input', function () {
+            var query = searchInput.value.trim();
+            clearTimeout(debounceTimer);
+
+            if (query.length < 1) {
+                hideSuggestions();
+                return;
+            }
+
+            debounceTimer = setTimeout(function () {
+                fetchSuggestions(query);
+            }, 180);
+        });
+
+        searchInput.addEventListener('keydown', function (e) {
+            var isDropdownVisible = dropdown.style.display === 'block';
+
+            if (e.key === 'ArrowDown') {
+                if (!isDropdownVisible && searchInput.value.trim().length >= 1) {
+                    fetchSuggestions(searchInput.value.trim());
+                    e.preventDefault();
+                    return;
+                }
+                if (isDropdownVisible && currentResults.length > 0) {
+                    e.preventDefault();
+                    activeIndex = (activeIndex + 1) % currentResults.length;
+                    updateActiveItem();
+                }
+            } else if (e.key === 'ArrowUp') {
+                if (isDropdownVisible && currentResults.length > 0) {
+                    e.preventDefault();
+                    activeIndex = (activeIndex - 1 + currentResults.length) % currentResults.length;
+                    updateActiveItem();
+                }
+            } else if (e.key === 'Enter') {
+                if (isDropdownVisible && activeIndex >= 0 && activeIndex < currentResults.length) {
+                    e.preventDefault();
+                    window.location.href = currentResults[activeIndex].submit_url;
+                }
+            } else if (e.key === 'Escape') {
+                hideSuggestions();
+            }
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', function (e) {
+            var searchBox = document.getElementById('prof-search-box-container');
+            if (searchBox && !searchBox.contains(e.target)) {
+                hideSuggestions();
+            }
+        });
+
+        // Re-show suggestions on focus if query is present
+        searchInput.addEventListener('focus', function () {
+            var query = searchInput.value.trim();
+            if (query.length >= 1 && dropdown.style.display !== 'block') {
+                fetchSuggestions(query);
+            }
+        });
+    })();
 </script>
+
 {% endblock %}
