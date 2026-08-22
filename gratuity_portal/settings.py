@@ -19,13 +19,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+import os
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!_h9m$14@*64b)ko3!l!ww4yt36-(1jj0%w6@nn^5x8+7!mosj'
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
 
 
 # Application definition
@@ -78,10 +80,16 @@ WSGI_APPLICATION = 'gratuity_portal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.postgresql')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': DB_ENGINE,
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -113,12 +121,12 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.azuread.AzureADOAuth2',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your-google-client-id'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your-google-client-secret'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_OAUTH2_KEY', '')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_OAUTH2_SECRET', '')
 
-SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = '1f13daea-3da1-447a-8b1b-eb0dfbe0e137'
-SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = 'D9k8Q~9-813-w_lTIDV8F50HXXa-3yF9c2yHlcOQ'
-SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_TENANT_ID = '850aa78d-94e1-4bc6-9cf3-8c11b530701c'
+SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = os.environ.get('AZUREAD_OAUTH2_KEY', '')
+SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = os.environ.get('AZUREAD_OAUTH2_SECRET', '')
+SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_TENANT_ID = os.environ.get('AZUREAD_TENANT_ID', '')
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
@@ -198,6 +206,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
