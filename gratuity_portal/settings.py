@@ -150,7 +150,7 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 
 
 
-LOGIN_URL = '/login/azuread-oauth2/'
+LOGIN_URL = '/login/'
 LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/'
 

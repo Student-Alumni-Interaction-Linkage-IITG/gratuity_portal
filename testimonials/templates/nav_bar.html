@@ -3,7 +3,9 @@
 <div class="glass-navbar">
   <div class="navbar-container">
     <a href="{% url 'home' %}" class="navbar-logo">
-      <img src="{% static 'img/sail_logo.png' %}" alt="SAIL">
+      <img src="{% static 'img/iitg-logo.png' %}" alt="IITG" class="nav-logo-iitg">
+      <span class="logo-divider"></span>
+      <img src="{% static 'img/sail_logo.png' %}" alt="SAIL" class="nav-logo-sail">
       <span class="logo-text">Gratuity Portal</span>
     </a>
 
@@ -40,10 +42,9 @@
           </div>
         </div>
       {% else %}
-        <div style="display: flex; gap: 10px;">
-            <a href="{% url 'social:begin' 'azuread-oauth2' %}" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">Login (MS)</a>
-            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn" style="padding: 8px 16px; font-size: 0.9rem; background: #DB4437; color: white;">Login (Google)</a>
-        </div>
+        <a href="{% url 'login_page' %}" class="btn btn-primary" style="padding: 8px 22px; font-size: 0.92rem; font-weight: 600;">
+          Login
+        </a>
       {% endif %}
     </div>
   </div>
@@ -78,12 +79,24 @@
   .navbar-logo {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
   }
 
-  .navbar-logo img {
-    height: 32px;
+  .nav-logo-iitg, .nav-logo-sail {
+    height: 42px;
+    width: auto;
     object-fit: contain;
+  }
+
+  .logo-divider {
+    width: 1.5px;
+    height: 26px;
+    background: rgba(0, 0, 0, 0.15);
+    display: inline-block;
+  }
+
+  [data-theme="dark"] .logo-divider {
+    background: rgba(255, 255, 255, 0.2);
   }
   
   .logo-text {

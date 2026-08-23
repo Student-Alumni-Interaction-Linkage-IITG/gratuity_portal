@@ -1,9 +1,14 @@
 from django.urls import path
-from .views import submit_testimonial, home, professor_list, professor_search_suggestions, thank_you, logout_view, professor_dashboard, edit_profile, delete_testimonial, view_student_profile, student_dashboard
+from .views import (
+    submit_testimonial, home, professor_list, professor_search_suggestions, 
+    thank_you, logout_view, professor_dashboard, edit_profile, 
+    delete_testimonial, view_student_profile, student_dashboard, login_page
+)
 
 urlpatterns = [
-    path('submit/', submit_testimonial, name='submit_testimonial'),
     path('', home, name='home'),
+    path('login/', login_page, name='login_page'),
+    path('submit/', submit_testimonial, name='submit_testimonial'),
     path('professors/', professor_list, name='professor_list'),
     path('professors/suggestions/', professor_search_suggestions, name='professor_search_suggestions'),
     path('submit/<int:professor_id>/', submit_testimonial, name='submit_testimonial'),

@@ -75,16 +75,24 @@
                         <input type="text" name="author_name" id="author_name" class="form-control" placeholder="John Doe" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 6px;" value="{{ default_name }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="author_designation" style="display:block; margin-bottom: 5px; color: var(--clr-text-main); font-weight: 500;">Designation <span style="color:var(--clr-text-muted); font-weight:normal;">(optional)</span></label>
-                        <input type="text" name="author_designation" id="author_designation" class="form-control" placeholder="e.g. Software Engineer at Google" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 6px;" value="{{ default_designation|default:'' }}">
+                        <label for="author_email" style="display:block; margin-bottom: 5px; color: var(--clr-text-main); font-weight: 500;">Email <span style="color:var(--clr-accent-red)">*</span></label>
+                        <input type="email" name="author_email" id="author_email" class="form-control" placeholder="e.g. yourname@iitg.ac.in" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 6px;" value="{{ default_email|default:'' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="author_branch" style="display:block; margin-bottom: 5px; color: var(--clr-text-main); font-weight: 500;">Branch <span style="color:var(--clr-text-muted); font-weight:normal;">(optional)</span></label>
+                        <input type="text" name="author_branch" id="author_branch" class="form-control" placeholder="e.g. Computer Science" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 6px;" value="{{ default_branch|default:'' }}">
                     </div>
                     <div class="form-group">
                         <label for="author_batch" style="display:block; margin-bottom: 5px; color: var(--clr-text-main); font-weight: 500;">Batch <span style="color:var(--clr-text-muted); font-weight:normal;">(optional)</span></label>
                         <input type="text" name="author_batch" id="author_batch" class="form-control" placeholder="e.g. 2024" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 6px;" value="{{ default_batch|default:'' }}">
                     </div>
                     <div class="form-group">
-                        <label for="author_branch" style="display:block; margin-bottom: 5px; color: var(--clr-text-main); font-weight: 500;">Branch <span style="color:var(--clr-text-muted); font-weight:normal;">(optional)</span></label>
-                        <input type="text" name="author_branch" id="author_branch" class="form-control" placeholder="e.g. Computer Science" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 6px;" value="{{ default_branch|default:'' }}">
+                        <label for="author_designation" style="display:block; margin-bottom: 5px; color: var(--clr-text-main); font-weight: 500;">Designation <span style="color:var(--clr-text-muted); font-weight:normal;">(optional)</span></label>
+                        <input type="text" name="author_designation" id="author_designation" class="form-control" placeholder="e.g. Software Engineer at Google" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 6px;" value="{{ default_designation|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="author_phone" style="display:block; margin-bottom: 5px; color: var(--clr-text-main); font-weight: 500;">Phone Number <span style="color:var(--clr-text-muted); font-weight:normal;">(optional)</span></label>
+                        <input type="tel" name="author_phone" id="author_phone" class="form-control" placeholder="e.g. +91 98765 43210" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 6px;" value="">
                     </div>
                 </div>
                 

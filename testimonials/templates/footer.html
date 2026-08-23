@@ -1,9 +1,270 @@
 {% load static %}
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/footer.css' %}">
-{% endblock %}
-<footer>
-    <div>
-      Student Alumni Interaction Linkage
+
+<footer class="sail-site-footer">
+  <div class="footer-container">
+    <div class="footer-main-row">
+      <!-- Left Column: Cell Info -->
+      <div class="footer-about-col">
+        <div class="footer-brand">
+          <img src="{% static 'img/sail_logo.png' %}" alt="SAIL Logo" class="footer-logo">
+          <h3 class="footer-title">Student Alumni Interaction Cell</h3>
+        </div>
+        <p class="footer-address">IIT Guwahati, Assam &ndash; 781039</p>
+        <p class="footer-tagline">Celebrating the bond between students, faculty, and alumni.</p>
+      </div>
+
+      <!-- Right Column: Need Assistance? Contact Us -->
+      <div class="footer-contact-col">
+        <h4 class="footer-section-title">NEED ASSISTANCE? CONTACT US</h4>
+        <div class="footer-cards-grid">
+          
+          <!-- Contact 1 -->
+          <div class="footer-contact-card">
+            <span class="contact-role-badge">General Secretary</span>
+            <div class="contact-name">Aditya Dhaniyaal</div>
+            <a href="tel:+917302325346" class="contact-phone">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span>+91 73023 25346</span>
+            </a>
+          </div>
+
+          <!-- Contact 2 -->
+          <div class="footer-contact-card">
+            <span class="contact-role-badge">Web Head</span>
+            <div class="contact-name">Ram Tej Duvvuri</div>
+            <a href="tel:+919392731091" class="contact-phone">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span>+91 93927 31091</span>
+            </a>
+          </div>
+
+          <!-- Contact 3 -->
+          <div class="footer-contact-card">
+            <span class="contact-role-badge">Web Head</span>
+            <div class="contact-name">Ayusha Thakur</div>
+            <a href="tel:+919015094032" class="contact-phone">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span>+91 90150 94032</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
     </div>
-  </footer>
+
+    <!-- Bottom Copyright -->
+    <div class="footer-bottom-bar">
+      &copy; 2026 Student Alumni Interaction Cell (SAIL), IIT Guwahati. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<style>
+  .sail-site-footer {
+    width: 100%;
+    background: var(--glass-bg);
+    border-top: 1px solid var(--glass-border);
+    margin-top: auto;
+    padding: 18px 0 10px;
+    color: var(--clr-text-main);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  [data-theme="dark"] .sail-site-footer {
+    background: rgba(18, 18, 18, 0.95);
+    border-top-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .footer-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 12px;
+  }
+
+  /* Left Column */
+  .footer-about-col {
+    flex: 0 0 320px;
+    max-width: 360px;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+  }
+
+  .footer-logo {
+    height: 26px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .footer-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--clr-primary);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  [data-theme="dark"] .footer-title {
+    color: #60a5fa;
+  }
+
+  .footer-address {
+    font-size: 0.8rem;
+    color: var(--clr-text-muted);
+    font-weight: 500;
+    margin-bottom: 1px;
+    line-height: 1.3;
+  }
+
+  .footer-tagline {
+    font-size: 0.76rem;
+    color: var(--clr-text-muted);
+    line-height: 1.3;
+    opacity: 0.85;
+  }
+
+  /* Right Column */
+  .footer-contact-col {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .footer-section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--clr-text-muted);
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .footer-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .footer-contact-card {
+    background: rgba(15, 44, 89, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  [data-theme="dark"] .footer-contact-card {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .footer-contact-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(15, 44, 89, 0.25);
+  }
+
+  [data-theme="dark"] .footer-contact-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .contact-role-badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #8c9ba5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+  }
+
+  [data-theme="dark"] .contact-role-badge {
+    color: #64748b;
+  }
+
+  .contact-name {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--clr-primary);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  [data-theme="dark"] .contact-name {
+    color: #e2e8f0;
+  }
+
+  .contact-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.76rem;
+    color: var(--clr-text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    margin-top: 1px;
+  }
+
+  .contact-phone svg {
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  .contact-phone:hover {
+    color: var(--clr-primary);
+    text-decoration: underline;
+  }
+
+  [data-theme="dark"] .contact-phone:hover {
+    color: #60a5fa;
+  }
+
+  .footer-bottom-bar {
+    border-top: 1px solid var(--glass-border);
+    padding-top: 8px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--clr-text-muted);
+    opacity: 0.8;
+  }
+
+  [data-theme="dark"] .footer-bottom-bar {
+    border-top-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Responsive Footer */
+  @media (max-width: 960px) {
+    .footer-main-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+    }
+    .footer-about-col {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .footer-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+    .sail-site-footer {
+      padding: 16px 0 8px;
+    }
+  }
+</style>

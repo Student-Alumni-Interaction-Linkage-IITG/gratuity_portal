@@ -3,7 +3,7 @@ from .models import Testimonial
 from professors.models import Professor
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 
 # @login_required
 # def submit_testimonial(request):
@@ -20,15 +20,19 @@ def submit_testimonial(request, professor_id):
     if request.method == 'POST':
         content = request.POST.get('content')
         author_name = request.POST.get('author_name', '')
+        author_email = request.POST.get('author_email', '')
+        author_phone = request.POST.get('author_phone', '')
         author_designation = request.POST.get('author_designation', '')
         author_batch = request.POST.get('author_batch', '')
         author_branch = request.POST.get('author_branch', '')
         
         student = None
-        if request.user.is_authenticated:
+        if hasattr(request, 'user') and request.user.is_authenticated:
             student = request.user
             if not author_name:
                 author_name = request.user.get_full_name() or request.user.username
+            if not author_email:
+                author_email = request.user.email
             try:
                 profile = request.user.student_profile
                 if not author_designation: author_designation = profile.designation
@@ -42,6 +46,8 @@ def submit_testimonial(request, professor_id):
             student=student,
             content=content,
             author_name=author_name,
+            author_email=author_email,
+            author_phone=author_phone,
             author_designation=author_designation,
             author_batch=author_batch,
             author_branch=author_branch
@@ -50,8 +56,9 @@ def submit_testimonial(request, professor_id):
     
     # Pre-fill for authenticated users
     context = {'professor': professor}
-    if request.user.is_authenticated:
+    if hasattr(request, 'user') and request.user.is_authenticated:
         context['default_name'] = request.user.get_full_name() or request.user.username
+        context['default_email'] = request.user.email
         try:
             profile = request.user.student_profile
             context['default_designation'] = profile.designation
@@ -217,3 +224,36 @@ def view_student_profile(request, student_id):
     student = User.objects.get(id=student_id)
     profile = StudentProfile.objects.filter(user=student).first()
     return render(request, 'testimonials/student_profile.html', {'student': student, 'profile': profile})
+
+def login_page(request):
+    if hasattr(request, 'user') and request.user.is_authenticated:
+        return redirect('home')
+    
+    error_message = None
+    if request.method == 'POST':
+        username_or_email = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        remember_me = request.POST.get('remember_me')
+        
+        # Support login with either username or email
+        username = username_or_email
+        if '@' in username_or_email:
+            user_obj = User.objects.filter(email__iexact=username_or_email).first()
+            if user_obj:
+                username = user_obj.username
+        
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if not remember_me:
+                request.session.set_expiry(0)
+            else:
+                request.session.set_expiry(1209600)
+            
+            next_url = request.GET.get('next') or request.POST.get('next') or 'home'
+            return redirect(next_url)
+        else:
+            error_message = "Invalid email/username or password."
+            
+    return render(request, 'login.html', {'error_message': error_message})
+

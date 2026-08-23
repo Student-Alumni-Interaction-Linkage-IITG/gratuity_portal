@@ -57,7 +57,7 @@
                                         </div>
                                         <div>
                                             <div style="font-weight: 600; color: var(--clr-text-main); font-size: 0.95rem;">{{ t.author_name }}</div>
-                                            <div style="font-size: 0.8rem; color: var(--clr-text-muted);">{{ t.student.email }}</div>
+                                            <div style="font-size: 0.8rem; color: var(--clr-text-muted);">{{ t.author_email|default:t.student.email }}</div>
                                         </div>
                                     </a>
                                     {% else %}
@@ -67,7 +67,7 @@
                                         </div>
                                         <div>
                                             <div style="font-weight: 600; color: var(--clr-text-main); font-size: 0.95rem;">{{ t.author_name }}</div>
-                                            <div style="font-size: 0.8rem; color: var(--clr-text-muted);">Guest</div>
+                                            <div style="font-size: 0.8rem; color: var(--clr-text-muted);">{{ t.author_email|default:"Guest" }}</div>
                                         </div>
                                     </div>
                                     {% endif %}
