@@ -16,6 +16,10 @@ from .models import Professor
 
 @admin.register(Professor)
 class ProfessorAdmin(ImportExportModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if 'profile_picture' in form.changed_data and obj.profile_picture:
+            from .utils import process_teacher_photo
+            process_teacher_photo(obj)
 
 # admin.site.register(Professor)

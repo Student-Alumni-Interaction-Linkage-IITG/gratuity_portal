@@ -3,9 +3,9 @@
 {% block content %}
 {% include "nav_bar.html" %}
 
-<div class="page-container" style="max-width: 1200px; padding-top: 20px;">
+<div class="page-container" style="max-width: 1300px;">
     
-    <div style="margin-bottom: 30px;">
+    <div style="margin-bottom: 24px;">
         <h1 style="color: var(--clr-primary); font-size: 2rem; margin-bottom: 5px;">Welcome back, {{ request.user.username }} 👋</h1>
         <p style="color: var(--clr-text-muted); font-size: 1.05rem;">Here are the testimonials you've submitted to your professors.</p>
     </div>
@@ -13,7 +13,7 @@
     <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
         
         <!-- Left Sidebar Profile -->
-        <div class="glass-card" style="flex: 1; min-width: 280px; max-width: 320px; text-align: center; padding: 40px 20px; position: sticky; top: 100px;">
+        <div class="glass-card" style="flex: 1; min-width: 280px; max-width: 300px; text-align: center; padding: 24px; position: sticky; top: 88px;">
             <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; background: #eee; border: 2px solid transparent;">
                 {% if profile.profile_picture %}
                     <img src="{{ profile.profile_picture.url }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -38,12 +38,7 @@
             
             <div style="height: 1px; background: rgba(0,0,0,0.05); margin: 0 10px 20px;"></div>
             
-            <div style="margin-bottom: 30px;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2" style="margin-bottom: 8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                <div style="font-size: 1.8rem; font-weight: 700; color: var(--clr-text-main); line-height: 1;">{{ page_obj.paginator.count }}</div>
-                <div style="font-size: 0.8rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Testimonials Submitted</div>
-            </div>
-            
+
             <a href="{% url 'edit_profile' %}" class="btn" style="width: 100%; border: 1px solid var(--clr-primary); color: var(--clr-primary); background: transparent; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 Edit Profile
@@ -51,7 +46,7 @@
         </div>
         
         <!-- Right Content: Testimonials -->
-        <div class="glass-card" style="flex: 2; min-width: 300px; padding: 30px 40px;">
+        <div class="glass-card" style="flex: 2; min-width: 300px; padding: 24px 32px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                 <h2 style="color: var(--clr-primary); font-size: 1.5rem; margin: 0;">Your Testimonials</h2>
                 
@@ -62,17 +57,19 @@
             </div>
             
             <div style="display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 20px;">
-                <div style="padding: 6px 16px; background: var(--clr-primary); color: #fff; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">All ({{ page_obj.paginator.count }})</div>
+                <div style="padding: 6px 16px; background: var(--clr-primary); color: #fff; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">All</div>
                 <div style="padding: 6px 16px; background: rgba(0,0,0,0.05); color: var(--clr-text-muted); border-radius: 20px; font-size: 0.85rem; font-weight: 500;">Recent</div>
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 20px;">
                 {% for t in page_obj %}
-                    <div style="border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 20px; transition: transform 0.2s;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                    <div style="border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 16px; transition: transform 0.2s;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                             <div style="display: flex; gap: 15px; align-items: center;">
                                 <div style="width: 45px; height: 45px; border-radius: 50%; background: #e3f2fd; color: #1976d2; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem;">
-                                    {% if t.professor.profile_picture %}
+                                    {% if t.professor.processed_profile_picture %}
+                                        <img src="{{ t.professor.processed_profile_picture.url }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                    {% elif t.professor.profile_picture %}
                                         <img src="{{ t.professor.profile_picture.url }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                                     {% else %}
                                         {{ t.professor.name|make_list|first|upper }}
@@ -111,7 +108,7 @@
             {% if page_obj.has_other_pages %}
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.05);">
                 <div style="color: var(--clr-text-muted); font-size: 0.85rem;">
-                    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} testimonials
+                    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} testimonials
                 </div>
                 
                 <div style="display: flex; gap: 8px;">

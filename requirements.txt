@@ -56,3 +56,5 @@ uv==0.2.29
 virtualenv==20.27.1
 webencodings==0.5.1
 yfinance==0.2.28
+opencv-python-headless
+python-dotenv

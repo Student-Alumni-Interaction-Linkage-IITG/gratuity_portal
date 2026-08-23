@@ -4,10 +4,10 @@
 {% block content %}
 {% include "nav_bar.html" %}
 
-<!-- Spacer for fixed navbar (70px) -->
-<div style="height: 70px;"></div>
+<!-- Spacer for fixed navbar (64px) -->
+<div style="height: 64px;"></div>
 <div class="prof-page-header">
-    <h1>Browse Professors</h1>
+
     <p>Find your professor and write a testimonial to show your gratitude.</p>
 </div>
 <!-- Sticky Top Bar: Department Dropdown + Search -->
@@ -86,7 +86,9 @@
         <a href="{% url 'submit_testimonial' prof.id %}" class="prof-card-item" data-name="{{ prof.name|lower }}"
             data-dept="{{ prof.department|lower }}">
             <div class="prof-card-avatar-wrap">
-                {% if prof.profile_picture %}
+                {% if prof.processed_profile_picture %}
+                <img src="{{ prof.processed_profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
+                {% elif prof.profile_picture %}
                 <img src="{{ prof.profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
                 {% elif prof.image_url %}
                 <img src="{{ prof.image_url }}" alt="{{ prof.name }}" loading="lazy">
@@ -99,13 +101,7 @@
                 <span class="prof-card-department">{{ prof.department }}</span>
             </div>
             <div class="prof-card-actions">
-                <div class="prof-testimonial-count">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                    </svg>
-                    <span>{{ prof.testimonial_set.count }}</span>
-                </div>
+
                 <span class="prof-write-cta">Write &rarr;</span>
             </div>
         </a>
@@ -176,7 +172,7 @@
     ═══════════════════════════════════════════ */
     .prof-top-bar {
         position: sticky;
-        top: 70px;
+        top: 64px;
         z-index: 500;
         background: rgba(255, 255, 255, 0.92);
         backdrop-filter: blur(16px);
@@ -602,13 +598,13 @@
     .prof-page-container {
         max-width: 1400px;
         margin: 0 auto;
-        padding: 32px 32px 60px;
+        padding: 24px 24px 60px;
     }
 
     .prof-page-header {
         text-align: center;
         max-width: 1400px;
-        margin: 28px auto 20px auto;
+        margin: 16px auto 16px auto;
         padding: 0 32px;
     }
 
@@ -632,8 +628,33 @@
     .prof-card-grid {
         display: grid !important;
         grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-        gap: 24px !important;
+        gap: 20px !important;
         width: 100% !important;
+    }
+
+    @media (max-width: 1024px) {
+        .prof-card-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .prof-card-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+        .prof-top-bar-inner {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .prof-search-wrapper {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .prof-card-grid {
+            grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+        }
     }
 
     /* ═══════════════════════════════════════════
@@ -649,7 +670,7 @@
         background: #fff;
         border-radius: 14px;
         border: 1px solid #F0F0F0;
-        padding: 28px 20px 18px;
+        padding: 20px 16px 16px;
         transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
         position: relative;
         overflow: hidden;
