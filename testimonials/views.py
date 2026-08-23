@@ -15,23 +15,25 @@ from django.contrib.auth import login, logout, authenticate
 #         return redirect('/testimonials/submit')
 #     professors = Professor.objects.all()
 #     return render(request, 'submit_testimonial.html', {'professors': professors})
-def submit_testimonial(request, professor_id):
+def submit_testimonial(request, professor_id=None):
+    if not professor_id:
+        return redirect('professor_list')
     professor = Professor.objects.get(id=professor_id)
     if request.method == 'POST':
         content = request.POST.get('content')
         author_name = request.POST.get('author_name', '')
-        author_email = request.POST.get('author_email', '')
-        author_phone = request.POST.get('author_phone', '')
         author_designation = request.POST.get('author_designation', '')
         author_batch = request.POST.get('author_batch', '')
         author_branch = request.POST.get('author_branch', '')
+        author_email = request.POST.get('author_email', '').strip()
+        author_phone = request.POST.get('author_phone', '').strip()
         
         student = None
         if hasattr(request, 'user') and request.user.is_authenticated:
             student = request.user
             if not author_name:
                 author_name = request.user.get_full_name() or request.user.username
-            if not author_email:
+            if not author_email and request.user.email:
                 author_email = request.user.email
             try:
                 profile = request.user.student_profile
@@ -46,11 +48,11 @@ def submit_testimonial(request, professor_id):
             student=student,
             content=content,
             author_name=author_name,
-            author_email=author_email,
-            author_phone=author_phone,
             author_designation=author_designation,
             author_batch=author_batch,
-            author_branch=author_branch
+            author_branch=author_branch,
+            author_email=author_email,
+            author_phone=author_phone
         )
         return redirect('thank_you')
     
@@ -58,7 +60,7 @@ def submit_testimonial(request, professor_id):
     context = {'professor': professor}
     if hasattr(request, 'user') and request.user.is_authenticated:
         context['default_name'] = request.user.get_full_name() or request.user.username
-        context['default_email'] = request.user.email
+        context['default_email'] = request.user.email or ''
         try:
             profile = request.user.student_profile
             context['default_designation'] = profile.designation

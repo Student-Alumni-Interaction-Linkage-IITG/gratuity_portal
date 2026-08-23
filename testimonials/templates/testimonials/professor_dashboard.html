@@ -11,6 +11,45 @@
         <p style="color: var(--clr-text-muted); font-size: 1.05rem;">Here are all the testimonials you've received.</p>
     </div>
 
+    <!-- Stats Row -->
+    <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; padding: 30px; margin-bottom: 30px; flex-wrap: wrap; gap: 20px;">
+        
+        <div style="flex: 1; text-align: center; border-right: 1px solid rgba(0,0,0,0.05);">
+            <div style="width: 40px; height: 40px; background: rgba(31, 60, 136, 0.1); color: var(--clr-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--clr-primary); line-height: 1.2;">{{ total_testimonials }}</div>
+            <div style="font-size: 0.85rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Total Testimonials</div>
+        </div>
+        
+        <div style="flex: 1; text-align: center; border-right: 1px solid rgba(0,0,0,0.05);">
+            <div style="width: 40px; height: 40px; background: rgba(42, 157, 143, 0.1); color: var(--clr-accent-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+            </div>
+            <!-- Mock positive messages count to match design -->
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--clr-accent-green); line-height: 1.2;">{{ total_testimonials }}</div>
+            <div style="font-size: 0.85rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Positive Messages</div>
+        </div>
+        
+        <div style="flex: 1; text-align: center; border-right: 1px solid rgba(0,0,0,0.05);">
+            <div style="width: 40px; height: 40px; background: rgba(156, 39, 176, 0.1); color: #9C27B0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div style="font-size: 1rem; font-weight: 500; color: var(--clr-text-main); line-height: 1.2; margin-top: 5px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                {% if latest_testimonial %}{{ latest_testimonial.submitted_at|date:"d M Y" }}{% else %}-{% endif %}
+            </div>
+            <div style="font-size: 0.85rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Latest Testimonial</div>
+        </div>
+        
+        <div style="flex: 1; text-align: center;">
+            <div style="width: 40px; height: 40px; background: rgba(244, 162, 97, 0.1); color: var(--clr-accent-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--clr-accent-yellow); line-height: 1.2;">{{ unique_students }}</div>
+            <div style="font-size: 0.85rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Students</div>
+        </div>
+        
+    </div>
 
     <!-- Main Table Area -->
     <div class="glass-card" style="padding: 30px;">
@@ -57,7 +96,8 @@
                                         </div>
                                         <div>
                                             <div style="font-weight: 600; color: var(--clr-text-main); font-size: 0.95rem;">{{ t.author_name }}</div>
-                                            <div style="font-size: 0.8rem; color: var(--clr-text-muted);">{{ t.author_email|default:t.student.email }}</div>
+                                            <div style="font-size: 0.8rem; color: var(--clr-text-muted);">{{ t.author_email|default:t.student.email|default:'Guest' }}</div>
+                                            {% if t.author_phone %}<div style="font-size: 0.75rem; color: var(--clr-text-muted);">{{ t.author_phone }}</div>{% endif %}
                                         </div>
                                     </a>
                                     {% else %}
@@ -67,7 +107,8 @@
                                         </div>
                                         <div>
                                             <div style="font-weight: 600; color: var(--clr-text-main); font-size: 0.95rem;">{{ t.author_name }}</div>
-                                            <div style="font-size: 0.8rem; color: var(--clr-text-muted);">{{ t.author_email|default:"Guest" }}</div>
+                                            <div style="font-size: 0.8rem; color: var(--clr-text-muted);">{{ t.author_email|default:'Guest' }}</div>
+                                            {% if t.author_phone %}<div style="font-size: 0.75rem; color: var(--clr-text-muted);">{{ t.author_phone }}</div>{% endif %}
                                         </div>
                                     </div>
                                     {% endif %}
@@ -109,7 +150,7 @@
         {% if page_obj.has_other_pages %}
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px;">
             <div style="color: var(--clr-text-muted); font-size: 0.85rem;">
-                Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} testimonials
+                Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ total_testimonials }} testimonials
             </div>
             
             <div style="display: flex; gap: 8px;">

@@ -6,11 +6,11 @@ class Testimonial(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     author_name = models.CharField(max_length=150, default='Anonymous')
-    author_email = models.EmailField(blank=True, null=True)
-    author_phone = models.CharField(max_length=30, blank=True, null=True)
     author_designation = models.CharField(max_length=150, blank=True, null=True)
     author_batch = models.CharField(max_length=50, blank=True, null=True)
     author_branch = models.CharField(max_length=100, blank=True, null=True)
+    author_email = models.EmailField(max_length=254, blank=True, null=True)
+    author_phone = models.CharField(max_length=20, blank=True, null=True)
     content = models.TextField()
     submitted_at = models.DateTimeField(auto_now_add=True)
 
