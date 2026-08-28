@@ -1,103 +1,365 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% block content %}
 {% include "nav_bar.html" %}
 
-<div class="page-container" style="max-width: 1200px; padding-top: 20px;">
+<div class="page-container" style="max-width: 1200px; margin: 0 auto; padding: 100px 24px 40px;">
     
-    <div style="display: flex; gap: 24px; align-items: stretch; flex-wrap: wrap;">
+    <div class="edit-profile-workspace">
         
-        <!-- Left Sidebar Profile (Exact match to dashboard) -->
-        <div class="glass-card" style="flex: 1; min-width: 280px; max-width: 300px; text-align: center; padding: 24px; position: sticky; top: 88px;">
-            <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; background: #eee; border: 2px solid transparent;">
+        <!-- Left: Student Profile Summary -->
+        <div class="profile-panel">
+            <div class="profile-avatar">
                 {% if form.instance.profile_picture %}
-                    <img src="{{ form.instance.profile_picture.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{ form.instance.profile_picture.url }}" alt="{{ request.user.username }}">
                 {% else %}
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: #ccc; background: #f9f9f9;">
-                        {{ request.user.username|make_list|first|upper }}
-                    </div>
+                    <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
                 {% endif %}
             </div>
             
-            <h2 style="color: var(--clr-text-main); font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;">{{ request.user.username }}</h2>
-            <div style="color: var(--clr-text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+            <h2 class="profile-name">{{ request.user.username }}</h2>
+            <div class="profile-designation">
                 {% if form.instance.designation %}{{ form.instance.designation }}{% else %}Student{% endif %}
             </div>
             
-            <div style="height: 1px; background: rgba(0,0,0,0.05); margin: 0 10px 20px;"></div>
+            <div class="profile-divider"></div>
             
-            <div style="color: var(--clr-text-main); font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                {{ request.user.email }}
+            <div class="profile-email">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span>{{ request.user.email }}</span>
             </div>
             
-            <div style="height: 1px; background: rgba(0,0,0,0.05); margin: 0 10px 20px;"></div>
-            
-            
-            <a href="{% url 'student_dashboard' %}" class="btn" style="width: 100%; border: 1px solid var(--clr-primary); color: var(--clr-primary); background: transparent; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <a href="{% url 'student_dashboard' %}" class="btn-view-testimonials">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 View My Testimonials
             </a>
         </div>
         
-        <!-- Right Content: Edit Profile Form -->
-        <div class="glass-card" style="flex: 2; min-width: 300px; padding: 24px 32px;">
-            <h2 style="color: var(--clr-primary); font-size: 1.8rem; margin-bottom: 8px;">Edit Profile</h2>
-            <p style="color: var(--clr-text-muted); font-size: 0.95rem; margin-bottom: 20px;">Update your information so professors know who is writing.</p>
-            
-            <div style="height: 1px; background: rgba(0,0,0,0.05); margin-bottom: 20px;"></div>
+        <!-- Right: Edit Profile Form -->
+        <div class="edit-form-panel">
+            <div class="form-header">
+                <h1 class="page-title">Edit Profile</h1>
+                <p class="page-subtitle">Update your information so professors know who is writing.</p>
+            </div>
 
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" id="editProfileForm">
                 {% csrf_token %}
                 
-                <div class="form-group" style="margin-bottom: 16px;">
-                    <label for="{{ form.designation.id_for_label }}" class="form-label" style="font-weight: 600; font-size: 0.95rem;">Current Designation / Job</label>
-                    {{ form.designation }}
-                    <small style="color: #aaa; display: block; margin-top: 6px; font-size: 0.8rem;">e.g., CEO at Google, UG Student</small>
-                </div>
-
-                <div style="display: flex; gap: 20px; margin-bottom: 16px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
-                        <label for="{{ form.batch.id_for_label }}" class="form-label" style="font-weight: 600; font-size: 0.95rem;">Batch (Year)</label>
-                        {{ form.batch }}
+                <!-- Row 1: Name and Email -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.name.id_for_label }}">Full Name</label>
+                        <div class="input-wrapper">
+                            {{ form.name }}
+                        </div>
                     </div>
 
-                    <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
-                        <label for="{{ form.branch.id_for_label }}" class="form-label" style="font-weight: 600; font-size: 0.95rem;">Branch / Department</label>
-                        {{ form.branch }}
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Contact Email</label>
+                        <div class="input-wrapper">
+                            {{ form.email }}
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 24px;">
-                    <label for="{{ form.profile_picture.id_for_label }}" class="form-label" style="font-weight: 600; font-size: 0.95rem;">Profile Photo</label>
-                    <div style="background: rgba(0,0,0,0.02); padding: 16px; border-radius: 8px; border: 1px dashed rgba(0,0,0,0.15); display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; gap: 15px; align-items: center;">
-                            <div style="width: 40px; height: 40px; background: rgba(0,0,0,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--clr-text-main);">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                <!-- Row 2: Designation and Phone -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.designation.id_for_label }}">Current Designation / Job</label>
+                        <div class="input-wrapper">
+                            {{ form.designation }}
+                        </div>
+                        <div class="helper-text">e.g., CEO at Google, UG Student</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.phone_no.id_for_label }}">Phone Number</label>
+                        <div class="input-wrapper">
+                            {{ form.phone_no }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Batch and Branch -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.batch.id_for_label }}">Batch (Year) <span class="required-star">*</span></label>
+                        <div class="input-wrapper">
+                            {{ form.batch }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.branch.id_for_label }}">Branch / Department</label>
+                        <div class="input-wrapper">
+                            {{ form.branch }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Profile Photo Upload -->
+                <div class="form-group">
+                    <label for="{{ form.profile_picture.id_for_label }}">Profile Photo</label>
+                    <div class="upload-area">
+                        <div class="upload-info">
+                            <div class="upload-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
                             </div>
-                            <div>
-                                <div style="color: var(--clr-text-main); font-weight: 500; font-size: 0.95rem;">Click to upload or drag and drop</div>
-                                <div style="color: var(--clr-text-muted); font-size: 0.85rem;">{{ form.profile_picture }}</div>
+                            <div class="upload-text">
+                                <span class="upload-action">Click to upload or drag and drop</span>
+                                <div class="upload-input-wrap">{{ form.profile_picture }}</div>
+                                <span class="upload-recommend">Recommended: Square image</span>
                             </div>
                         </div>
                         
                         {% if form.instance.profile_picture %}
-                            <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; border: 2px solid #ddd;">
-                                <img src="{{ form.instance.profile_picture.url }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
+                        <div class="upload-preview">
+                            <img src="{{ form.instance.profile_picture.url }}" alt="Profile preview">
+                        </div>
                         {% endif %}
                     </div>
-                    <small style="color: #aaa; display: block; margin-top: 8px; font-size: 0.8rem;">Recommended: Square image</small>
                 </div>
-                
-                <div style="height: 1px; background: rgba(0,0,0,0.05); margin-bottom: 20px;"></div>
 
-                <div style="text-align: right;">
-                    <button type="submit" class="btn btn-primary" style="padding: 12px 35px; font-size: 1.05rem;">Save Profile</button>
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        Save Profile
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    </button>
                 </div>
             </form>
         </div>
         
     </div>
 </div>
+
+<style>
+    .page-container { font-family: 'Inter', sans-serif; }
+    
+    .edit-profile-workspace {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+    }
+
+    /* Left Panel: Profile */
+    .profile-panel {
+        flex: 0 0 280px;
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.06);
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 0 auto 16px;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
+        background: #f8fafc;
+    }
+
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .profile-avatar-fallback {
+        width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        background: #f1f5f9; color: #94a3b8;
+        font-size: 2.5rem; font-weight: 700;
+    }
+
+    .profile-name {
+        color: #0f2c59; font-size: 1.35rem; font-weight: 700; margin: 0 0 4px 0;
+    }
+
+    .profile-designation {
+        color: #64748b; font-size: 0.9rem; margin-bottom: 16px; font-weight: 500;
+    }
+
+    .profile-divider {
+        height: 1px; background: rgba(0,0,0,0.06); margin: 0 0 16px 0;
+    }
+
+    .profile-email {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        color: #475569; font-size: 0.85rem; margin-bottom: 20px;
+        word-break: break-all;
+    }
+
+    .btn-view-testimonials {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        width: 100%; padding: 8px;
+        border: 1px solid rgba(15, 44, 89, 0.2);
+        border-radius: 8px;
+        color: #0f2c59; font-size: 0.9rem; font-weight: 600;
+        background: transparent;
+        text-decoration: none;
+        transition: background 0.2s, border-color 0.2s;
+        box-sizing: border-box;
+    }
+
+    .btn-view-testimonials:hover {
+        background: rgba(15, 44, 89, 0.04);
+        border-color: rgba(15, 44, 89, 0.3);
+    }
+
+    /* Right Panel: Edit Form */
+    .edit-form-panel {
+        flex: 1; min-width: 0;
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.06);
+        padding: 24px 32px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    }
+
+    .form-header { margin-bottom: 24px; }
+    
+    .page-title {
+        color: #0f2c59;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin: 0 0 4px 0;
+        line-height: 1.2;
+    }
+
+    .page-subtitle {
+        color: #64748b; font-size: 0.95rem; margin: 0;
+    }
+
+    /* Form Styles */
+    .form-group { margin-bottom: 20px; }
+    
+    .form-row { display: flex; gap: 20px; margin-bottom: 20px; }
+    .form-row .form-group { flex: 1; margin-bottom: 0; }
+
+    .form-group label {
+        display: block; margin-bottom: 6px;
+        color: #334155; font-weight: 600; font-size: 0.9rem;
+    }
+
+    .required-star { color: #e11d48; }
+    .helper-text { color: #94a3b8; font-size: 0.8rem; margin-top: 5px; }
+
+    /* Target Django Inputs */
+    .input-wrapper input[type="text"], 
+    .input-wrapper input[type="email"], 
+    .input-wrapper input[type="url"],
+    .input-wrapper select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        color: #0f2c59;
+        background: #f8fafc;
+        transition: border-color 0.2s, background 0.2s;
+        box-sizing: border-box;
+    }
+
+    .input-wrapper input:focus, .input-wrapper select:focus {
+        outline: none; border-color: #0f2c59; background: #ffffff;
+    }
+
+    /* Upload Area */
+    .upload-area {
+        display: flex; justify-content: space-between; align-items: center;
+        background: #f8fafc;
+        padding: 16px 20px;
+        border-radius: 8px;
+        border: 1px dashed #cbd5e1;
+    }
+
+    .upload-info { display: flex; align-items: center; gap: 16px; }
+
+    .upload-icon {
+        width: 36px; height: 36px; border-radius: 8px;
+        background: rgba(15, 44, 89, 0.05); color: #0f2c59;
+        display: flex; align-items: center; justify-content: center;
+    }
+
+    .upload-text { display: flex; flex-direction: column; gap: 2px; }
+    .upload-action { color: #0f2c59; font-weight: 600; font-size: 0.9rem; }
+    .upload-recommend { color: #94a3b8; font-size: 0.75rem; margin-top: 2px;}
+    .upload-input-wrap { font-size: 0.85rem; color: #475569; margin-top: 2px; }
+    
+    .upload-preview {
+        width: 52px; height: 52px; border-radius: 50%; overflow: hidden;
+        border: 2px solid #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        flex-shrink: 0;
+    }
+    .upload-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Actions */
+    .form-actions {
+        display: flex; justify-content: flex-end;
+        padding-top: 12px;
+    }
+
+    .btn-submit {
+        background: #0f2c59; color: #ffffff;
+        border: none; padding: 10px 24px; border-radius: 8px;
+        font-size: 0.95rem; font-weight: 600; cursor: pointer;
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        transition: background 0.2s, transform 0.2s;
+        width: 160px;
+    }
+
+    .btn-submit:hover {
+        background: #1e3a8a; transform: translateY(-1px);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* Dark Theme Support */
+    [data-theme="dark"] .page-title, [data-theme="dark"] .profile-name { color: #e2e8f0; }
+    [data-theme="dark"] .page-subtitle, [data-theme="dark"] .profile-designation, [data-theme="dark"] .profile-email, [data-theme="dark"] .helper-text, [data-theme="dark"] .upload-recommend { color: #94a3b8; }
+    [data-theme="dark"] .profile-panel, [data-theme="dark"] .edit-form-panel { background: #1e293b; border-color: rgba(255,255,255,0.05); }
+    [data-theme="dark"] .profile-divider { background: rgba(255,255,255,0.05); }
+    [data-theme="dark"] .btn-view-testimonials { border-color: rgba(255,255,255,0.2); color: #e2e8f0; }
+    [data-theme="dark"] .btn-view-testimonials:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.4); }
+    [data-theme="dark"] .form-group label { color: #cbd5e1; }
+    [data-theme="dark"] .input-wrapper input[type="text"], [data-theme="dark"] .input-wrapper input[type="email"], [data-theme="dark"] .input-wrapper input[type="url"], [data-theme="dark"] .input-wrapper select {
+        background: #0f172a; border-color: rgba(255,255,255,0.1); color: #e2e8f0;
+    }
+    [data-theme="dark"] .input-wrapper input:focus, [data-theme="dark"] .input-wrapper select:focus { border-color: #60a5fa; }
+    [data-theme="dark"] .upload-area { background: #0f172a; border-color: rgba(255,255,255,0.1); }
+    [data-theme="dark"] .upload-icon { background: rgba(255,255,255,0.05); color: #cbd5e1; }
+    [data-theme="dark"] .upload-action { color: #cbd5e1; }
+    [data-theme="dark"] .upload-preview { border-color: #1e293b; }
+
+    @media (max-width: 1024px) {
+        .edit-profile-workspace { flex-direction: column; }
+        .profile-panel { width: 100%; flex: none; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
+        .form-row { flex-direction: column; gap: 20px; }
+    }
+    @media (max-width: 768px) {
+        .page-container { padding-top: 80px; padding-left: 16px; padding-right: 16px; }
+        .upload-area { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+        .btn-submit { width: 100%; justify-content: center; }
+        .profile-panel, .edit-form-panel { padding: 20px 16px; }
+    }
+</style>
+
+<script>
+    // Make batch required dynamically if form widget doesn't render it
+    document.addEventListener("DOMContentLoaded", function() {
+        const batchInput = document.querySelector('input[name="batch"]');
+        if(batchInput) batchInput.required = true;
+    });
+
+    // Button loading state
+    const form = document.getElementById('editProfileForm');
+    const submitBtn = document.getElementById('submitBtn');
+    form.addEventListener('submit', function() {
+        submitBtn.style.opacity = '0.7';
+        submitBtn.style.pointerEvents = 'none';
+        submitBtn.innerHTML = 'Saving...';
+    });
+</script>
 {% endblock %}

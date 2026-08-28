@@ -1,131 +1,125 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% block content %}
 {% include "nav_bar.html" %}
 
-<div class="page-container" style="max-width: 1300px;">
+<div class="page-container" style="max-width: 1200px; margin: 0 auto; padding: 100px 24px 40px;">
     
+    <!-- Page Heading -->
     <div style="margin-bottom: 24px;">
-        <h1 style="color: var(--clr-primary); font-size: 2rem; margin-bottom: 5px;">Welcome back, {{ request.user.username }} 👋</h1>
-        <p style="color: var(--clr-text-muted); font-size: 1.05rem;">Here are the testimonials you've submitted to your professors.</p>
+        <h1 class="page-title">My Testimonials</h1>
+        <p class="page-subtitle">Here are the testimonials you've submitted to your professors.</p>
     </div>
 
-    <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+    <div class="dashboard-workspace">
         
-        <!-- Left Sidebar Profile -->
-        <div class="glass-card" style="flex: 1; min-width: 280px; max-width: 300px; text-align: center; padding: 24px; position: sticky; top: 88px;">
-            <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; background: #eee; border: 2px solid transparent;">
+        <!-- Left: Student Profile Panel -->
+        <div class="profile-panel">
+            <div class="profile-avatar">
                 {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{ profile.profile_picture.url }}" alt="{{ request.user.username }}">
                 {% else %}
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: #ccc; background: #f9f9f9;">
-                        {{ request.user.username|make_list|first|upper }}
-                    </div>
+                    <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
                 {% endif %}
             </div>
             
-            <h2 style="color: var(--clr-text-main); font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;">{{ request.user.username }}</h2>
-            <div style="color: var(--clr-text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+            <h2 class="profile-name">{{ request.user.username }}</h2>
+            <div class="profile-designation">
                 {% if profile.designation %}{{ profile.designation }}{% else %}Student{% endif %}
             </div>
             
-            <div style="height: 1px; background: rgba(0,0,0,0.05); margin: 0 10px 20px;"></div>
+            <div class="profile-divider"></div>
             
-            <div style="color: var(--clr-text-main); font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                {{ request.user.email }}
+            <div class="profile-email">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span>{{ request.user.email }}</span>
             </div>
             
-            <div style="height: 1px; background: rgba(0,0,0,0.05); margin: 0 10px 20px;"></div>
-            
-
-            <a href="{% url 'edit_profile' %}" class="btn" style="width: 100%; border: 1px solid var(--clr-primary); color: var(--clr-primary); background: transparent; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <a href="{% url 'edit_profile' %}" class="btn-edit-profile">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                 Edit Profile
             </a>
         </div>
         
-        <!-- Right Content: Testimonials -->
-        <div class="glass-card" style="flex: 2; min-width: 300px; padding: 24px 32px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                <h2 style="color: var(--clr-primary); font-size: 1.5rem; margin: 0;">Your Testimonials</h2>
+        <!-- Right: Testimonial History Panel -->
+        <div class="history-panel">
+            
+            <div class="history-header">
+                <h2 class="history-title">My Testimonials</h2>
                 
-                <div style="position: relative;">
-                    <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #bbb;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" placeholder="Search testimonials..." style="padding: 8px 12px 8px 36px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); font-size: 0.9rem; width: 200px; background: transparent;">
+                <div class="history-search">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" placeholder="Search testimonials...">
                 </div>
             </div>
             
-            <div style="display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 20px;">
-                <div style="padding: 6px 16px; background: var(--clr-primary); color: #fff; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">All</div>
-                <div style="padding: 6px 16px; background: rgba(0,0,0,0.05); color: var(--clr-text-muted); border-radius: 20px; font-size: 0.85rem; font-weight: 500;">Recent</div>
+            <div class="history-filters">
+                <div class="filter-pill active">All</div>
+                <div class="filter-pill">Recent</div>
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="testimonial-list">
                 {% for t in page_obj %}
-                    <div style="border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 16px; transition: transform 0.2s;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                            <div style="display: flex; gap: 15px; align-items: center;">
-                                <div style="width: 45px; height: 45px; border-radius: 50%; background: #e3f2fd; color: #1976d2; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem;">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-prof-info">
+                                <div class="testimonial-prof-avatar">
                                     {% if t.professor.processed_profile_picture %}
-                                        <img src="{{ t.professor.processed_profile_picture.url }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                        <img src="{{ t.professor.processed_profile_picture.url }}" alt="{{ t.professor.name }}">
                                     {% elif t.professor.profile_picture %}
-                                        <img src="{{ t.professor.profile_picture.url }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                        <img src="{{ t.professor.profile_picture.url }}" alt="{{ t.professor.name }}">
                                     {% else %}
-                                        {{ t.professor.name|make_list|first|upper }}
+                                        <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
                                     {% endif %}
                                 </div>
-                                <div>
-                                    <h4 style="margin: 0; color: var(--clr-text-main); font-size: 1.05rem;">To: {{ t.professor.name }}</h4>
-                                    <div style="font-size: 0.85rem; color: var(--clr-text-muted);">{{ t.professor.department }}</div>
+                                <div class="testimonial-prof-text">
+                                    <h4>To: {{ t.professor.name }}</h4>
+                                    <span>{{ t.professor.department }}</span>
                                 </div>
                             </div>
-                            <div style="font-size: 0.8rem; color: var(--clr-text-muted); display: flex; align-items: center; gap: 10px;">
-                                {{ t.submitted_at|date:"d M Y, g:i A" }}
-                                <a href="{% url 'delete_testimonial' t.id %}" onclick="return confirm('Are you sure you want to delete this?');" style="color: #bbb; cursor: pointer;">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                </a>
+                            
+                            <div class="testimonial-meta">
+                                <span class="testimonial-date">{{ t.submitted_at|date:"d M Y" }}</span>
                             </div>
                         </div>
-                        <div style="position: relative;">
-                            <p style="margin: 0; font-size: 1rem; color: var(--clr-text-main); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; max-height: calc(1.6rem * 3);">
-                                "{{ t.content }}"
-                            </p>
-                            {% if t.content|length > 150 %}
-                            <button onclick="openTestimonialModal('{{ t.id }}')" style="background:none; border:none; color:var(--clr-primary); font-weight:600; cursor:pointer; padding:0; margin-top:5px; font-size:0.9rem;">Read more</button>
-                            <div id="full-content-{{ t.id }}" style="display: none;">{{ t.content }}</div>
-                            {% endif %}
+                        
+                        <div class="testimonial-content">
+                            "{{ t.content }}"
                         </div>
                     </div>
                 {% empty %}
-                    <div style="text-align: center; padding: 40px; color: var(--clr-text-muted); font-style: italic;">
-                        You haven't written any testimonials yet. Go to <a href="{% url 'professor_list' %}" style="color: var(--clr-primary);">Browse Professors</a> to write one!
+                    <div class="empty-state">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <h3>No testimonials yet</h3>
+                        <p>You haven't written any testimonials yet. Find a professor and share your gratitude.</p>
+                        <a href="{% url 'professor_list' %}" class="btn-find-prof">Find a Professor</a>
                     </div>
                 {% endfor %}
             </div>
             
             <!-- Pagination Controls -->
             {% if page_obj.has_other_pages %}
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.05);">
-                <div style="color: var(--clr-text-muted); font-size: 0.85rem;">
+            <div class="pagination-container">
+                <div class="pagination-info">
                     Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} testimonials
                 </div>
                 
-                <div style="display: flex; gap: 8px;">
+                <div class="pagination-controls">
                     {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}" class="btn" style="padding: 6px 12px; background: #fff; border: 1px solid #ddd; color: #555;">&lt;</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&lt;</a>
                     {% endif %}
                     
                     {% for num in page_obj.paginator.page_range %}
                         {% if page_obj.number == num %}
-                            <span class="btn" style="padding: 6px 12px; background: var(--clr-primary); border: 1px solid var(--clr-primary); color: #fff;">{{ num }}</span>
+                            <span class="page-link active">{{ num }}</span>
                         {% else %}
-                            <a href="?page={{ num }}" class="btn" style="padding: 6px 12px; background: #fff; border: 1px solid #ddd; color: #555;">{{ num }}</a>
+                            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
                         {% endif %}
                     {% endfor %}
                     
                     {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}" class="btn" style="padding: 6px 12px; background: #fff; border: 1px solid #ddd; color: #555;">&gt;</a>
+                        <a href="?page={{ page_obj.next_page_number }}" class="page-link">&gt;</a>
                     {% endif %}
                 </div>
             </div>
@@ -136,32 +130,270 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div id="testimonialModal" class="testimonial-modal" style="display:none; position:fixed; z-index:1050; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5); backdrop-filter:blur(4px);">
-  <div class="testimonial-modal-content" style="background-color:var(--glass-bg); margin:10% auto; padding:30px; border:1px solid var(--glass-border); border-radius:12px; width:80%; max-width:700px; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
-    <span class="testimonial-close" onclick="closeTestimonialModal()" style="color:var(--clr-text-muted); float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
-    <h3 style="color:var(--clr-primary); margin-top:0; margin-bottom:20px;">Full Testimonial</h3>
-    <p id="modalTestimonialContent" style="font-size:1.1rem; line-height:1.7; font-style:italic; color:var(--clr-text-main); white-space:pre-wrap;"></p>
-  </div>
-</div>
-
-<script>
-    function openTestimonialModal(id) {
-        const fullContent = document.getElementById('full-content-' + id).innerText;
-        document.getElementById('modalTestimonialContent').innerText = '"' + fullContent + '"';
-        document.getElementById('testimonialModal').style.display = 'block';
+<style>
+    .page-container { font-family: 'Inter', sans-serif; }
+    
+    .page-title {
+        color: #0f2c59;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0 0 6px 0;
+        line-height: 1.1;
     }
 
-    function closeTestimonialModal() {
-        document.getElementById('testimonialModal').style.display = 'none';
+    .page-subtitle {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+    
+    .dashboard-workspace {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
     }
 
-    window.onclick = function(event) {
-        const modal = document.getElementById('testimonialModal');
-        if (event.target == modal) {
-            closeTestimonialModal();
-        }
+    /* Left Panel: Profile */
+    .profile-panel {
+        flex: 0 0 280px;
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.06);
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+        position: sticky;
+        top: 100px;
     }
-</script>
 
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: 0 auto 16px;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
+        background: #f8fafc;
+    }
+
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .profile-avatar-fallback {
+        width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        background: #f1f5f9; color: #94a3b8;
+        font-size: 2rem; font-weight: 700;
+    }
+
+    .profile-name {
+        color: #0f2c59; font-size: 1.25rem; font-weight: 700; margin: 0 0 4px 0;
+    }
+
+    .profile-designation {
+        color: #64748b; font-size: 0.85rem; margin-bottom: 20px; font-weight: 500;
+    }
+
+    .profile-divider {
+        height: 1px; background: rgba(0,0,0,0.06); margin: 0 0 16px 0;
+    }
+
+    .profile-email {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        color: #475569; font-size: 0.85rem; margin-bottom: 20px;
+    }
+
+    .btn-edit-profile {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        width: 100%; padding: 8px;
+        border: 1px solid rgba(15, 44, 89, 0.2);
+        border-radius: 8px;
+        color: #0f2c59; font-size: 0.9rem; font-weight: 600;
+        background: transparent;
+        text-decoration: none;
+        transition: background 0.2s, border-color 0.2s;
+        box-sizing: border-box;
+    }
+
+    .btn-edit-profile:hover {
+        background: rgba(15, 44, 89, 0.04);
+        border-color: rgba(15, 44, 89, 0.3);
+    }
+
+    /* Right Panel: History */
+    .history-panel {
+        flex: 1; min-width: 0;
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.06);
+        padding: 24px 32px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    }
+
+    .history-header {
+        display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+    }
+
+    .history-title {
+        color: #0f2c59; font-size: 1.4rem; font-weight: 700; margin: 0;
+    }
+
+    .history-search {
+        position: relative; display: flex; align-items: center;
+    }
+
+    .history-search svg {
+        position: absolute; left: 12px; color: #94a3b8;
+    }
+
+    .history-search input {
+        padding: 8px 12px 8px 36px;
+        border: 1px solid #cbd5e1; border-radius: 8px;
+        font-size: 0.85rem; width: 220px;
+        color: #0f2c59; font-family: inherit;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .history-search input:focus {
+        outline: none; border-color: #0f2c59;
+    }
+
+    .history-filters {
+        display: flex; gap: 8px; margin-bottom: 24px; padding-bottom: 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .filter-pill {
+        padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; cursor: pointer;
+        background: #f1f5f9; color: #475569; transition: all 0.2s;
+    }
+
+    .filter-pill.active {
+        background: #0f2c59; color: #ffffff;
+    }
+
+    /* Testimonial Cards */
+    .testimonial-list {
+        display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .testimonial-card {
+        border: 1px solid rgba(0,0,0,0.06); border-radius: 12px;
+        padding: 20px; transition: border-color 0.2s;
+    }
+
+    .testimonial-card:hover {
+        border-color: rgba(0,0,0,0.1);
+    }
+
+    .testimonial-header {
+        display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;
+    }
+
+    .testimonial-prof-info {
+        display: flex; align-items: center; gap: 12px;
+    }
+
+    .testimonial-prof-avatar {
+        width: 40px; height: 40px; border-radius: 50%;
+        background: #f1f5f9; color: #0f2c59;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 1rem; overflow: hidden;
+    }
+
+    .testimonial-prof-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .testimonial-prof-text h4 {
+        margin: 0 0 2px 0; color: #0f2c59; font-size: 0.95rem; font-weight: 700;
+    }
+
+    .testimonial-prof-text span {
+        color: #64748b; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .testimonial-meta {
+        display: flex; align-items: center; gap: 12px;
+    }
+
+    .testimonial-date {
+        color: #94a3b8; font-size: 0.8rem;
+    }
+
+    .btn-delete {
+        color: #cbd5e1; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        transition: color 0.2s; padding: 4px;
+    }
+
+    .btn-delete:hover { color: #ef4444; }
+
+    .testimonial-content {
+        margin: 0; font-size: 0.95rem; color: #334155; line-height: 1.6; word-wrap: break-word; font-style: italic;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center; padding: 40px 20px; color: #64748b;
+    }
+    .empty-state svg { color: #cbd5e1; margin-bottom: 12px; }
+    .empty-state h3 { color: #0f2c59; font-size: 1.1rem; margin: 0 0 8px 0; }
+    .empty-state p { font-size: 0.9rem; margin: 0 0 20px 0; }
+    
+    .btn-find-prof {
+        display: inline-block; background: #0f2c59; color: #ffffff; padding: 8px 20px;
+        border-radius: 8px; font-size: 0.9rem; font-weight: 500; text-decoration: none;
+        transition: background 0.2s;
+    }
+    .btn-find-prof:hover { background: #1e3a8a; }
+
+    /* Pagination */
+    .pagination-container {
+        display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    
+    .pagination-info { color: #64748b; font-size: 0.85rem; }
+    
+    .pagination-controls { display: flex; gap: 6px; }
+    
+    .page-link {
+        padding: 6px 12px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px;
+        color: #475569; font-size: 0.85rem; text-decoration: none; transition: all 0.2s;
+    }
+    .page-link:hover { background: #f8fafc; border-color: #94a3b8; }
+    .page-link.active { background: #0f2c59; color: #ffffff; border-color: #0f2c59; }
+
+    /* Dark Theme */
+    [data-theme="dark"] .page-title, [data-theme="dark"] .profile-name, [data-theme="dark"] .history-title, [data-theme="dark"] .testimonial-prof-text h4, [data-theme="dark"] .empty-state h3 { color: #e2e8f0; }
+    [data-theme="dark"] .page-subtitle, [data-theme="dark"] .profile-designation, [data-theme="dark"] .profile-email, [data-theme="dark"] .testimonial-date, [data-theme="dark"] .pagination-info, [data-theme="dark"] .empty-state p { color: #94a3b8; }
+    [data-theme="dark"] .profile-panel, [data-theme="dark"] .history-panel { background: #1e293b; border-color: rgba(255,255,255,0.05); }
+    [data-theme="dark"] .profile-divider, [data-theme="dark"] .history-filters, [data-theme="dark"] .pagination-container, [data-theme="dark"] .testimonial-card { border-color: rgba(255,255,255,0.1); }
+    [data-theme="dark"] .btn-edit-profile { border-color: rgba(255,255,255,0.2); color: #e2e8f0; }
+    [data-theme="dark"] .btn-edit-profile:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.4); }
+    [data-theme="dark"] .history-search input { background: #0f172a; border-color: rgba(255,255,255,0.1); color: #e2e8f0; }
+    [data-theme="dark"] .filter-pill { background: #0f172a; color: #94a3b8; }
+    [data-theme="dark"] .filter-pill.active { background: #3b82f6; color: #ffffff; }
+    [data-theme="dark"] .testimonial-content { color: #cbd5e1; }
+    [data-theme="dark"] .testimonial-prof-avatar { background: #0f172a; color: #94a3b8; }
+    [data-theme="dark"] .page-link { background: #0f172a; border-color: rgba(255,255,255,0.1); color: #cbd5e1; }
+    [data-theme="dark"] .page-link.active { background: #3b82f6; border-color: #3b82f6; }
+
+    @media (max-width: 1024px) {
+        .dashboard-workspace { flex-direction: column; }
+        .profile-panel { width: 100%; flex: none; position: static; display: flex; align-items: center; flex-wrap: wrap; text-align: left; gap: 16px; box-sizing: border-box; }
+        .profile-avatar { margin: 0; }
+        .profile-divider { display: none; }
+        .profile-email, .profile-designation { margin-bottom: 0; }
+        .btn-edit-profile { width: auto; margin-left: auto; }
+    }
+    @media (max-width: 768px) {
+        .page-container { padding-top: 80px; padding-left: 16px; padding-right: 16px; }
+        .profile-panel { flex-direction: column; text-align: center; justify-content: center; padding: 20px 16px; }
+        .btn-edit-profile { margin: 0 auto; width: 100%; }
+        .history-panel { padding: 20px 16px; }
+        .history-header { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+        .history-search { width: 100%; }
+        .history-search input { width: 100%; box-sizing: border-box; text-align: center; }
+        .testimonial-header { flex-direction: column; gap: 12px; align-items: center; text-align: center; }
+        .testimonial-meta { width: 100%; justify-content: space-between; }
+        .pagination-container { flex-direction: column; gap: 16px; align-items: center; }
+    }
+</style>
 {% endblock %}

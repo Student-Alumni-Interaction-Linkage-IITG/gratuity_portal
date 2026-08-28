@@ -16,11 +16,11 @@
       <!-- Right Column: Need Assistance? Contact Us -->
       <div class="footer-contact-col">
         <h4 class="footer-section-title">NEED ASSISTANCE? CONTACT US</h4>
-        <div class="footer-cards-grid">
+        <div class="footer-contacts-wrapper">
           
           <!-- Contact 1 -->
-          <div class="footer-contact-card">
-            <span class="contact-role-badge">General Secretary</span>
+          <div class="footer-contact-block">
+            <span class="contact-role">General Secretary</span>
             <div class="contact-name">Aditya Dhaniyaal</div>
             <a href="tel:+917302325346" class="contact-phone">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -29,8 +29,8 @@
           </div>
 
           <!-- Contact 2 -->
-          <div class="footer-contact-card">
-            <span class="contact-role-badge">Web Head</span>
+          <div class="footer-contact-block">
+            <span class="contact-role">Web Head</span>
             <div class="contact-name">Ram Tej Duvvuri</div>
             <a href="tel:+919392731091" class="contact-phone">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -39,8 +39,8 @@
           </div>
 
           <!-- Contact 3 -->
-          <div class="footer-contact-card">
-            <span class="contact-role-badge">Web Head</span>
+          <div class="footer-contact-block">
+            <span class="contact-role">Web Head</span>
             <div class="contact-name">Ayusha Thakur</div>
             <a href="tel:+919015094032" class="contact-phone">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Bottom Copyright -->
-    <div class="footer-bottom-bar">
+    <div class="footer-copyright">
       &copy; 2026 Student Alumni Interaction Cell (SAIL), IIT Guwahati. All rights reserved.
     </div>
   </div>
@@ -62,21 +62,19 @@
 <style>
   .sail-site-footer {
     width: 100%;
-    background: var(--glass-bg);
-    border-top: 1px solid var(--glass-border);
+    background: #ffffff;
     margin-top: auto;
-    padding: 18px 0 10px;
+    padding: 40px 0 20px; /* Reduced vertical padding */
     color: var(--clr-text-main);
-    transition: background 0.3s ease, border-color 0.3s ease;
+    transition: background 0.3s ease;
   }
 
   [data-theme="dark"] .sail-site-footer {
-    background: rgba(18, 18, 18, 0.95);
-    border-top-color: rgba(255, 255, 255, 0.06);
+    background: #0f172a; 
   }
 
   .footer-container {
-    max-width: 1200px;
+    max-width: 90%; /* Use 90% of the screen instead of fixed 1200px */
     margin: 0 auto;
     padding: 0 24px;
   }
@@ -84,123 +82,101 @@
   .footer-main-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 32px;
-    margin-bottom: 12px;
+    align-items: flex-start;
+    gap: 100px; /* Increased gap between left identity and right contacts */
+    margin-bottom: 30px; /* Reduced bottom margin */
   }
 
-  /* Left Column */
+  /* Left Column: Organization Identity */
   .footer-about-col {
-    flex: 0 0 320px;
-    max-width: 360px;
+    flex: 0 0 380px; /* Slightly wider left column */
   }
 
   .footer-brand {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 3px;
+    gap: 12px;
+    margin-bottom: 12px;
   }
 
   .footer-logo {
-    height: 26px;
+    height: 36px; 
     width: auto;
     object-fit: contain;
   }
 
   .footer-title {
-    font-size: 0.95rem;
+    font-size: 19px;
     font-weight: 700;
-    color: var(--clr-primary);
+    color: #0f2c59; 
     line-height: 1.2;
     margin: 0;
   }
 
   [data-theme="dark"] .footer-title {
-    color: #60a5fa;
+    color: #e2e8f0;
   }
 
   .footer-address {
-    font-size: 0.8rem;
-    color: var(--clr-text-muted);
+    font-size: 14.5px;
+    color: #64748b; 
     font-weight: 500;
-    margin-bottom: 1px;
-    line-height: 1.3;
+    margin-bottom: 4px;
+    line-height: 1.4;
   }
 
   .footer-tagline {
-    font-size: 0.76rem;
-    color: var(--clr-text-muted);
-    line-height: 1.3;
-    opacity: 0.85;
+    font-size: 13.5px;
+    color: #64748b;
+    line-height: 1.5;
   }
 
-  /* Right Column */
+  [data-theme="dark"] .footer-address,
+  [data-theme="dark"] .footer-tagline {
+    color: #94a3b8;
+  }
+
+  /* Right Column: Contact Information */
   .footer-contact-col {
     flex: 1;
     min-width: 0;
   }
 
   .footer-section-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--clr-text-muted);
-    letter-spacing: 0.8px;
-    margin-bottom: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    margin-bottom: 16px; /* Reduced space before names */
     text-transform: uppercase;
-    opacity: 0.85;
   }
 
-  .footer-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+  .footer-contacts-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Spread contacts out evenly */
+    gap: 20px; 
   }
 
-  .footer-contact-card {
-    background: rgba(15, 44, 89, 0.02);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
-    padding: 8px 12px;
+  .footer-contact-block {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    transition: transform 0.15s ease, border-color 0.15s ease;
+    gap: 4px;
   }
 
-  [data-theme="dark"] .footer-contact-card {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.06);
-  }
-
-  .footer-contact-card:hover {
-    transform: translateY(-1px);
-    border-color: rgba(15, 44, 89, 0.25);
-  }
-
-  [data-theme="dark"] .footer-contact-card:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-  }
-
-  .contact-role-badge {
-    font-size: 0.68rem;
-    font-weight: 600;
-    color: #8c9ba5;
+  .contact-role {
+    font-size: 12px;
+    font-weight: 500;
+    color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    line-height: 1.1;
-  }
-
-  [data-theme="dark"] .contact-role-badge {
-    color: #64748b;
   }
 
   .contact-name {
-    font-size: 0.86rem;
-    font-weight: 700;
-    color: var(--clr-primary);
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f2c59; 
     margin: 0;
-    line-height: 1.2;
   }
 
   [data-theme="dark"] .contact-name {
@@ -210,61 +186,80 @@
   .contact-phone {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    font-size: 0.76rem;
-    color: var(--clr-text-muted);
+    gap: 6px;
+    font-size: 13.5px;
+    color: #64748b;
     text-decoration: none;
-    transition: color 0.15s ease;
-    margin-top: 1px;
+    transition: color 0.2s ease;
+    margin-top: 2px;
   }
 
   .contact-phone svg {
     flex-shrink: 0;
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   .contact-phone:hover {
-    color: var(--clr-primary);
-    text-decoration: underline;
+    color: #2563eb;
+  }
+
+  [data-theme="dark"] .contact-phone {
+    color: #94a3b8;
   }
 
   [data-theme="dark"] .contact-phone:hover {
     color: #60a5fa;
   }
 
-  .footer-bottom-bar {
-    border-top: 1px solid var(--glass-border);
-    padding-top: 8px;
+  /* Copyright Area */
+  .footer-copyright {
     text-align: center;
-    font-size: 0.75rem;
-    color: var(--clr-text-muted);
-    opacity: 0.8;
+    font-size: 13.5px;
+    color: #94a3b8;
+    padding-top: 16px; /* Reduced padding above copyright */
+    border-top: 1px solid #f1f5f9;
   }
 
-  [data-theme="dark"] .footer-bottom-bar {
-    border-top-color: rgba(255, 255, 255, 0.05);
+  [data-theme="dark"] .footer-copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: #64748b;
   }
 
-  /* Responsive Footer */
+  /* Responsive Behavior */
   @media (max-width: 960px) {
     .footer-main-row {
       flex-direction: column;
-      align-items: flex-start;
-      gap: 18px;
+      align-items: center;
+      text-align: center;
+      gap: 32px;
     }
     .footer-about-col {
       flex: 1 1 100%;
       max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   }
 
-  @media (max-width: 720px) {
-    .footer-cards-grid {
-      grid-template-columns: 1fr;
-      gap: 6px;
-    }
+  @media (max-width: 768px) {
     .sail-site-footer {
-      padding: 16px 0 8px;
+      padding: 32px 0 16px;
+    }
+    .footer-container {
+      padding: 0 16px;
+      max-width: 100%;
+    }
+    .footer-contacts-wrapper {
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    .footer-main-row {
+      margin-bottom: 32px;
+    }
+    .footer-copyright {
+      padding-top: 16px;
     }
   }
 </style>

@@ -6,10 +6,27 @@
       <img src="{% static 'img/iitg-logo.png' %}" alt="IITG" class="nav-logo-iitg">
       <span class="logo-divider"></span>
       <img src="{% static 'img/sail_logo.png' %}" alt="SAIL" class="nav-logo-sail">
-      <span class="logo-text">Gratuity Portal</span>
+      <span class="logo-text">
+        <span class="logo-sail-abbr">SAIL</span>
+        <span class="logo-sail-sep">|</span>
+        <span class="logo-sail-full">Student Alumni Interaction Linkage</span>
+      </span>
     </a>
 
+    <div class="navbar-center">
+      <a href="{% url 'home' %}" class="logo-portal-name" style="text-decoration: none;">Gratitude Portal</a>
+    </div>
+
     <div class="navbar-actions">
+      <!-- Search Professors Link -->
+      <a href="{% url 'professor_list' %}" class="nav-search-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span class="nav-search-text">Search Professors</span>
+      </a>
+
       <!-- Theme Toggle -->
       <button onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Dark Mode">
         <svg id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -24,7 +41,7 @@
             {% if request.user.student_profile and request.user.student_profile.profile_picture %}
                <img src="{{ request.user.student_profile.profile_picture.url }}" class="nav-avatar" alt="Avatar">
             {% else %}
-               <div class="nav-avatar-placeholder">{{ request.user.username|make_list|first|upper }}</div>
+               <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
             {% endif %}
             <span class="nav-username">{{ request.user.username }}</span>
             <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -35,8 +52,21 @@
               <small>{{ request.user.email }}</small>
             </div>
             <hr class="dropdown-divider">
-            <a href="{% url 'student_dashboard' %}" class="dropdown-item">My Profile</a>
-            <a href="{% url 'professor_dashboard' %}" class="dropdown-item">Professor Dashboard</a>
+            {% if is_professor %}
+              <a href="{% url 'professor_dashboard' %}" class="dropdown-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:middle">
+                  <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                My Dashboard
+              </a>
+            {% else %}
+              <a href="{% url 'student_dashboard' %}" class="dropdown-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:middle">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                My Profile
+              </a>
+            {% endif %}
             <hr class="dropdown-divider">
             <a href="{% url 'logout' %}" class="dropdown-item text-danger">Logout</a>
           </div>
@@ -67,12 +97,12 @@
   }
 
   .navbar-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
   }
 
@@ -80,6 +110,14 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    justify-self: start;
+  }
+
+  .navbar-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .nav-logo-iitg, .nav-logo-sail {
@@ -100,16 +138,135 @@
   }
   
   .logo-text {
-    font-size: 1.25rem;
-    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
     color: var(--clr-primary);
-    letter-spacing: -0.5px;
+    white-space: nowrap;
+  }
+
+  .logo-sail-abbr {
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--clr-primary);
+    letter-spacing: 0.5px;
+  }
+
+  .logo-sail-sep {
+    color: #94a3b8;
+    font-weight: 300;
+    font-size: 1rem;
+    margin: 0 2px;
+  }
+
+  .logo-sail-full {
+    font-weight: 500;
+    font-size: 0.88rem;
+    color: var(--clr-text-main);
+    letter-spacing: -0.1px;
+  }
+
+  .logo-sail-dot {
+    color: #94a3b8;
+    font-size: 1rem;
+  }
+
+  .logo-portal-name {
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: var(--clr-primary);
+    letter-spacing: -0.2px;
+  }
+
+  [data-theme="dark"] .logo-sail-abbr,
+  [data-theme="dark"] .logo-portal-name {
+    color: #f1f5f9;
+  }
+
+  [data-theme="dark"] .logo-sail-full {
+    color: #94a3b8;
   }
 
   .navbar-actions {
     display: flex;
     align-items: center;
     gap: 15px;
+    justify-self: end;
+  }
+
+  .nav-search-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(31, 60, 136, 0.05);
+    color: var(--clr-primary);
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+
+  .nav-search-btn:hover {
+    background: var(--clr-primary);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  [data-theme="dark"] .nav-search-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  [data-theme="dark"] .nav-search-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .navbar-container {
+      padding: 0 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .navbar-center {
+      display: none;
+    }
+    .logo-divider, .nav-search-text, .nav-username, .dropdown-icon {
+      display: none;
+    }
+    .logo-sail-full, .logo-sail-sep, .logo-sail-dot {
+      display: none;
+    }
+    .logo-sail-abbr {
+      display: inline;
+      font-size: 0.95rem;
+    }
+    .nav-search-btn {
+      padding: 8px;
+      border-radius: 50%;
+      min-width: 44px;
+      min-height: 44px;
+      justify-content: center;
+    }
+    .theme-toggle-btn {
+      min-width: 44px;
+      min-height: 44px;
+    }
+    .navbar-actions {
+      gap: 8px;
+    }
+    .user-trigger {
+      padding: 4px;
+    }
+    .nav-logo-iitg, .nav-logo-sail {
+      height: 32px;
+    }
+    .glass-dropdown-menu {
+      right: -10px;
+    }
   }
 
   .theme-toggle-btn {

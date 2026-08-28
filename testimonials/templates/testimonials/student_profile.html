@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% block content %}
 {% include "nav_bar.html" %}
-<div class="page-container" style="display: flex; align-items: center; justify-content: center; min-height: 70vh;">
+<div class="page-container" style="display: flex; align-items: center; justify-content: center; min-height: 70vh; padding-top: 100px; padding-bottom: 40px;">
     <div class="glass-card" style="max-width: 500px; width: 100%; text-align: center; padding: 50px 30px; position: relative;">
         
         {% if profile and profile.profile_picture %}
             <img src="{{ profile.profile_picture.url }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid var(--clr-primary); margin: 0 auto 20px;">
         {% else %}
             <div style="width: 150px; height: 150px; border-radius: 50%; background: #eee; color: #aaa; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold; border: 4px solid var(--clr-primary); margin: 0 auto 20px;">
-                {{ student.username|make_list|first|upper }}
+                <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
             </div>
         {% endif %}
         

@@ -1,0 +1,27 @@
+/* ==========================================================================
+   PROFESSOR LIST PAGE – Clean Modern Styles
+   Overrides all legacy prof_list styles
+   ========================================================================== */
+
+/* Legacy resets – neutralize old prof_list.css classes */
+.prof-list,
+.nav-bar,
+.dept-list,
+.container,
+.search-box,
+.card-area,
+.hamburger-menu,
+.bar {
+    all: unset;
+    display: none !important;
+}
+
+/* Grid layout for professor cards – 4 columns */
+.prof-card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 0 32px;
+}

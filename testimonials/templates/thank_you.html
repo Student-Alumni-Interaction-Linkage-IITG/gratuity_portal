@@ -1,28 +1,293 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 {% include "nav_bar.html" %}
-<div class="page-container" style="display: flex; align-items: center; justify-content: center; min-height: 70vh;">
+
+<div class="page-container success-container">
     
-    <div class="glass-card" style="max-width: 600px; text-align: center; padding: 60px 40px;">
-        <!-- Animated Checkmark Icon -->
-        <div style="width: 80px; height: 80px; background: rgba(42, 157, 143, 0.1); color: var(--clr-accent-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
+    <div class="success-card">
+        
+        <!-- Animated Success Circle -->
+        <div class="success-icon-container">
+            <div class="success-icon-wrapper">
+                <svg class="success-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <!-- Burst lines top right -->
+            <svg class="burst-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#2b7a4b" stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="6" x2="2" y2="2" />
+                <line x1="12" y1="4" x2="12" y2="0" />
+                <line x1="18" y1="6" x2="22" y2="2" />
             </svg>
         </div>
 
-        <h1 style="color: var(--clr-primary); font-size: 2.5rem; margin-bottom: 20px;">Thank You!</h1>
-        <p style="color: var(--clr-text-muted); font-size: 1.2rem; line-height: 1.6; margin-bottom: 40px;">
-            Your gratitude means the world. Your testimonial has been successfully submitted and is now visible to the professor on their dashboard.
-        </p>
-
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <a href="{% url 'home' %}" class="btn btn-primary" style="font-size: 1.1rem; padding: 12px 30px;">
-                Back to Home
-            </a>
+        <div class="success-content">
+            <h1 class="success-title">
+                <svg class="sparkle" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7a4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5l-10 14M22 12H2M19 17L5 7"/></svg>
+                Thank You!
+                <svg class="sparkle" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7a4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5l-10 14M22 12H2M19 17L5 7"/></svg>
+            </h1>
+            
+            <p class="success-subtitle">Your message has been shared successfully.</p>
+            
+            <p class="success-quote">
+                <span class="quote-mark">“</span>Your words are now waiting for your professor.<span class="quote-mark">”</span>
+            </p>
+            
+            <div class="success-divider">
+                <svg class="heart-icon" viewBox="0 0 24 24" fill="#3b8a59">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            
+            <p class="success-footer-text">
+                Every note of gratitude helps keep the bond<br>
+                between students and teachers alive.
+            </p>
         </div>
+
+        <div class="success-actions">
+            <a href="{% url 'professor_list' %}" class="btn-primary-action">
+                <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                Write Another Testimonial
+            </a>
+            
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'student_dashboard' %}" class="btn-secondary-action">
+                <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                View My Testimonials
+            </a>
+            {% endif %}
+        </div>
+        
     </div>
     
 </div>
+
+<style>
+    .page-container { font-family: 'Inter', sans-serif; }
+    
+    .success-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 80px);
+        padding: 40px 20px;
+        background-color: var(--clr-bg);
+    }
+
+    .success-card {
+        background: transparent;
+        border-radius: 20px;
+        border: none;
+        box-shadow: none;
+        width: 100%;
+        max-width: 580px;
+        padding: 60px 48px;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeUpIn 0.5s ease forwards;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    /* Background image from landing page */
+    .success-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: url('{% static "img/landingpage-card-bg.png" %}') no-repeat center center;
+        background-size: cover;
+        z-index: -1;
+        opacity: 0.6;
+        pointer-events: none;
+        transform: scale(1.2); /* Scale up to remove baked-in white borders from image */
+    }
+
+    /* Success Icon */
+    .success-icon-container {
+        position: relative;
+        display: inline-block;
+        margin: 0 auto 28px;
+    }
+
+    .success-icon-wrapper {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        background: #e8f3ec;
+        color: #2b7a4b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        animation: scaleIn 0.4s 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .burst-icon {
+        position: absolute;
+        top: -8px;
+        right: -16px;
+        opacity: 0;
+        transform: rotate(30deg);
+        animation: burstIn 0.4s 0.4s forwards;
+    }
+
+    /* Text Content */
+    .success-content {
+        margin-bottom: 40px;
+    }
+
+    .success-title {
+        color: #0f2c59;
+        font-size: 2.6rem;
+        font-weight: 800;
+        margin: 0 0 16px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .sparkle {
+        opacity: 0;
+        animation: scaleIn 0.4s 0.3s forwards;
+    }
+
+    .success-subtitle {
+        color: #334155;
+        font-size: 1.15rem;
+        font-weight: 500;
+        margin: 0 0 20px 0;
+    }
+
+    .success-quote {
+        color: #3b8a59;
+        font-size: 1.1rem;
+        font-style: italic;
+        font-weight: 500;
+        margin: 0 0 24px 0;
+        display: inline-block;
+    }
+
+    .quote-mark { font-weight: 700; }
+
+    .success-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        width: 100%;
+        max-width: 200px;
+    }
+    .success-divider::before, .success-divider::after {
+        content: '';
+        height: 1px;
+        flex: 1;
+        background: rgba(0,0,0,0.1);
+    }
+    .heart-icon {
+        width: 14px;
+        height: 14px;
+        margin: 0 16px;
+    }
+
+    .success-footer-text {
+        color: #64748b;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Actions */
+    .success-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .btn-primary-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: #0f2c59;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 16px 32px;
+        border-radius: 8px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        width: 100%;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-primary-action:hover {
+        background: #1e3a8a;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: #ffffff;
+        color: #0f2c59;
+        text-decoration: none;
+        padding: 16px 32px;
+        border-radius: 8px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        width: 100%;
+        border: 1px solid rgba(0,0,0,0.15);
+        transition: background 0.2s, transform 0.1s, border-color 0.2s;
+    }
+
+    .btn-secondary-action:hover {
+        background: #f8fafc;
+        border-color: rgba(0,0,0,0.25);
+        transform: translateY(-1px);
+    }
+
+    /* Animations */
+    @keyframes fadeUpIn {
+        from { opacity: 0; transform: translateY(10px) scale(var(--card-scale, 0.77)); }
+        to { opacity: 1; transform: translateY(0) scale(var(--card-scale, 0.77)); }
+    }
+    @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes burstIn {
+        from { opacity: 0; transform: scale(0.5) rotate(15deg); }
+        to { opacity: 1; transform: scale(1) rotate(30deg); }
+    }
+
+    /* Dark Theme Support */
+    [data-theme="dark"] .success-card { background: #1e293b; border-color: rgba(255,255,255,0.05); }
+    [data-theme="dark"] .success-card::before { opacity: 0.05; filter: invert(1); }
+    [data-theme="dark"] .success-title { color: #e2e8f0; }
+    [data-theme="dark"] .success-subtitle { color: #cbd5e1; }
+    [data-theme="dark"] .success-quote { color: #10b981; }
+    [data-theme="dark"] .success-divider::before, [data-theme="dark"] .success-divider::after { background: rgba(255,255,255,0.1); }
+    [data-theme="dark"] .heart-icon { fill: #10b981; }
+    [data-theme="dark"] .success-footer-text { color: #94a3b8; }
+    [data-theme="dark"] .success-icon-wrapper { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    [data-theme="dark"] .btn-secondary-action { background: #0f172a; color: #e2e8f0; border-color: rgba(255,255,255,0.15); }
+    [data-theme="dark"] .btn-secondary-action:hover { background: #1e293b; }
+
+    @media (max-width: 768px) {
+        .success-container { min-height: 100dvh; }
+        .success-card { --card-scale: 1; width: calc(100% - 32px); padding: 40px 20px; }
+        .success-title { font-size: 2rem; }
+    }
+</style>
 {% endblock %}

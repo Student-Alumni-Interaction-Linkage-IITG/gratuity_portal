@@ -16,6 +16,10 @@ class AzureADOAuth2WithPKCE(AzureADOAuth2):
     
     name = 'azuread-oauth2-pkce'
     
+    @property
+    def tenant_id(self):
+        return self.setting('TENANT_ID', 'common')
+    
     def generate_code_verifier(self):
         """Generate a code verifier for PKCE"""
         return base64.urlsafe_b64encode(

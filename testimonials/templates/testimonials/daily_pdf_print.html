@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAIL_Testimonials_{{ professor.name }}_{{ today_date|date:"Y-m-d" }}</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #0f2c59;
+            background: #ffffff;
+        }
+
+        /* Print Specific CSS */
+        @media print {
+            @page {
+                size: A4;
+                margin: 20mm 15mm; /* Top/Bottom and Left/Right margins */
+            }
+            body {
+                background: #ffffff;
+            }
+            .card {
+                page-break-inside: avoid;
+            }
+        }
+
+        .document-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header / Branding */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #2b7a4b;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .header-logos {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logos img {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .header-text h1 {
+            font-size: 24px;
+            color: #0f2c59;
+            margin: 0 0 5px 0;
+            letter-spacing: 1px;
+        }
+        .header-text h2 {
+            font-size: 16px;
+            color: #2b7a4b;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Metadata */
+        .meta-info {
+            margin-bottom: 30px;
+            font-size: 14px;
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        
+        .meta-column p {
+            margin: 8px 0;
+        }
+
+        /* Testimonial Cards */
+        .card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background: #ffffff;
+        }
+
+        .card-header {
+            font-size: 15px;
+            font-weight: bold;
+            color: #0f2c59;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .student-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #cbd5e1;
+        }
+
+        .student-name {
+            display: flex;
+            flex-direction: column;
+        }
+        .student-name span {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: normal;
+        }
+
+        .card-date {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        .card-body {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #334155;
+            white-space: pre-wrap; /* Preserves newlines */
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 10px;
+            color: #94a3b8;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        
+        <div class="header">
+            <div class="header-logos">
+                <img src="{% static 'img/iitg-logo.png' %}" alt="IITG Logo">
+                <img src="{% static 'img/sail_logo.png' %}" alt="SAIL Logo" style="height:40px;">
+            </div>
+            <div class="header-text">
+                <h1>SAIL GRATITUDE PORTAL</h1>
+                <h2>ALL TESTIMONIALS</h2>
+            </div>
+        </div>
+        
+        <div class="meta-info">
+            <div class="meta-column">
+                <p><strong>Professor:</strong> {{ professor.name }}</p>
+                <p><strong>Department:</strong> {{ professor.department }}</p>
+            </div>
+            <div class="meta-column">
+                <p><strong>Date:</strong> {{ today_date|date:"F d, Y" }}</p>
+                <p><strong>Total Testimonials:</strong> {{ total_count }}</p>
+            </div>
+        </div>
+        
+        {% for t in testimonials %}
+        <div class="card">
+            <div class="card-header">
+                <div class="student-info">
+                    {% include "components/avatar.html" with type="student" obj=t.student css_class="student-avatar" %}
+                    
+                    <div class="student-name">
+                        {{ t.author_name }}
+                        {% if t.author_designation %}
+                        <span>{{ t.author_designation }} {% if t.author_batch %}| {{ t.author_batch }}{% endif %}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <span class="card-date">{{ t.submitted_at|time:"h:i A" }}</span>
+            </div>
+            <div class="card-body">{{ t.content }}</div>
+        </div>
+        {% endfor %}
+        
+        <div class="footer">
+            Generated securely from the SAIL Gratitude Portal • Indian Institute of Technology Guwahati
+        </div>
+    </div>
+
+    <script>
+        // Automatically open the print dialog when the page loads
+        window.onload = function() {
+            // Slight delay ensures images (like logos) are fully rendered before printing
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        };
+    </script>
+</body>
+</html>

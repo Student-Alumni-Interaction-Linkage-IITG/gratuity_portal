@@ -22,6 +22,9 @@ class StudentProfile(models.Model):
     designation = models.CharField(max_length=150, blank=True, null=True, help_text="e.g., CEO at Google, UG Student")
     batch = models.CharField(max_length=50, blank=True, null=True)
     branch = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=150, blank=True, null=True)
+    email = models.EmailField(max_length=254, blank=True, null=True)
+    phone_no = models.CharField(max_length=20, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='students/', blank=True, null=True)
 
     def __str__(self):

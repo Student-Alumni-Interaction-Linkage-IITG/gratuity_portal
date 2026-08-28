@@ -27,12 +27,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-!_h9m$14@*64b)ko3!l!ww4yt36-(1jj0%w6@nn^5x8+7!mosj')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# Production Security Settings
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Reverse Proxy Settings
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    CSRF_TRUSTED_ORIGINS = ['https://iitg.ac.in']
 
 
 # Application definition
@@ -74,6 +88,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'testimonials.context_processors.professor_context',
             ],
         },
     },
@@ -137,11 +152,11 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_OAUTH2_KEY', 'your-google-client-id')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_OAUTH2_SECRET', 'your-google-client-secret')
 
-SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = os.environ.get('AZUREAD_OAUTH2_KEY', 'your-azure-client-id')
-SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = os.environ.get('AZUREAD_OAUTH2_SECRET', 'your-azure-client-secret')
+SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_KEY = os.environ.get('AZUREAD_OAUTH2_KEY', 'your-azure-client-id')
+SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_SECRET = os.environ.get('AZUREAD_OAUTH2_SECRET', 'your-azure-client-secret')
 SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_TENANT_ID = os.environ.get('AZUREAD_TENANT_ID', 'your-azure-tenant-id')
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/sail/gratitude_portal/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/sail/gratitude_portal/'
 
 SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_USE_PKCE = True
 
@@ -149,10 +164,9 @@ SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_USE_PKCE = True
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 
 
-
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/accounts/logout/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/sail/gratitude_portal/login/'
+LOGOUT_URL = '/sail/gratitude_portal/accounts/logout/'
+LOGIN_REDIRECT_URL = '/sail/gratitude_portal/'
 
 # Social Auth Configuration
 SOCIAL_AUTH_CREATE_USERS = True
@@ -162,11 +176,15 @@ SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_SCOPE = ['openid', 'email', 'profile', 'User.Rea
 # Enable PKCE globally
 SOCIAL_AUTH_PKCE_EXTENSION_ENABLED = True
 
-# Force the use of localhost in redirect URIs
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
-import socket
-if socket.gethostname() == 'localhost' or True:  # Always use localhost for development
+# Force the use of localhost in redirect URIs ONLY in development
+import os
+if DEBUG:
     SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_REDIRECT_URI = 'http://localhost:8000/accounts/complete/azuread-oauth2-pkce/'
+    SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+else:
+    # In production, force the exact domain so Nginx IP doesn't leak into the redirect URI
+    SOCIAL_AUTH_AZUREAD_OAUTH2_PKCE_REDIRECT_URI = 'https://iitg.ac.in/sail/gratitude_portal/accounts/complete/azuread-oauth2-pkce/'
+    SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 # Error handling
 SOCIAL_AUTH_RAISE_EXCEPTIONS = True  # Enable for debugging
@@ -218,7 +236,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/sail/gratitude_portal/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'testimonials' / 'static',
@@ -238,5 +256,8 @@ def debug_user_info(strategy, details, response, *args, **kwargs):
 
 # Media files setup for image uploads
 import os
-MEDIA_URL = '/media/'
+MEDIA_URL = '/sail/gratitude_portal/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Force Django to prefix all internal URLs
+FORCE_SCRIPT_NAME = '/sail/gratitude_portal'

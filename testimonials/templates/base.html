@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>SAIL Gratuity Portal</title>
     
     <!-- Google Fonts: Outfit -->
@@ -39,5 +39,23 @@
     <!-- Global Footer -->
     {% include "footer.html" %}
 
+
+    <!-- Global Loading Screen -->
+    {% include "components/loading_screen.html" %}
+
+    <script>
+        // Trigger loading screen on major navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadLinks = document.querySelectorAll('.nav-link, .btn-primary, .btn-google, .btn-microsoft');
+            loadLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.hasAttribute('target') && this.getAttribute('target') === '_blank') return;
+                    if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) return;
+                    
+                    showGlobalLoading();
+                });
+            });
+        });
+    </script>
 </body>
 </html>

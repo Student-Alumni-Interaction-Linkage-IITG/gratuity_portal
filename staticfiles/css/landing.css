@@ -1,0 +1,149 @@
+/* landing.css */
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, rgb(233, 124, 124), #9403fc);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #333;
+}
+
+/* Main container */
+.landingpage {
+    text-align: center;
+    color: white;
+}
+
+/* Logo */
+.saillogo-img {
+    max-width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Headings */
+.landing-heading {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: white;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.landing-border {
+    width: 100px;
+    border: 2px solid #fff;
+    margin: 15px auto;
+}
+
+.landing-intro h4 {
+    font-weight: normal;
+    color: #f0f0f0;
+    margin-bottom: 30px;
+}
+
+/* Card-like boxes for login/success */
+.card {
+    background: white;
+    color: #333;
+    border-radius: 12px;
+    padding: 30px 25px;
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* Login box (blue theme) */
+.card-login {
+    border: 2px solid #0078d4;
+    background: #f0f8ff;
+}
+
+.card-login h2 {
+    color: #0078d4;
+    margin-bottom: 20px;
+}
+
+/* Success box (green theme) */
+.card-success {
+    border: 2px solid #28a745;
+    background: #f0fff0;
+}
+
+.card-success h2 {
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 8px;
+    color: white;
+    transition: background 0.3s, transform 0.2s;
+    background-color: #e2d544d6;
+    color: #2389d6;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Specific button colors */
+.btn-blue {
+    background: #0078d4;
+}
+
+.btn-blue:hover {
+    background: #005a9e;
+}
+
+.btn-green {
+    background: #28a745;
+}
+
+.btn-green:hover {
+    background: #1e7e34;
+}
+
+.btn-red {
+    background: #dc3545;
+}
+
+.btn-red:hover {
+    background: #a71d2a;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .landing-heading {
+        font-size: 2rem;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .btn {
+        width: 100%;
+        margin: 10px 0;
+    }
+}

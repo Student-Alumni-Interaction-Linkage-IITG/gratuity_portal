@@ -169,7 +169,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 20px 20px 40px;
+        padding: 20px 20px;
         position: relative;
         z-index: 5;
       }
@@ -180,12 +180,30 @@
         max-width: 440px;
         background: #ffffff;
         border: 1px solid rgba(226, 232, 240, 0.8);
-        border-radius: 24px;
+        border-radius: 20px;
         padding: 44px 38px 40px;
         box-shadow: 0 20px 48px -12px rgba(15, 44, 89, 0.08), 0 0 1px rgba(0,0,0,0.06);
         position: relative;
         text-align: center;
         transition: all 0.3s ease;
+        animation: cardFadeIn 0.4s ease-out forwards;
+      }
+
+      @keyframes cardFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .auth-card {
+            animation: none;
+        }
       }
 
       [data-theme="dark"] .auth-card {
@@ -199,7 +217,7 @@
       .card-logo-badge {
         display: flex;
         justify-content: center;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
       }
 
       .card-logo-badge img {
@@ -209,11 +227,11 @@
       }
 
       .auth-title {
-        font-size: 1.85rem;
-        font-weight: 800;
+        font-size: 2rem;
+        font-weight: 700;
         color: var(--clr-primary, #0F2C59);
-        letter-spacing: -0.8px;
-        margin-bottom: 6px;
+        letter-spacing: -0.5px;
+        margin-bottom: 8px;
       }
 
       [data-theme="dark"] .auth-title {
@@ -221,244 +239,71 @@
       }
 
       .auth-subtitle {
-        font-size: 0.92rem;
-        color: var(--clr-text-muted, #5C6B80);
-        margin-bottom: 28px;
-        line-height: 1.4;
-      }
-
-      /* ── Form Controls ── */
-      .auth-form {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        text-align: left;
-      }
-
-      .form-group-item {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-
-      .field-label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--clr-text-main, #334155);
-      }
-
-      [data-theme="dark"] .field-label {
-        color: #cbd5e1;
-      }
-
-      .input-wrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
-      }
-
-      .input-icon-left {
-        position: absolute;
-        left: 14px;
-        color: #94a3b8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        pointer-events: none;
-      }
-
-      .auth-input {
-        width: 100%;
-        padding: 12px 16px 12px 42px;
-        font-size: 0.93rem;
-        font-family: inherit;
-        color: var(--clr-text-main, #1e293b);
-        background: #ffffff;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 10px;
-        outline: none;
-        transition: all 0.2s ease;
-      }
-
-      [data-theme="dark"] .auth-input {
-        background: rgba(15, 17, 23, 0.6);
-        border-color: rgba(255, 255, 255, 0.12);
-        color: #f1f5f9;
-      }
-
-      .auth-input::placeholder {
-        color: #94a3b8;
-        font-size: 0.9rem;
-      }
-
-      .auth-input:focus {
-        border-color: var(--clr-primary, #0F2C59);
-        box-shadow: 0 0 0 3px rgba(15, 44, 89, 0.08);
-      }
-
-      [data-theme="dark"] .auth-input:focus {
-        border-color: #60a5fa;
-        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
-      }
-
-      .toggle-password-btn {
-        position: absolute;
-        right: 12px;
-        background: transparent;
-        border: none;
-        color: #94a3b8;
-        cursor: pointer;
-        padding: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: color 0.15s ease;
-      }
-
-      .toggle-password-btn:hover {
-        color: var(--clr-text-main, #334155);
-      }
-
-      /* ── Form Utilities Row (Remember me + Forgot Password) ── */
-      .form-utils-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 0.85rem;
-        margin-top: -4px;
-      }
-
-      .remember-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+        font-size: 1rem;
         color: var(--clr-text-muted, #64748b);
-        cursor: pointer;
-        user-select: none;
+        margin-bottom: 32px;
+        line-height: 1.5;
       }
 
-      .remember-checkbox {
-        accent-color: var(--clr-primary, #0F2C59);
-        width: 15px;
-        height: 15px;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-
-      .forgot-link {
-        color: #1d4ed8;
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.15s ease;
-      }
-
-      .forgot-link:hover {
-        text-decoration: underline;
-        color: #1e40af;
-      }
-
-      [data-theme="dark"] .forgot-link {
-        color: #60a5fa;
-      }
-
-      /* ── Primary Submit Button ── */
-      .btn-submit-signin {
-        width: 100%;
-        padding: 13px;
-        background: var(--clr-primary, #0F2C59);
-        color: #ffffff;
-        font-family: inherit;
-        font-size: 0.98rem;
-        font-weight: 700;
-        border: none;
-        border-radius: 28px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 14px rgba(15, 44, 89, 0.2);
-        margin-top: 6px;
-      }
-
-      .btn-submit-signin:hover {
-        background: var(--clr-primary-light, #1A4B96);
-        transform: translateY(-1.5px);
-        box-shadow: 0 6px 18px rgba(15, 44, 89, 0.28);
-      }
-
-      [data-theme="dark"] .btn-submit-signin {
-        background: #2563eb;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
-      }
-
-      [data-theme="dark"] .btn-submit-signin:hover {
-        background: #1d4ed8;
-      }
-
-      /* ── OR Divider ── */
-      .auth-divider {
+      /* ── OAuth Buttons ── */
+      .oauth-buttons {
         display: flex;
-        align-items: center;
-        margin: 18px 0;
-        color: #94a3b8;
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 1px;
+        flex-direction: column;
+        gap: 16px;
       }
 
-      .auth-divider::before,
-      .auth-divider::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: #e2e8f0;
-      }
-
-      [data-theme="dark"] .auth-divider::before,
-      [data-theme="dark"] .auth-divider::after {
-        background: rgba(255, 255, 255, 0.1);
-      }
-
-      .auth-divider span {
-        padding: 0 12px;
-      }
-
-      /* ── Google SSO Button ── */
-      .btn-sso-google {
+      .btn-sso {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 12px;
         width: 100%;
-        padding: 11px 16px;
+        height: 52px;
         background: #ffffff;
-        color: #374151;
+        color: #334155;
         font-family: inherit;
-        font-size: 0.92rem;
+        font-size: 1rem;
         font-weight: 600;
-        border: 1.5px solid #e5e7eb;
-        border-radius: 28px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
         text-decoration: none;
         transition: all 0.2s ease;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        position: relative;
       }
 
-      .btn-sso-google:hover {
-        background: #f9fafb;
-        border-color: #d1d5db;
-        color: #111827;
+      .btn-sso:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       }
 
-      [data-theme="dark"] .btn-sso-google {
-        background: rgba(255, 255, 255, 0.05);
+      .btn-sso:active {
+        transform: translateY(0);
+      }
+
+      [data-theme="dark"] .btn-sso {
+        background: rgba(255, 255, 255, 0.03);
         border-color: rgba(255, 255, 255, 0.12);
-        color: #f3f4f6;
+        color: #e2e8f0;
       }
 
-      [data-theme="dark"] .btn-sso-google:hover {
+      [data-theme="dark"] .btn-sso:hover {
         background: rgba(255, 255, 255, 0.08);
         border-color: rgba(255, 255, 255, 0.2);
         color: #ffffff;
+      }
+      
+      .btn-sso.loading {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+
+      .auth-helper-text {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin-top: 24px;
       }
 
       /* ── Error Banner ── */
@@ -469,7 +314,7 @@
         padding: 10px 14px;
         border-radius: 8px;
         font-size: 0.85rem;
-        margin-bottom: 18px;
+        margin-bottom: 24px;
         text-align: left;
         display: flex;
         align-items: center;
@@ -485,8 +330,8 @@
       /* ── Campus Skyline Graphic at Bottom ── */
       .campus-skyline-wrap {
         width: 100%;
-        max-width: 900px;
-        margin: 20px auto 0;
+        max-width: 700px;
+        margin: 0 auto;
         opacity: 0.35;
         pointer-events: none;
         display: flex;
@@ -501,7 +346,7 @@
       .skyline-svg {
         width: 100%;
         height: auto;
-        max-height: 90px;
+        max-height: 70px;
       }
 
       .skyline-text {
@@ -520,22 +365,29 @@
       /* ── Footer ── */
       .login-footer {
         text-align: center;
-        padding: 18px 20px 24px;
+        padding: 10px 20px 24px;
         font-size: 0.82rem;
         color: var(--clr-text-muted, #64748b);
         position: relative;
         z-index: 10;
       }
 
-      @media (max-width: 600px) {
+      @media (max-width: 768px) {
+        body {
+            min-height: 100dvh;
+        }
         .login-header {
           padding: 16px 20px;
         }
         .auth-card {
-          padding: 32px 24px 28px;
+          width: calc(100% - 32px);
+          padding: 32px 24px;
           border-radius: 20px;
         }
         .bg-dot-matrix {
+          display: none;
+        }
+        .campus-skyline-wrap {
           display: none;
         }
       }
@@ -543,18 +395,12 @@
 </head>
 <body>
 
-    <!-- Ambient Glows -->
-    <div class="ambient-glow-tl" aria-hidden="true"></div>
-    <div class="ambient-glow-br" aria-hidden="true"></div>
-    <div class="bg-dot-matrix" aria-hidden="true"></div>
-    <div class="bg-contour-circle" aria-hidden="true"></div>
-
     <!-- Top Minimal Navbar -->
     <header class="login-header">
-        <a href="{% url 'home' %}" class="login-brand">
+        <div class="login-brand">
             <img src="{% static 'img/sail_logo.png' %}" alt="SAIL Logo">
             <span class="login-brand-name">Gratuity Portal</span>
-        </a>
+        </div>
 
         <button type="button" class="theme-btn-toggle" onclick="toggleTheme()" id="themeBtn">
             <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -583,140 +429,21 @@
             </div>
             {% endif %}
 
-            <!-- Login Form -->
-            <form method="POST" action="{% url 'login_page' %}" class="auth-form">
-                {% csrf_token %}
-
-                <!-- Email or Username Field -->
-                <div class="form-group-item">
-                    <label for="id_username" class="field-label">Email or Username</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon-left">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </span>
-                        <input 
-                            type="text" 
-                            name="username" 
-                            id="id_username" 
-                            class="auth-input" 
-                            placeholder="Enter your email or username" 
-                            required 
-                            autofocus
-                        >
-                    </div>
-                </div>
-
-                <!-- Password Field -->
-                <div class="form-group-item">
-                    <label for="id_password" class="field-label">Password</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon-left">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                            </svg>
-                        </span>
-                        <input 
-                            type="password" 
-                            name="password" 
-                            id="id_password" 
-                            class="auth-input" 
-                            placeholder="Enter your password" 
-                            required
-                        >
-                        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()" title="Toggle password visibility">
-                            <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Utilities Row: Remember Me & Forgot Password -->
-                <div class="form-utils-row">
-                    <label class="remember-label">
-                        <input type="checkbox" name="remember_me" class="remember-checkbox" checked>
-                        <span>Remember me</span>
-                    </label>
-                    <a href="javascript:void(0)" onclick="alert('Please contact the portal administrator to reset your credentials or use Google / Microsoft SSO.');" class="forgot-link">
-                        Forgot Password?
-                    </a>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="btn-submit-signin">
-                    Sign In
-                </button>
-            </form>
-
-            <!-- OR Divider -->
-            <div class="auth-divider">
-                <span>OR</span>
+            <!-- OAuth Authentication Options -->
+            <div class="oauth-buttons">
+                <!-- Sign in with Microsoft -->
+                <a href="{% url 'social:begin' 'azuread-oauth2-pkce' %}" class="btn-sso" onclick="this.classList.add('loading'); this.innerHTML='<span>Connecting to Microsoft...</span>';">
+                    <svg width="20" height="20" viewBox="0 0 21 21">
+                        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+                        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+                        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+                        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+                    </svg>
+                    <span>Continue with Microsoft</span>
+                </a>
             </div>
 
-            <!-- Sign in with Google Button -->
-            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-sso-google">
-                <svg width="18" height="18" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                </svg>
-                <span>Sign in with Google</span>
-            </a>
-
-        </div>
-
-        <!-- Campus Skyline Graphic -->
-        <div class="campus-skyline-wrap">
-            <svg class="skyline-svg" viewBox="0 0 800 90" fill="none" stroke="currentColor" stroke-width="1.2">
-                <!-- Lake waterline base -->
-                <path d="M 0 82 Q 200 80 400 82 T 800 82" stroke-dasharray="4, 3" opacity="0.6"/>
-                <path d="M 50 85 Q 250 84 450 85 T 750 85" opacity="0.4"/>
-                
-                <!-- Left tree clusters -->
-                <path d="M 140 80 C 135 68 145 55 155 58 C 160 50 175 52 178 62 C 185 60 190 70 185 80 Z" fill="none"/>
-                <line x1="162" y1="80" x2="162" y2="70"/>
-                <path d="M 188 80 C 184 72 190 64 198 66 C 202 60 212 62 214 70 C 220 68 222 76 218 80 Z" fill="none"/>
-                
-                <!-- Administration Complex / Academic Building -->
-                <!-- Left wing -->
-                <rect x="225" y="62" width="55" height="18" fill="none"/>
-                <line x1="235" y1="62" x2="235" y2="80"/>
-                <line x1="245" y1="62" x2="245" y2="80"/>
-                <line x1="255" y1="62" x2="255" y2="80"/>
-                <line x1="265" y1="62" x2="265" y2="80"/>
-                
-                <!-- Center colonnade / Portico -->
-                <path d="M 285 80 L 285 52 L 310 40 L 335 52 L 335 80 Z" fill="none"/>
-                <rect x="340" y="48" width="120" height="32" fill="none"/>
-                <line x1="360" y1="48" x2="360" y2="80"/>
-                <line x1="380" y1="48" x2="380" y2="80"/>
-                <line x1="400" y1="48" x2="400" y2="80"/>
-                <line x1="420" y1="48" x2="420" y2="80"/>
-                <line x1="440" y1="48" x2="440" y2="80"/>
-                
-                <!-- Main Administrative Block Tower -->
-                <polygon points="465,80 465,38 520,32 575,38 575,80" fill="none"/>
-                <polygon points="485,35 520,20 555,35" fill="none"/>
-                <rect x="490" y="44" width="60" height="12" fill="none"/>
-                <rect x="490" y="60" width="60" height="14" fill="none"/>
-                
-                <!-- Right Wing Complex -->
-                <rect x="580" y="50" width="85" height="30" fill="none"/>
-                <line x1="600" y1="50" x2="600" y2="80"/>
-                <line x1="620" y1="50" x2="620" y2="80"/>
-                <line x1="640" y1="50" x2="640" y2="80"/>
-                
-                <!-- Right tree cluster -->
-                <path d="M 670 80 C 665 70 672 60 680 62 C 685 54 698 56 700 66 C 708 65 712 74 706 80 Z" fill="none"/>
-                <line x1="688" y1="80" x2="688" y2="70"/>
-            </svg>
-            <span class="skyline-text">IIT GUWAHATI</span>
+            <p class="auth-helper-text">Use your IITG Microsoft account to sign in.</p>
         </div>
     </main>
 
@@ -726,48 +453,47 @@
     </footer>
 
     <script>
-      function togglePasswordVisibility() {
-        const passInput = document.getElementById('id_password');
-        const eyeIcon = document.getElementById('eyeIcon');
-        if (passInput.type === 'password') {
-          passInput.type = 'text';
-          eyeIcon.innerHTML = `
-            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-            <line x1="1" y1="1" x2="23" y2="23"></line>
-          `;
-        } else {
-          passInput.type = 'password';
-          eyeIcon.innerHTML = `
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          `;
-        }
-      }
-
       function updateThemeLabel() {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const text = document.getElementById('themeText');
-        const icon = document.getElementById('themeIcon');
-        if (text && icon) {
-          if (isDark) {
-            text.innerText = 'Light Mode';
-            icon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
-          } else {
-            text.innerText = 'Dark Mode';
-            icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
-          }
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        
+        if (isDark) {
+          themeIcon.innerHTML = `
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          `;
+          themeText.textContent = "Light Mode";
+        } else {
+          themeIcon.innerHTML = `
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          `;
+          themeText.textContent = "Dark Mode";
         }
       }
 
       function toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        const root = document.documentElement;
+        if (root.getAttribute('data-theme') === 'dark') {
+          root.removeAttribute('data-theme');
+          localStorage.setItem('theme', 'light');
+        } else {
+          root.setAttribute('data-theme', 'dark');
+          localStorage.setItem('theme', 'dark');
+        }
         updateThemeLabel();
       }
 
-      document.addEventListener('DOMContentLoaded', updateThemeLabel);
+      document.addEventListener('DOMContentLoaded', () => {
+        updateThemeLabel();
+      });
     </script>
 </body>
 </html>
