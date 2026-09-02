@@ -13,10 +13,14 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'img/sail_logo.png' %}">
     <link rel="apple-touch-icon" href="{% static 'img/sail_logo.png' %}">
-    <!-- Google Fonts: Outfit -->
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="{% static 'css/global.css' %}" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=optional" as="style">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=optional" rel="stylesheet">
     
     <!-- Global Design System -->
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
@@ -47,20 +51,64 @@
     {% include "footer.html" %}
 
 
-    <!-- Global Loading Screen -->
-    {% include "components/loading_screen.html" %}
+    <!-- Topbar Navigation Progress -->
+    <div id="topbar-progress"></div>
+
+    <style>
+        #topbar-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--clr-primary), #3b82f6);
+            z-index: 999999;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+        }
+    </style>
 
     <script>
-        // Trigger loading screen on major navigation
+        // Trigger subtle top-bar progress on navigation
         document.addEventListener('DOMContentLoaded', function() {
-            const loadLinks = document.querySelectorAll('.nav-link, .btn-primary, .btn-google, .btn-microsoft');
-            loadLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    if (this.hasAttribute('target') && this.getAttribute('target') === '_blank') return;
-                    if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) return;
+            const progress = document.getElementById('topbar-progress');
+            let isNavigating = false;
+            
+            // Smoothly reveal the page when it initially loads
+            document.body.classList.add('page-loaded');
+
+            document.body.addEventListener('click', function(e) {
+                // Find closest anchor tag
+                const link = e.target.closest('a');
+                if (!link) return;
+                
+                const href = link.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+                if (link.getAttribute('target') === '_blank' || e.ctrlKey || e.metaKey) return;
+                
+                if (!isNavigating) {
+                    isNavigating = true;
+                    progress.style.opacity = '1';
+                    progress.style.width = '30%';
                     
-                    showGlobalLoading();
-                });
+                    // Simulate progress
+                    setTimeout(() => { if (isNavigating) progress.style.width = '60%'; }, 500);
+                    setTimeout(() => { if (isNavigating) progress.style.width = '85%'; }, 1500);
+                }
+            });
+            
+            // Clean up on pageshow (e.g. back/forward cache)
+            window.addEventListener('pageshow', function() {
+                isNavigating = false;
+                progress.style.width = '100%';
+                setTimeout(() => {
+                    progress.style.opacity = '0';
+                    setTimeout(() => {
+                        progress.style.width = '0%';
+                    }, 300);
+                }, 200);
             });
         });
     </script>

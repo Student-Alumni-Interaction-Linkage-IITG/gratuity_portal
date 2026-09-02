@@ -29,13 +29,13 @@
         
         <!-- Left: Professor Identity Panel -->
         <div class="prof-identity-panel">
-            <div class="prof-avatar">
+            <div class="prof-avatar skeleton-box">
                 {% if professor.profile_picture %}
-                    <img src="{{ professor.profile_picture.url }}" alt="{{ professor.name }}">
+                    <img src="{{ professor.profile_picture.url }}" alt="{{ professor.name }}" loading="eager" fetchpriority="high" onload="this.parentElement.classList.remove('skeleton-box'); this.style.opacity=1" style="opacity: 0; transition: opacity 0.3s ease;">
                 {% elif professor.image_url %}
-                    <img src="{{ professor.image_url }}" alt="{{ professor.name }}">
+                    <img src="{{ professor.image_url }}" alt="{{ professor.name }}" loading="eager" fetchpriority="high" onload="this.parentElement.classList.remove('skeleton-box'); this.style.opacity=1" style="opacity: 0; transition: opacity 0.3s ease;">
                 {% else %}
-                    <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
+                    <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;" onload="this.parentElement.classList.remove('skeleton-box');">
                 {% endif %}
             </div>
             <h2 class="prof-name">{{ professor.name }}</h2>

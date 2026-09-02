@@ -108,15 +108,15 @@
             {% for prof in page_obj %}
             <a href="{% url 'submit_testimonial' prof.id %}" class="prof-card-item" data-name="{{ prof.name|lower }}"
                 data-dept="{{ prof.department|lower }}">
-                <div class="prof-card-avatar-wrap">
+                <div class="prof-card-avatar-wrap skeleton-box">
                     {% if prof.processed_profile_picture %}
-                    <img src="{{ prof.processed_profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
+                    <img src="{{ prof.processed_profile_picture.url }}" alt="{{ prof.name }}" loading="lazy" decoding="async" onload="this.parentElement.classList.remove('skeleton-box'); this.style.opacity=1" style="opacity: 0; transition: opacity 0.3s ease;">
                     {% elif prof.profile_picture %}
-                    <img src="{{ prof.profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
+                    <img src="{{ prof.profile_picture.url }}" alt="{{ prof.name }}" loading="lazy" decoding="async" onload="this.parentElement.classList.remove('skeleton-box'); this.style.opacity=1" style="opacity: 0; transition: opacity 0.3s ease;">
                     {% elif prof.image_url %}
-                    <img src="{{ prof.image_url }}" alt="{{ prof.name }}" loading="lazy">
+                    <img src="{{ prof.image_url }}" alt="{{ prof.name }}" loading="lazy" decoding="async" onload="this.parentElement.classList.remove('skeleton-box'); this.style.opacity=1" style="opacity: 0; transition: opacity 0.3s ease;">
                     {% else %}
-                    <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
+                    <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;" onload="this.parentElement.classList.remove('skeleton-box');">
                     {% endif %}
                     <div class="prof-card-avatar-badge">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
