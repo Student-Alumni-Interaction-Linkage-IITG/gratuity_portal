@@ -41,7 +41,7 @@
             {% if request.user.student_profile and request.user.student_profile.profile_picture %}
                <img src="{{ request.user.student_profile.profile_picture.url }}" class="nav-avatar" alt="Avatar">
             {% else %}
-               <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
+               <img src="{% static 'img/empty-dp.png' %}" class="nav-avatar" alt="Avatar">
             {% endif %}
             <span class="nav-username">{{ request.user.username }}</span>
             <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>

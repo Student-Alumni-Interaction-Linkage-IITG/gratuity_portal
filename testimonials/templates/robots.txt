@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /submit/
+Disallow: /admin/
+Disallow: /login/
+Disallow: /accounts/
+Allow: /
+Allow: /professors/

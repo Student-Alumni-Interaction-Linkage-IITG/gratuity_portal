@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 from django.urls import re_path
 from django.views.static import serve
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', include('testimonials.urls')),
@@ -14,4 +15,7 @@ urlpatterns = [
     
     # Serve media files directly (needed for production without Nginx)
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    
+    # SEO
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]

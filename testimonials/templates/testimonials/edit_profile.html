@@ -353,13 +353,160 @@
         if(batchInput) batchInput.required = true;
     });
 
-    // Button loading state
     const form = document.getElementById('editProfileForm');
     const submitBtn = document.getElementById('submitBtn');
-    form.addEventListener('submit', function() {
+    const fileInput = document.querySelector('input[type="file"]');
+    
+    // Preview image on selection
+    if(fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            
+            // Check for HEIC before even attempting to preview or compress
+            if (file.name.toLowerCase().endsWith('.heic') || file.type === 'image/heic') {
+                alert("HEIC images are not currently supported by browsers. Please select a JPG or PNG image.");
+                fileInput.value = ''; // clear
+                return;
+            }
+            
+            if (file.size > 15 * 1024 * 1024) {
+                alert("This image is too large (over 15MB). Please select a smaller file.");
+                fileInput.value = '';
+                return;
+            }
+            
+            // Optional: Show preview immediately if desired, but we have a dedicated preview div.
+            // Let's update the existing preview image if it exists, or create one.
+            let previewDiv = document.querySelector('.upload-preview img');
+            if(!previewDiv) {
+                const uploadArea = document.querySelector('.upload-area');
+                if(uploadArea) {
+                    const previewContainer = document.createElement('div');
+                    previewContainer.className = 'upload-preview';
+                    previewContainer.innerHTML = '<img src="" alt="Profile preview">';
+                    uploadArea.appendChild(previewContainer);
+                    previewDiv = previewContainer.querySelector('img');
+                }
+            }
+            
+            if(previewDiv) {
+                const objectUrl = URL.createObjectURL(file);
+                previewDiv.src = objectUrl;
+            }
+        });
+    }
+
+    form.addEventListener('submit', async function(e) {
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            // No file to compress, just submit normally
+            setButtonState('Saving...');
+            return; // let form submit
+        }
+        
+        const file = fileInput.files[0];
+        
+        // If it's already a small file or not an image (which shouldn't happen), just upload
+        if (!file.type.startsWith('image/')) {
+            setButtonState('Saving...');
+            return;
+        }
+        
+        e.preventDefault(); // Stop normal submission
+        
+        setButtonState('Processing image...');
+        
+        try {
+            const compressedFile = await processImage(file);
+            
+            // Replace the file in the input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(compressedFile);
+            fileInput.files = dataTransfer.files;
+            
+            setButtonState('Uploading...');
+            
+            // Manually submit the form bypassing the listener
+            HTMLFormElement.prototype.submit.call(form);
+            
+        } catch (error) {
+            console.error("Image processing failed", error);
+            alert("Failed to process the image: " + error.message + ". Please try a different image.");
+            resetButtonState();
+        }
+    });
+    
+    function setButtonState(text) {
         submitBtn.style.opacity = '0.7';
         submitBtn.style.pointerEvents = 'none';
-        submitBtn.innerHTML = 'Saving...';
-    });
+        submitBtn.innerHTML = text;
+    }
+    
+    function resetButtonState() {
+        submitBtn.style.opacity = '1';
+        submitBtn.style.pointerEvents = 'auto';
+        submitBtn.innerHTML = 'Save Profile <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>';
+    }
+
+    function processImage(file) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                URL.revokeObjectURL(img.src);
+                
+                let width = img.width;
+                let height = img.height;
+                
+                // 1. Calculate square crop
+                const size = Math.min(width, height);
+                const startX = (width - size) / 2;
+                const startY = (height - size) / 2;
+                
+                // 2. Resize to max 800x800
+                const MAX_DIMENSION = 800;
+                let targetSize = size;
+                if (targetSize > MAX_DIMENSION) {
+                    targetSize = MAX_DIMENSION;
+                }
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = targetSize;
+                canvas.height = targetSize;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw white background in case of transparent PNGs converting to JPEG/WEBP
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, targetSize, targetSize);
+                
+                // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+                ctx.drawImage(img, startX, startY, size, size, 0, 0, targetSize, targetSize);
+                
+                // Export to WEBP
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        reject(new Error("Canvas to Blob failed"));
+                        return;
+                    }
+                    // Generate new filename
+                    const originalName = file.name;
+                    const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+                    const newFileName = nameWithoutExt + '_optimized.webp';
+                    
+                    const newFile = new File([blob], newFileName, {
+                        type: 'image/webp',
+                        lastModified: Date.now()
+                    });
+                    
+                    resolve(newFile);
+                }, 'image/webp', 0.85); // 85% quality WEBP
+            };
+            
+            img.onerror = () => {
+                reject(new Error("Invalid image file"));
+            };
+            
+            img.src = URL.createObjectURL(file);
+        });
+    }
 </script>
 {% endblock %}

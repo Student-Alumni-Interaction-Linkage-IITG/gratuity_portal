@@ -13,6 +13,7 @@ class Testimonial(models.Model):
     author_phone = models.CharField(max_length=20, blank=True, null=True)
     content = models.TextField()
     submitted_at = models.DateTimeField(auto_now_add=True)
+    email_sent = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Testimonial by {self.author_name} for {self.professor}'

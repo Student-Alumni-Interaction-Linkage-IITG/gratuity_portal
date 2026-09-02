@@ -185,8 +185,9 @@
         <div class="card">
             <div class="card-header">
                 <div class="student-info">
-                    {% include "components/avatar.html" with type="student" obj=t.student css_class="student-avatar" %}
-                    
+                    <div class="student-avatar" style="width:32px;height:32px;border-radius:50%;background:#0f2c59;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;flex-shrink:0;">
+                        {{ t.author_name|first|upper }}
+                    </div>
                     <div class="student-name">
                         {{ t.author_name }}
                         {% if t.author_designation %}
@@ -194,7 +195,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <span class="card-date">{{ t.submitted_at|time:"h:i A" }}</span>
+                <span class="card-date">{{ t.submitted_at|date:"d M Y, h:i A" }}</span>
             </div>
             <div class="card-body">{{ t.content }}</div>
         </div>

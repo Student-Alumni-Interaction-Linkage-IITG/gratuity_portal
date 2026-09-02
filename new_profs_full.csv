@@ -1,0 +1,34 @@
+id,name,department,email,email_notifications_enabled,profile_picture,processed_profile_picture,image_url,url
+1,Abraham Cyril Issac,School of Business,issacac@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/Abraham%20Cyril%20Issac.jpg,https://www.iitg.ac.in/sob/faculty_profile.php?id=aXNzYWNhYw==
+2,Sumant Kumar Bishwas,School of Business,skbishwas@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/sumant.jpg,https://www.iitg.ac.in/sob/faculty_profile.php?id=c2tiaXNod2Fz
+3,Kuldeep Baishya,School of Business,kuldeep.baishya@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/passport%20photo.jpg,https://www.iitg.ac.in/sob/faculty_profile.php?id=a3VsZGVlcC5iYWlzaHlh
+4,Pinosh Kumar Hajoary,School of Business,pinoshh@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/pinosh_kumar.jpg,https://www.iitg.ac.in/sob/faculty_profile.php?id=cGlub3NoaA==
+5,Aariya Sen,School of Business,aariyasen@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/Aariya%20Sen.jpg,https://www.iitg.ac.in/sob/faculty_profile.php?id=YWFyaXlhc2Vu
+6,Himanshu Gupta,School of Business,himanshu_gupta@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/H%20gupta.jpg,https://www.iitg.ac.in/sob/faculty_profile.php?id=aGltYW5zaHVfZ3VwdGE=
+7,Arti Omar Chakraborty,School of Business,arti.omar@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/arti_omar.jpg,https://www.iitg.ac.in/sob/faculty_profile.php?id=YXJ0aS5vbWFy
+8,Atanu Bhuyan,School of Business,atanub1@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/atanu_b.jpg,https://www.iitg.ac.in/sob/faculty_profile.php?id=YXRhbnViMQ==
+9,Ronil Barua,School of Business,rbarua@iitg.ac.in,false,,,https://www.iitg.ac.in/sob/faculty/Ronil.png,https://www.iitg.ac.in/sob/faculty_profile.php?id=cmJhcnVh
+10,Rajiv K. Kar,Jyoti and Bhupat Mehta School of Health Sciences and Technology,rajivkar@iitg.ac.in,false,,,https://www.iitg.ac.in/shst/images/peoples/Assistant%20Professor/Dr%20Rajiv.png,https://www.iitg.ac.in/shst/rkk.php
+11,Raju Bej,Jyoti and Bhupat Mehta School of Health Sciences and Technology,rajubej@iitg.ac.in,false,,,https://www.iitg.ac.in/shst/images/peoples/Assistant%20Professor/Dr.%20Bej.jpg,
+12,Rahul Agarwal,Jyoti and Bhupat Mehta School of Health Sciences and Technology,rahulag@iitg.ac.in,false,,,https://www.iitg.ac.in/shst/images/peoples/Assistant%20Professor/Dr%20Rahul.jpeg,https://www.iitg.ac.in/shst/ra.php
+13,Ritika Jain,Jyoti and Bhupat Mehta School of Health Sciences and Technology,rjain1992@iitg.ac.in,false,,,https://www.iitg.ac.in/shst/images/peoples/Assistant%20Professor/Dr%20Ritika.jpg,
+14,Aritra Chatterjee,Jyoti and Bhupat Mehta School of Health Sciences and Technology,caritra@iitg.ac.in,false,,,https://www.iitg.ac.in/shst/images/peoples/Assistant%20Professor/Dr%20Aritra.jpg,
+15,Bhrigu Kumar Lahkar,Jyoti and Bhupat Mehta School of Health Sciences and Technology,bklahkar@iitg.ac.in,false,,,https://www.iitg.ac.in/shst/images/peoples/Assistant%20Professor/BK_Lahkar.jpg,https://www.iitg.ac.in/shst/bl.php
+16,Sudip Mitra,School of Agro and Rural Technology,sudipmitra@iitg.ac.in,false,,,https://www.iitg.ac.in/sart/faculty/e1414e8d31e6cb03e9c7167e335b9d2f.jpg,https://www.iitg.ac.in/sudipmitra/
+17,Meena Khwairakpam,School of Agro and Rural Technology,meena.kh@iitg.ac.in,false,,,https://www.iitg.ac.in/sart/faculty/4c9dc399be08b6cb3d09561b0188868d.jpeg,https://www.iitg.ac.in/sart/home_faculty_profile.php?p=UHVIZ2MyNWRoU2RyczE2aGU4K2x4QT09
+18,Siddhartha Singha,School of Agro and Rural Technology,siddharthafp@iitg.ac.in,false,,,https://www.iitg.ac.in/sart/faculty/63fef9c9a1bf5afb4a36d943c4f19354.jpg,https://www.iitg.ac.in/sart/home_faculty_profile.php?p=aXFPSm1tUjV6UTAxTE1UM09Bc2VrZz09
+19,Sagar Surendra Deshmukh,School of Agro and Rural Technology,sagarsd@iitg.ac.in,false,,,https://www.iitg.ac.in/sart/faculty/439c563c155e866a3e46b2a45a1edd09.jpg,https://www.iitg.ac.in/sart/home_faculty_profile.php?p=b2hQRjEzTG10ZzFWTkJiVnlEOG5DZz09
+20,Risha Mal,School of Agro and Rural Technology,risha@iitg.ac.in,false,,,https://www.iitg.ac.in/sart/faculty/83db23cfebd1dcabced9b445f2a0de56.jpeg,https://www.iitg.ac.in/sart/home_faculty_profile.php?p=SjlwcUE1WlRZc2c1dHRCMExoYVZjQT09
+21,Dipankar Mandal,School of Agro and Rural Technology,dmandal@iitg.ac.in,false,,,https://www.iitg.ac.in/sart/faculty/8573c6c38b1eb9e66e13e13533e41036.jpg,https://fac.iitg.ac.in/dmandal/
+22,Pankaj Kalita,School of Agro and Rural Technology,pankajk@iitg.ac.in,false,,,https://www.iitg.ac.in/sart/faculty/9b2d60ee4728831a7ea3ac798770e972.jpg,https://www.iitg.ac.in/pankajk/
+23,Sashindra K. Kakoty,School of Agro and Rural Technology,sashin@iitg.ac.in,false,,,https://www.iitg.ac.in/sart/faculty/8eaf9f2b76b283b7fc3b199c60b8c6a6.jpg,https://www.iitg.ac.in/sashin
+24,Sriram Bhyravarapu,Computer Science and Engineering,sriramb@iitg.ac.in,false,,,https://www.iitg.ac.in/cseweb/automation/__MODULE__cseprofilepic.php?picturecode=sriramb,https://www.iitg.ac.in/cse/internet-pages/sriramb
+25,Satyajit Das,Computer Science and Engineering,satyajit.das@iitg.ac.in,false,,,https://www.iitg.ac.in/cseweb/automation/__MODULE__cseprofilepic.php?picturecode=satyajit.das,https://www.iitg.ac.in/cse/internet-pages/satyajit.das
+26,Bernard Nongpoh,Computer Science and Engineering,bnongpoh@iitg.ac.in,false,,,https://www.iitg.ac.in/cseweb/automation/__MODULE__cseprofilepic.php?picturecode=bnongpoh,https://www.iitg.ac.in/cse/internet-pages/bnongpoh
+27,Khushraj Madnani,Computer Science and Engineering,khushraj@iitg.ac.in,false,,,https://www.iitg.ac.in/cseweb/automation/__MODULE__cseprofilepic.php?picturecode=khushraj,https://www.iitg.ac.in/cse/internet-pages/khushraj
+28,Lokesh Siddhu,Computer Science and Engineering,siddhulokesh@iitg.ac.in,false,,,https://www.iitg.ac.in/cseweb/automation/__MODULE__cseprofilepic.php?picturecode=siddhulokesh,https://www.iitg.ac.in/cse/internet-pages/siddhulokesh
+29,Mohammed Mosaddique Nawaz Hussain,Electronics and Electrical Engineering,nawaz.hussain@iitg.ac.in,false,,,https://www.iitg.ac.in/eee/faculty/f79e6ce891783095eece7d18db22bc76df80dc19.jpg,
+30,Rajib Kumar Bhattacharjya,Civil Engineering,rkbc@iitg.ac.in,false,,,https://www.iitg.ac.in/civil/faculty/7e5c9861445ee53ab0557ee9ffb111a3.jpg,https://www.iitg.ac.in/cdmr/index_faculty_profile.php?fac=UzBaOHNZNnc0ckd0NW0ycjNjQVJDdz09
+31,Rituparna Patgiri,Humanities and Social Sciences,rituparnapatgiri@iitg.ac.in,false,,,https://www.iitg.ac.in/hss/faculty/rituparnapatgiri.jpeg
+32,Visakh Madhusoodanan Subha,Humanities and Social Sciences,visakhms@iitg.ac.in,false,,,https://www.iitg.ac.in/hss/faculty/2535709e4e3498940b7ca61bbd001a05.jpg
+33,Abhishek Kashyap,Humanities and Social Sciences,abhishek.kashyap@iitg.ac.in,false,,,https://www.iitg.ac.in/hss/faculty/a01d0bd28ff928aeb321001643b89981.jpg,https://www.iitg.ac.in/hss/faculty_page_profile.php?name=cHZzTUR5QnhOSmN5TEZjZitVMkltQT09

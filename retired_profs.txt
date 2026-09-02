@@ -1,0 +1,20 @@
+id,name,department,email,email_notifications_enabled,profile_picture,processed_profile_picture,image_url,url
+1,Krishna Barua,Humanities and Social Sciences,,false,,,https://www.iitg.ac.in/storage/faculty/3618faculty.JPG,https://www.iitg.ac.in/hss/faculty_page_profile.php?name=dldJR2pINzVZK0p3STh2U1pXMHh0dz09
+2,Archana Barua,Humanities and Social Sciences,archana@iitg.ac.in,false,,,https://www.iitg.ac.in/storage/faculty/5792faculty.JPG,https://www.iitg.ac.in/hss/faculty_page_profile.php?name=WTA5NDA3ajdIN1dvRUJZVVMvMllNS3c1ck14bFRYQ1k1RjZBK0VEQVh1ND0=
+3,Saundarjya Borbora,Humanities and Social Sciences,sborbora@iitg.ac.in,false,,,https://www.iitg.ac.in/storage/faculty/7817faculty.JPG,https://www.iitg.ac.in/hss/faculty_page_profile.php?name=SStrNmFoK1pWYWkwcVJsVDJzeVdPVUpYZStZOVB5SmtvMVRYVDZkY1Nvcz0=
+4,P S Robi,Mechanical Engineering,,false,,,https://www.iitg.ac.in/storage/faculty/9862234.jpg,
+5,Anoop Kumar Dass,Mechanical Engineering,,false,,,https://www.iitg.ac.in/storage/faculty/9870CET_4271.jpg,
+6,Anil D. Sahasrabudhe,Mechanical Engineering,,false,,,https://www.iitg.ac.in/storage/faculty/6014278873865_395719655902192_8343252805712797290_n.jpg,
+7,Sajal Kanti Deb,Civil Engineering,,false,,,https://www.iitg.ac.in/storage/faculty/8953skd.jpg,
+8,Sudip Talukdar,Civil Engineering,,false,,,https://www.iitg.ac.in/storage/faculty/5509stalukdar.jpg,
+9,Dhirendra Nath Buragohain,Civil Engineering,dnb@iitg.ac.in,false,,,https://www.iitg.ac.in/storage/faculty/706faculty.JPG,https://www.iitg.ac.in/iitg_faculty_details?name=Dhirendra%20Nath-Buragohain&fac=ZEcvNW5NYmp3NEFzTlV2aHlsdytRUT09
+10,Debkumar Chakrabarti,Design,,false,,,https://www.iitg.ac.in/storage/faculty/920494023937DC-Design.jpg,
+11,Ravi Mokashi Punekar,Design,,false,,,https://www.iitg.ac.in/storage/faculty/2756RM-Design.jpg,
+12,Pradeep G Yammiyavar,Design,,false,,,https://www.iitg.ac.in/storage/faculty/4699faculty.JPG,
+13,Gautam Barua,Computer Science and Engineering,,false,,,https://www.iitg.ac.in/storage/faculty/1544faculty.JPG,
+14,Anup Kr. Gogoi,Electronics and Electrical Engineering,akg@iitg.ac.in,false,,,https://www.iitg.ac.in/storage/faculty/7827faculty.JPG,
+15,Anil Mahanta,Electronics and Electrical Engineering,anilm@iitg.ac.in,false,,,https://www.iitg.ac.in/storage/faculty/151faculty.JPG,https://www.iitg.ac.in/eee/faculties.php?nm=a2c5RDFYRm00OE5ZL0JwNzZuWkhDdz09
+16,Prabin Kumar Bora,Electronics and Electrical Engineering,prabin@iitg.ac.in,false,,,https://www.iitg.ac.in/storage/faculty/7185p-8eab078a28f44cdb0ae87e49fb03e122.jpg,https://www.iitg.ac.in/eee/faculty_profile.php?name=pkb
+17,Sanjay Kumar Bose,Electronics and Electrical Engineering,skbose@iitg.ac.in,false,,,https://www.iitg.ac.in/eee/faculty/a6134410d7240ec2149231e518ed2577.jpg,
+18,Mihir Kanti Chaudhuri,Chemistry,mihir@iitg.ac.in,false,,,https://www.iitg.ac.in/storage/faculty/4940faculty.JPG,https://www.iitg.ac.in/chem/page_profile.php?name=Nk1ibUE5aGFjYVZiYUhrN0k3djVPQT09
+19,Aiyagari Ramesh,Biosciences and Bioengineering,aramesh@iitg.ac.in,false,,,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeDFV-lFYPaZ2mfRL4cqe9H9LYhkO3zT3FKK_0fhlH7w&s=10,https://iitg.ac.in/biotech/faculty_profile_full.php?email=aramesh@iitg.ac.in&iitg=2531

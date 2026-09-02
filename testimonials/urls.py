@@ -3,7 +3,7 @@ from .views import (
     submit_testimonial, home, professor_list, professor_search_suggestions, 
     thank_you, logout_view, professor_dashboard, edit_profile, 
     delete_testimonial, view_student_profile, student_dashboard, login_page,
-    download_daily_pdf
+    download_daily_pdf, update_notification_preference
 )
 
 urlpatterns = [
@@ -21,4 +21,5 @@ urlpatterns = [
     path('testimonial/delete/<int:testimonial_id>/', delete_testimonial, name='delete_testimonial'),
     path('student/<int:student_id>/', view_student_profile, name='view_student_profile'),
     path('dashboard/download-daily-pdf/', download_daily_pdf, name='download_daily_pdf'),
+    path('dashboard/notification-preference/', update_notification_preference, name='update_notification_preference'),
 ]

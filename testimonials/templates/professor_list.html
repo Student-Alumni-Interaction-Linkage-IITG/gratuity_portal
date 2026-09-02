@@ -91,76 +91,97 @@
 <!-- Page Content -->
 <div class="prof-page-container">
 
-    <!-- Professor Grid (full width) -->
-    <div class="prof-card-grid" id="prof-card-grid">
-        {% for prof in page_obj %}
-        <a href="{% url 'submit_testimonial' prof.id %}" class="prof-card-item" data-name="{{ prof.name|lower }}"
-            data-dept="{{ prof.department|lower }}">
-            <div class="prof-card-avatar-wrap">
-                {% if prof.processed_profile_picture %}
-                <img src="{{ prof.processed_profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
-                {% elif prof.profile_picture %}
-                <img src="{{ prof.profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
-                {% elif prof.image_url %}
-                <img src="{{ prof.image_url }}" alt="{{ prof.name }}" loading="lazy">
-                {% else %}
-                <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
-                {% endif %}
-                <div class="prof-card-avatar-badge">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                    </svg>
-                </div>
-            </div>
-            <div class="prof-card-info-wrap">
-                <h3 class="prof-card-title">{{ prof.name }}</h3>
-                <div class="prof-card-divider"></div>
-                <span class="prof-card-department">{{ prof.department }}</span>
-            </div>
-            <div class="prof-card-arrow-wrap">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-            </div>
-        </a>
-        {% empty %}
-        <div class="prof-empty-state">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <p>No professors found{% if search_query %} matching "<strong>{{ search_query }}</strong>"{% endif %}{% if current_department %} in <strong>{{ current_department }}</strong>{% endif %}.</p>
-            {% if search_query or current_department %}
-            <a href="{% url 'professor_list' %}" class="prof-reset-btn">Clear Filters</a>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
+    <!-- Card grid + side nav arrows wrapped together -->
+    <div class="prof-grid-nav-wrapper">
 
-    <!-- Fixed Side Navigation Arrows -->
-    {% if page_obj.has_other_pages %}
-        {% if page_obj.has_previous %}
+        <!-- Left arrow -->
+        {% if page_obj.has_other_pages and page_obj.has_previous %}
         <a href="?page={{ page_obj.previous_page_number }}{% if current_department %}&department={{ current_department|urlencode }}{% endif %}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="prof-side-nav prof-side-nav-left" aria-label="Previous Page">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M15 18l-6-6 6-6" />
             </svg>
         </a>
         {% endif %}
-        {% if page_obj.has_next %}
+
+        <!-- Professor Grid -->
+        <div class="prof-card-grid" id="prof-card-grid">
+            {% for prof in page_obj %}
+            <a href="{% url 'submit_testimonial' prof.id %}" class="prof-card-item" data-name="{{ prof.name|lower }}"
+                data-dept="{{ prof.department|lower }}">
+                <div class="prof-card-avatar-wrap">
+                    {% if prof.processed_profile_picture %}
+                    <img src="{{ prof.processed_profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
+                    {% elif prof.profile_picture %}
+                    <img src="{{ prof.profile_picture.url }}" alt="{{ prof.name }}" loading="lazy">
+                    {% elif prof.image_url %}
+                    <img src="{{ prof.image_url }}" alt="{{ prof.name }}" loading="lazy">
+                    {% else %}
+                    <img src="{% static 'img/empty-dp.png' %}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
+                    {% endif %}
+                    <div class="prof-card-avatar-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="prof-card-info-wrap">
+                    <h3 class="prof-card-title">{{ prof.name }}</h3>
+                    <div class="prof-card-divider"></div>
+                    <span class="prof-card-department">{{ prof.department }}</span>
+                </div>
+                <div class="prof-card-arrow-wrap">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </div>
+            </a>
+            {% empty %}
+            <div class="prof-empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <p>No professors found{% if search_query %} matching "<strong>{{ search_query }}</strong>"{% endif %}{% if current_department %} in <strong>{{ current_department }}</strong>{% endif %}.</p>
+                {% if search_query or current_department %}
+                <a href="{% url 'professor_list' %}" class="prof-reset-btn">Clear Filters</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Right arrow -->
+        {% if page_obj.has_other_pages and page_obj.has_next %}
         <a href="?page={{ page_obj.next_page_number }}{% if current_department %}&department={{ current_department|urlencode }}{% endif %}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="prof-side-nav prof-side-nav-right" aria-label="Next Page">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 18l6-6-6-6" />
             </svg>
         </a>
         {% endif %}
-    {% endif %}
 
-    <!-- Bottom Page Numbers Only -->
+    </div>
+
+    <!-- Bottom Pagination -->
     {% if page_obj.has_other_pages %}
     <div class="prof-pagination-bar">
         <div class="prof-pagination-btns">
+            <!-- Previous Button -->
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_department %}&department={{ current_department|urlencode }}{% endif %}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="prof-page-nav-btn" aria-label="Previous Page">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg> Previous
+            </a>
+            {% else %}
+            <span class="prof-page-nav-btn prof-page-disabled">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg> Previous
+            </span>
+            {% endif %}
+
+            <!-- Page Numbers -->
             {% for num in page_obj.paginator.page_range %}
                 {% if page_obj.number == num %}
                     <span class="prof-page-btn prof-page-active">{{ num }}</span>
@@ -168,7 +189,23 @@
                     <a href="?page={{ num }}{% if current_department %}&department={{ current_department|urlencode }}{% endif %}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="prof-page-btn">{{ num }}</a>
                 {% endif %}
             {% endfor %}
+
+            <!-- Next Button -->
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if current_department %}&department={{ current_department|urlencode }}{% endif %}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="prof-page-nav-btn" aria-label="Next Page">
+                Next <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18l6-6-6-6" />
+                </svg>
+            </a>
+            {% else %}
+            <span class="prof-page-nav-btn prof-page-disabled">
+                Next <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18l6-6-6-6" />
+                </svg>
+            </span>
+            {% endif %}
         </div>
+        
         <div class="prof-pagination-info">
             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} &middot; {{ page_obj.paginator.count }} professor{{ page_obj.paginator.count|pluralize }}
         </div>
@@ -250,9 +287,13 @@
         cursor: pointer;
         transition: border-color 0.2s, box-shadow 0.2s;
         min-width: 200px;
+        max-width: 320px;
         height: auto;
         line-height: 1.4;
         box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .dept-dropdown-wrapper select:focus, .dept-dropdown-wrapper select:hover {
@@ -922,45 +963,46 @@
     }
 
     /* ═══════════════════════════════════════════
-       FIXED SIDE NAVIGATION ARROWS
+       CARD GRID + SIDE NAV FLEX WRAPPER
     ═══════════════════════════════════════════ */
+    .prof-grid-nav-wrapper {
+        display: block;
+    }
+
     .prof-side-nav {
         position: fixed;
-        top: 50%;
+        /* Y: slightly below viewport center so button sits in card section */
+        top: 58%;
         transform: translateY(-50%);
         z-index: 400;
-        width: 72px;
-        height: 72px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
-        background: #0f2c59;
-        color: #ffffff;
+        background: #e2e8f0;
+        color: #334155;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 16px rgba(15, 44, 89, 0.3);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
         text-decoration: none;
         transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-        border: 2px solid rgba(255, 255, 255, 0.15);
+        border: 1.5px solid rgba(0, 0, 0, 0.08);
     }
 
     .prof-side-nav:hover {
-        background: #1a4b96;
-        transform: translateY(-50%) scale(1.1);
-        box-shadow: 0 6px 24px rgba(15, 44, 89, 0.45);
+        background: #cbd5e1;
+        color: #0f2c59;
+        transform: translateY(-50%) scale(1.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
     }
 
-    .prof-side-nav-left {
-        left: 16px;
-    }
-
-    .prof-side-nav-right {
-        right: 16px;
-    }
+    /* X position: hug the page container padding edge, not the window edge */
+    .prof-side-nav-left  { left: 28px; }
+    .prof-side-nav-right { right: 28px; }
 
     @media (max-width: 768px) {
-        .prof-side-nav {
-            display: none;
-        }
+        .prof-side-nav { display: none; }
+    }
 
     /* ═══════════════════════════════════════════
        PAGINATION (page numbers only at bottom)
@@ -1487,7 +1529,7 @@
 
             debounceTimer = setTimeout(function () {
                 fetchSuggestions(query);
-            }, 180);
+            }, 300);
         });
 
         searchInput.addEventListener('keydown', function (e) {

@@ -1,0 +1,11 @@
+id,name,department,email,email_notifications_enabled,profile_picture,processed_profile_picture,image_url,url
+24,Sriram Bhyravarapu,Computer Science and Engineering,sriramb@iitg.ac.in,false,,,,https://www.iitg.ac.in/cse/internet-pages/sriramb
+25,Satyajit Das,Computer Science and Engineering,satyajit.das@iitg.ac.in,false,,,,https://www.iitg.ac.in/cse/internet-pages/satyajit.das
+26,Bernard Nongpoh,Computer Science and Engineering,bnongpoh@iitg.ac.in,false,,,,https://www.iitg.ac.in/cse/internet-pages/bnongpoh
+27,Khushraj Madnani,Computer Science and Engineering,khushraj@iitg.ac.in,false,,,,https://www.iitg.ac.in/cse/internet-pages/khushraj
+28,Lokesh Siddhu,Computer Science and Engineering,siddhulokesh@iitg.ac.in,false,,,,https://www.iitg.ac.in/cse/internet-pages/siddhulokesh
+29,Mohammed Mosaddique Nawaz Hussain,Electronics and Electrical Engineering,nawaz.hussain@iitg.ac.in,false,,,,
+30,Rajib Kumar Bhattacharjya,Civil Engineering,rkbc@iitg.ac.in,false,,,,https://www.iitg.ac.in/cdmr/index_faculty_profile.php?fac=UzBaOHNZNnc0ckd0NW0ycjNjQVJDdz09
+31,Rituparna Patgiri,Humanities and Social Sciences,rituparnapatgiri@iitg.ac.in,false,,,,
+32,Visakh Madhusoodanan Subha,Humanities and Social Sciences,visakhms@iitg.ac.in,false,,,,
+33,Abhishek Kashyap,Humanities and Social Sciences,abhishek.kashyap@iitg.ac.in,false,,,,https://www.iitg.ac.in/hss/faculty_page_profile.php?name=cHZzTUR5QnhOSmN5TEZjZitVMkltQT09

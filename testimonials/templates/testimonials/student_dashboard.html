@@ -48,10 +48,15 @@
             <div class="history-header">
                 <h2 class="history-title">My Testimonials</h2>
                 
-                <div class="history-search">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" placeholder="Search testimonials...">
-                </div>
+                <form method="GET" action="{% url 'student_dashboard' %}" class="history-search">
+                    <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" name="q" placeholder="Search testimonials..." value="{{ search_query|default:'' }}">
+                    {% if search_query %}
+                    <a href="{% url 'student_dashboard' %}" class="clear-search">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </a>
+                    {% endif %}
+                </form>
             </div>
             
             <div class="history-filters">
@@ -91,9 +96,15 @@
                 {% empty %}
                     <div class="empty-state">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                        <h3>No testimonials yet</h3>
-                        <p>You haven't written any testimonials yet. Find a professor and share your gratitude.</p>
-                        <a href="{% url 'professor_list' %}" class="btn-find-prof">Find a Professor</a>
+                        {% if search_query %}
+                            <h3>No testimonials found matching "{{ search_query }}"</h3>
+                            <p>Try adjusting your search terms.</p>
+                            <a href="{% url 'student_dashboard' %}" class="btn-find-prof">Clear Search</a>
+                        {% else %}
+                            <h3>No testimonials yet</h3>
+                            <p>You haven't written any testimonials yet. Find a professor and share your gratitude.</p>
+                            <a href="{% url 'professor_list' %}" class="btn-find-prof">Find a Professor</a>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
@@ -107,19 +118,19 @@
                 
                 <div class="pagination-controls">
                     {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&lt;</a>
+                        <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="page-link">&lt;</a>
                     {% endif %}
                     
                     {% for num in page_obj.paginator.page_range %}
                         {% if page_obj.number == num %}
                             <span class="page-link active">{{ num }}</span>
                         {% else %}
-                            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                            <a href="?page={{ num }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="page-link">{{ num }}</a>
                         {% endif %}
                     {% endfor %}
                     
                     {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}" class="page-link">&gt;</a>
+                        <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="page-link">&gt;</a>
                     {% endif %}
                 </div>
             </div>
@@ -241,12 +252,18 @@
         position: relative; display: flex; align-items: center;
     }
 
-    .history-search svg {
-        position: absolute; left: 12px; color: #94a3b8;
+    .history-search .search-icon {
+        position: absolute; left: 12px; color: #94a3b8; pointer-events: none;
     }
+    
+    .history-search .clear-search {
+        position: absolute; right: 12px; color: #94a3b8; text-decoration: none;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .history-search .clear-search:hover { color: #0f2c59; }
 
     .history-search input {
-        padding: 8px 12px 8px 36px;
+        padding: 8px 36px 8px 36px;
         border: 1px solid #cbd5e1; border-radius: 8px;
         font-size: 0.85rem; width: 220px;
         color: #0f2c59; font-family: inherit;
